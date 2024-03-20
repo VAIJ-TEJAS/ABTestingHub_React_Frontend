@@ -1,14 +1,12 @@
-import Signin from "./components/Signin"
-import Signup from "./components/Signup"
+import { Categories } from "./articles/pages/Categories";
 
 function App() {
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center gap-1">
-      <Signin/> 
-      <Signup/>
-    </div>
-  )
+    <>
+      <Categories/>
+    </>
+  );
 }
 
-export default App
+export default App;

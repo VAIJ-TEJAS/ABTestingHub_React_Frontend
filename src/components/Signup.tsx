@@ -51,7 +51,7 @@ const Signup = () => {
             </Button>
             <Modal open={isModalVisible} onOk={handleOk} onCancel={handleCancel} closeIcon={null} footer={null} width={720}>
                 <div className='flex justify-between items-center gap-3'>
-                    <div className='w-80'>
+                    <div className='w-64'>
                         <div className='relative'>
                             <div className='absolute w-full h-full flex justify-center items-center'>
                                 <div className='text-4xl text-primary font-bold'>
