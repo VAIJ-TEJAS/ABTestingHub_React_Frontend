@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 button.ant-btn-primary {
-    background-color: #1890FF; 
+    background-color: #1890FF;
     color: #ffffff;
 }

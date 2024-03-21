@@ -11,5 +11,8 @@ export default {
       }
     },
   },
+  safelist: [
+    'no-tailwind',
+  ],
   plugins: [],
 }

@@ -5,7 +5,7 @@ import CoverImage from "../../assets/images/cover.webp";
 import AuthorImage from "../../assets/images/author.jpeg";
 
 
-export const Home = () => {
+export const ArticlesHome = () => {
     return (
         <>
             <Container>
