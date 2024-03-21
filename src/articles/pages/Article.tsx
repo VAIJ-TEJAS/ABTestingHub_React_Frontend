@@ -11,6 +11,7 @@ import { IArticle } from "../../types/article.types";
 export const Article = () => {
 
   const [article, setArticle] = useState<IArticle | null>(null);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const [content, setContent] = useState<string | TrustedHTML>("");
 
   useEffect(() => {
@@ -27,6 +28,23 @@ export const Article = () => {
 
     fetchArticle();
   }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, { rootMargin: '0px', threshold: 0.5 });
+
+    // Observe sections for intersection
+    document.querySelectorAll('h1[id]').forEach((section) => {
+      observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, [content]);
 
   const scrollToSection = (id : string) => {
     console.log((id))
@@ -68,8 +86,6 @@ export const Article = () => {
       text: heading.innerText,
     }))
     : [];
-
-  console.log(toc);
 
   if(!article){
     return(
@@ -139,7 +155,7 @@ export const Article = () => {
                   {toc.map((heading, index) => {
                     return (
                       <div key={index}>
-                        <div className={`space-y-3`}  key={heading.id} >
+                        <div className={`space-y-3 ${activeSection === heading.id ? 'text-primary' : ''}`}  key={heading.id} >
                           <div className="font-bold hover:text-primary hover:cursor-pointer" onClick={() => scrollToSection(heading.id)}>
                             {heading.text}
                           </div>
