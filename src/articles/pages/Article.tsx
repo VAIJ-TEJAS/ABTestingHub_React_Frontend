@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import axios from "axios"
 import '../../css/scoped-styles.css';
 import { IArticle } from "../../types/article.types";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 
 export const Article = () => {
 
@@ -17,7 +19,6 @@ export const Article = () => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        // Replace this URL with the actual endpoint you're using to fetch the article
         const response = await axios.get('https://89.116.33.88/articles/');
         setArticle(response.data[0]);
         setContent(addSectionIdsToContent(response.data[0].content));
@@ -46,7 +47,7 @@ export const Article = () => {
     return () => observer.disconnect();
   }, [content]);
 
-  const scrollToSection = (id : string) => {
+  const scrollToSection = (id: string) => {
     console.log((id))
     document.getElementById(id)?.scrollIntoView({
       behavior: 'smooth',
@@ -62,20 +63,20 @@ export const Article = () => {
     // Parse the HTML content
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
-  
+
     // Select all h1 elements
     const headings = doc.querySelectorAll('h1');
-  
+
     // Modify each h1 element to include an ID
     headings.forEach((heading, index) => {
       const sectionId = `section-${index}`;
       heading.id = sectionId; // Add the ID to the h1 element
     });
-  
+
     // Serialize the document back to an HTML string
     const serializer = new XMLSerializer();
     const serializedHtml = serializer.serializeToString(doc);
-  
+
     console.log(serializedHtml)
     return serializedHtml;
   };
@@ -89,7 +90,20 @@ export const Article = () => {
 
   return (
     <>
-      <>
+      <div className="relative">
+        <div  className="sticky top-0 z-50 bg-white border-y border-zinc-500  py-2 flex justify-center">
+          <div className="flex space-x-4">
+            <Button type="primary" size="small" className="border-black font-mono">NEWSLETTER</Button>
+            <Button size="small" className="border-black font-mono">EXAMPLE</Button>
+            <Button size="small" className="border-black font-mono">GUIDE</Button>
+            <Button size="small" className="border-black font-mono">INTEGRATIONS</Button>
+            <Button size="small" className="border-black font-mono">RELEASE NOTES</Button>
+            <Button size="small" className="border-black font-mono">PRODUCT</Button>
+            <Button size="small" className="border-black font-mono">COMMUNITY</Button>
+            <Button size="small" className="border-black font-mono">TUTORIALS</Button>
+          </div>
+        </div>
+
         {/* Top container with the image */}
         <Container
           style={{
@@ -141,7 +155,7 @@ export const Article = () => {
               <div dangerouslySetInnerHTML={createMarkup(content)} className="no-tailwind" />
             </div>
             <div className="w-64 space-y-3 pl-3 relative">
-              <div className="sticky top-4">
+              <div className="sticky top-16">
                 <h1 className="font-mono text-xs text-zinc-500">
                   TABLE OF CONTENTS
                 </h1>
@@ -149,7 +163,7 @@ export const Article = () => {
                   {toc.map((heading, index) => {
                     return (
                       <div key={index}>
-                        <div className={`space-y-3 ${activeSection === heading.id ? 'text-primary' : ''}`}  key={heading.id} >
+                        <div className={`space-y-3 ${activeSection === heading.id ? 'text-primary' : ''}`} key={heading.id} >
                           <div className="font-bold hover:text-primary hover:cursor-pointer" onClick={() => scrollToSection(heading.id)}>
                             {heading.text}
                           </div>
@@ -167,6 +181,41 @@ export const Article = () => {
 
         {/* Related Articles */}
         <Container className="my-16">
+          <div className="flex justify-between gap-3">
+
+            <div className="flex flex-1 flex-col items-start space-y-1 group cursor-pointer">
+              <div className="text-xl flex justify-start items-start gap-1">
+                <div className="text-primary group-hover:animate-ping">
+                  <LeftOutlined />
+                </div>
+                <div>
+                  Previous
+                </div>
+              </div>
+              <div className="text-2xl font-medium group-hover:text-primary duration-200">
+                Artificial Intelligence
+              </div>
+            </div>
+
+            <div className="text-zinc-500 flex-shrink-0">
+              |
+            </div>
+
+            <div className="flex flex-1 flex-col items-end space-y-1 group cursor-pointer">
+              <div className="text-xl flex items-start gap-1">
+                <div>
+                  Next
+                </div>
+                <div className="text-primary group-hover:animate-ping">
+                  <RightOutlined />
+                </div>
+              </div>
+              <div className="text-2xl font-medium group-hover:text-primary duration-200">
+                Artificial Intelligence
+              </div>
+            </div>
+
+          </div>
           <hr className="my-8" />
           <div className="text-4xl font-medium my-8">
             Related Articles
@@ -177,7 +226,7 @@ export const Article = () => {
             <ArticleCard />
           </div>
         </Container>
-      </>
+      </div>
     </>
   );
 }
