@@ -4,7 +4,7 @@ import Logo from "../assets/images/logo.png"
 export const Navbar = () => {
   return (
     <>
-      <nav className="relative px-4 py-2 flex justify-between items-center bg-blue-50">
+      <nav className="relative px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary">
         <a className="text-3xl font-bold leading-none flex items-center gap-4" href="#">
           <img src={Logo} className="w-12" />
           <div className="text-primary">
