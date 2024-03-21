@@ -87,12 +87,6 @@ export const Article = () => {
     }))
     : [];
 
-  if(!article){
-    return(
-      <div>Loading...</div>
-    )
-  }
-
   return (
     <>
       <>
