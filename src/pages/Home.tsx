@@ -30,63 +30,68 @@ export const Home = () => {
       {/* Tools  */}
       <div>
         <Container>
-          <div className="gap-8 py-16 flex justify-center">
-            <div className=" border-primary border rounded-xl p-4">
-              <div className="pb-4 text-primary text-3xl font-mono">
-                MSS Tool
+          <div className="gap-8 py-16">
+            <div className="space-y-4">
+              <div className="text-4xl font-medium py-8">
+                Tools We Offer
               </div>
-              <div className="flex gap-8">
-                <Paper className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
-                  <div>
-                    <img src={ContinuousMetricLogo} className="rounded" />
+              <div className="flex justify-center gap-8">
+                <div className=" border-primary border rounded-xl p-4">
+                  <div className="pb-4 text-primary text-3xl font-mono">
+                    MSS Tool
                   </div>
-                  <div className="">
-                    <div className="text-xl font-medium group-hover:text-primary duration-200">
-                      Continuous Metric Testing
-                    </div>
-                    <div className="text-zinc-500">
-                      Measures how much of something there is, taking any value on a scale (e.g., how long users watch a video on average).
-                    </div>
-                  </div>
-                </Paper>
+                  <div className="flex gap-8">
+                    <Paper className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
+                      <div>
+                        <img src={ContinuousMetricLogo} className="rounded" />
+                      </div>
+                      <div className="">
+                        <div className="text-xl font-medium group-hover:text-primary duration-200">
+                          Continuous Metric Testing
+                        </div>
+                        <div className="text-zinc-500">
+                          Measures how much of something there is, taking any value on a scale (e.g., how long users watch a video on average).
+                        </div>
+                      </div>
+                    </Paper>
 
-                <Paper className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
-                  <div>
-                    <img src={ProportionalMetricLogo} className="rounded" />
+                    <Paper className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
+                      <div>
+                        <img src={ProportionalMetricLogo} className="rounded" />
+                      </div>
+                      <div className="">
+                        <div className="text-xl font-medium group-hover:text-primary duration-200">
+                          Proportional metric Testing
+                        </div>
+                        <div className="text-zinc-500">
+                          Represents a fraction of a whole, expressed as a percentage or ratio (e.g., what portion of website visitors make a purchase).
+                        </div>
+                      </div>
+                    </Paper>
                   </div>
-                  <div className="">
-                    <div className="text-xl font-medium group-hover:text-primary duration-200">
-                      Proportional metric Testing
-                    </div>
-                    <div className="text-zinc-500">
-                      Represents a fraction of a whole, expressed as a percentage or ratio (e.g., what portion of website visitors make a purchase).
-                    </div>
+                </div>
+                <div className="border-red-600 border rounded-xl p-4">
+                  <div className="pb-4 text-red-600 text-3xl font-mono">
+                    AB Testing Tool
                   </div>
-                </Paper>
+                  <div className="flex gap-8">
+                    <Paper className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
+                      <div>
+                        <img src={ABTestingLogo} className="rounded" />
+                      </div>
+                      <div className="">
+                        <div className="text-xl font-medium group-hover:text-primary duration-200">
+                          AB testing Tool
+                        </div>
+                        <div className="text-zinc-500">
+                          An experiment that compares two variations of something by randomly splitting users into groups and measuring which performs better.
+                        </div>
+                      </div>
+                    </Paper>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div className="border-red-600 border rounded-xl p-4">
-              <div className="pb-4 text-red-600 text-3xl font-mono">
-                AB Testing Tool
-              </div>
-              <div className="flex gap-8">
-                <Paper className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
-                  <div>
-                    <img src={ABTestingLogo} className="rounded" />
-                  </div>
-                  <div className="">
-                    <div className="text-xl font-medium group-hover:text-primary duration-200">
-                      AB testing Tool
-                    </div>
-                    <div className="text-zinc-500">
-                      An experiment that compares two variations of something by randomly splitting users into groups and measuring which performs better.
-                    </div>
-                  </div>
-                </Paper>
-              </div>
-            </div>
-
           </div>
         </Container>
       </div>
@@ -95,7 +100,7 @@ export const Home = () => {
         <Container>
           <div className="space-y-8 py-16">
             <div className="space-y-4">
-              <div className="text-4xl font-medium">
+              <div className="text-4xl font-medium py-8">
                 Most Popular
               </div>
               <div className="gap-3 flex flex-wrap justify-center">
