@@ -50,6 +50,33 @@ export const Navbar = () => {
 
           <li>
             <a
+              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/ab-testing/') ? 'text-primary' : ''}`}
+              onClick={() => { navigate('/ab-testing/'); }}
+            >
+              AB Testing
+            </a>
+          </li>
+
+          <li>
+            <a
+              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/proportional-metric-testing/') ? 'text-primary' : ''}`}
+              onClick={() => { navigate('/proportional-metric-testing/'); }}
+            >
+              Proportional Metric
+            </a>
+          </li>
+
+          <li>
+            <a
+              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/continuous-metric-testing/') ? 'text-primary' : ''}`}
+              onClick={() => { navigate('/continuous-metric-testing/'); }}
+            >
+              Continuous Metric
+            </a>
+          </li>
+
+          <li>
+            <a
               className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/articles/') ? 'text-primary' : ''}`}
               onClick={() => { navigate('/articles/'); }}
             >

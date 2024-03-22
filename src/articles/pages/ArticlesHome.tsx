@@ -3,6 +3,7 @@ import { ArticleCard } from "../components/ArticleCard"
 import { Button } from "antd"
 import CoverImage from "../../assets/images/cover.webp";
 import AuthorImage from "../../assets/images/author.jpeg";
+import { MostPopularArticleCard } from "../components/MostPopularArticleCard";
 
 
 export const ArticlesHome = () => {
@@ -60,50 +61,9 @@ export const ArticlesHome = () => {
                             Most Popular
                         </div>
                         <div className="space-y-3">
-                            <div className="w-96 group space-y-4">
-                                <div className="space-y-1 group-hover:cursor-pointer">
-                                    <div className="text-2xl font-medium group-hover:text-primary transition-colors duration-200">
-                                        A Step-by-Step Guide to Preparing Data for Labeling
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <img src={AuthorImage} className="h-10 w-10 object-cover rounded-full" />
-                                        <div>
-                                            <div className="font-semibold">Tejas Vaij</div>
-                                            <div className="text-sm text-zinc-500">Full Stack Developer</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr className="" />
-                            </div>
-                            <div className="w-96 group space-y-4">
-                                <div className="space-y-1 group-hover:cursor-pointer">
-                                    <div className="text-2xl font-medium group-hover:text-primary transition-colors duration-200">
-                                        A Step-by-Step Guide to Preparing Data for Labeling
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <img src={AuthorImage} className="h-10 w-10 object-cover rounded-full" />
-                                        <div>
-                                            <div className="font-semibold">Tejas Vaij</div>
-                                            <div className="text-sm text-zinc-500">Full Stack Developer</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr className="" />
-                            </div>
-                            <div className="w-96 group space-y-4">
-                                <div className="space-y-1 group-hover:cursor-pointer">
-                                    <div className="text-2xl font-medium group-hover:text-primary transition-colors duration-200">
-                                        A Step-by-Step Guide to Preparing Data for Labeling
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <img src={AuthorImage} className="h-10 w-10 object-cover rounded-full" />
-                                        <div>
-                                            <div className="font-semibold">Tejas Vaij</div>
-                                            <div className="text-sm text-zinc-500">Full Stack Developer</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <MostPopularArticleCard/>
+                            <MostPopularArticleCard/>
+                            <MostPopularArticleCard/>
                         </div>
                     </div>
                 </div>
