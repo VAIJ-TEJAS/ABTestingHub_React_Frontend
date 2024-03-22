@@ -1,10 +1,22 @@
 import { Button } from "antd"
 import Logo from "../assets/images/logo.png"
+import { useNavigate, useLocation } from "react-router-dom";
 
 export const Navbar = () => {
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isActive = (pathname: string) => location.pathname.split('/')[1] === pathname.split('/')[1];
+
+  const isArticlePage = location.pathname.includes('/article/');
+  const navClass = isArticlePage
+  ? "relative px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary"
+  : "sticky top-0 px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary shadow-md z-50";
+
+
   return (
     <>
-      <nav className="relative px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary">
+      <nav className={navClass}>
         <a className="text-3xl font-bold leading-none flex items-center gap-4" href="#">
           <img src={Logo} className="w-12" />
           <div className="text-primary">
@@ -25,44 +37,34 @@ export const Navbar = () => {
         </div>
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
           <li>
-            <a className="hover:text-primary transition-all duration-300" href="#">
+            <a
+              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/home/') ? 'text-primary' : ''}`}
+              onClick={() => { navigate('/home/'); }}
+            >
               Home
             </a>
           </li>
 
           <li>
-            <a className="hover:text-primary transition-all duration-300" href="#">
-              A/B Testing
-            </a>
-          </li>
-
-          <li>
-            <a className="hover:text-primary transition-all duration-300" href="#">
-              MSS Testing
-            </a>
-          </li>
-
-          <li>
-            <a className="hover:text-primary transition-all duration-300" href="#">
-              Revenue Calculator
-            </a>
-          </li>
-          <li>
-            <a className="text-primary hover:text-primary transition-all duration-300" href="#">
-              Resources
+            <a
+              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/articles/') ? 'text-primary' : ''}`}
+              onClick={() => { navigate('/articles/'); }}
+            >
+              Articles
             </a>
           </li>
         </ul>
         <Button
-          className="hidden lg:inline-block lg:ml-auto lg:mr-3 px-6 bg-gray-50 hover:bg-gray-100 text-gray-900 font-bold  transition duration-200"
+          type="primary"
+          className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
         >
-          Sign In
+          Get Started
         </Button>
         <Button
           type="primary"
-          className="hidden lg:inline-block px-6 text-white font-bold transition duration-200"
+          className="hidden lg:inline-block lg:ml-3 px-6 text-white font-bold transition duration-200"
         >
-          Sign up
+          Dashboard
         </Button>
       </nav>
       <div className="navbar-menu relative z-50 hidden">

@@ -7,6 +7,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { ConfigProvider } from 'antd';
+import { MyContextProvider } from './context/context.provider.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ConfigProvider
@@ -17,6 +18,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       },
     }}
   >
-    <App />
+    <MyContextProvider>
+      <App />
+    </MyContextProvider>
   </ConfigProvider>,
 )
