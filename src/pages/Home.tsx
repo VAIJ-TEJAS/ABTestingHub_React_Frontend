@@ -5,6 +5,7 @@ import { MostPopularArticleCard } from "../articles/components/MostPopularArticl
 import ContinuousMetricLogo from "../assets/images/ContinuousMetric.webp"
 import ProportionalMetricLogo from "../assets/images/ProportionalMetric.webp"
 import ABTestingLogo from "../assets/images/ABTesting.webp"
+import { ArticleStripe } from "../articles/components/ArticleStripe";
 
 export const Home = () => {
   return (
@@ -95,7 +96,7 @@ export const Home = () => {
           </div>
         </Container>
       </div>
-      {/* Articles  */}
+      {/* Most Popular Articles  */}
       <div>
         <Container>
           <div className="space-y-8 py-16">
@@ -110,6 +111,40 @@ export const Home = () => {
                 <MostPopularArticleCard />
                 <MostPopularArticleCard />
                 <MostPopularArticleCard />
+              </div>
+            </div>
+          </div>
+        </Container>
+      </div>
+      {/* All Articles  */}
+      <div>
+        <Container>
+          <div className="space-y-8 py-16">
+            <div className="flex gap-8">
+              <div className="space-y-8 w-full p-4">
+                <ArticleStripe />
+                <ArticleStripe />
+                <ArticleStripe />
+                <ArticleStripe />
+                <ArticleStripe />
+                <ArticleStripe />
+                <ArticleStripe />
+                <ArticleStripe />
+              </div>
+              <div className="w-80 flex-shrink-0 p-4 space-y-4">
+                <div className="font-medium">
+                  Discover our articles in various categories
+                </div>
+                <div className="flex flex-wrap gap-4">
+                    <Button type="primary" size="small" className="border-black font-mono">NEWSLETTER</Button>
+                    <Button size="small" className="border-black font-mono">EXAMPLE</Button>
+                    <Button size="small" className="border-black font-mono">GUIDE</Button>
+                    <Button size="small" className="border-black font-mono">INTEGRATIONS</Button>
+                    <Button size="small" className="border-black font-mono">RELEASE NOTES</Button>
+                    <Button size="small" className="border-black font-mono">PRODUCT</Button>
+                    <Button size="small" className="border-black font-mono">COMMUNITY</Button>
+                    <Button size="small" className="border-black font-mono">TUTORIALS</Button>
+                </div>
               </div>
             </div>
           </div>
