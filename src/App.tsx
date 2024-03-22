@@ -9,6 +9,9 @@ import { Context } from "./context/context.provider";
 import { ABTesting } from "./pages/ABTesting";
 import { CreateTest } from "./pages/CreateTest";
 import { Dashboard } from "./pages/Dashboard";
+import { ContinuousMetricTesting } from "./pages/ContinuousMetricTesting";
+import { ProportionalMetricTesting } from "./pages/ProportionalMetricTesting";
+import { Auth } from "./components/Auth";
 
 function App() {
 
@@ -18,6 +21,7 @@ function App() {
     <>
       <Router>
         <Navbar />
+        <Auth/>
         <Routes>
           <Route path="/" element={<Navigate to={"home"} />} />
           <Route path="/home" element={<Home />} />
@@ -25,8 +29,8 @@ function App() {
           <Route path="/articles/:category_name" element={<Categories />} />
           <Route path="/article/:article_id" element={<Article />} />
           <Route path="/ab-testing/" element={<ABTesting />} />
-          <Route path="/continuous-metric-testing/" element={<ABTesting />} />
-          <Route path="/proportional-metric-testing/" element={<ABTesting />} />
+          <Route path="/continuous-metric-testing/" element={<ContinuousMetricTesting />} />
+          <Route path="/proportional-metric-testing/" element={<ProportionalMetricTesting />} />
           {userAuthenticated ? (
             <>
               <Route path="/create-test/" element={<CreateTest />} />

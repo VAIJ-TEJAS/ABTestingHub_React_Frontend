@@ -1,8 +1,11 @@
 import { Button } from "antd"
 import Logo from "../assets/images/logo.png"
 import { useNavigate, useLocation } from "react-router-dom";
+import { Context } from "../context/context.provider";
 
 export const Navbar = () => {
+
+  const { userAuthenticated, showAuthModal } = Context();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -10,8 +13,8 @@ export const Navbar = () => {
 
   const isArticlePage = location.pathname.includes('/article/');
   const navClass = isArticlePage
-  ? "relative px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary"
-  : "sticky top-0 px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary shadow-md z-50";
+    ? "relative px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary"
+    : "sticky top-0 px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary shadow-md z-50";
 
 
   return (
@@ -54,18 +57,24 @@ export const Navbar = () => {
             </a>
           </li>
         </ul>
-        <Button
-          type="primary"
-          className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
-        >
-          Get Started
-        </Button>
-        <Button
-          type="primary"
-          className="hidden lg:inline-block lg:ml-3 px-6 text-white font-bold transition duration-200"
-        >
-          Dashboard
-        </Button>
+        {
+          userAuthenticated ? (
+            <Button
+              type="primary"
+              className="hidden lg:inline-block lg:ml-3 px-6 text-white font-bold transition duration-200"
+            >
+              Dashboard
+            </Button>
+          ) : (
+            <Button
+              type="primary"
+              className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
+              onClick={showAuthModal}
+            >
+              Get Started
+            </Button>
+          )
+        }
       </nav>
       <div className="navbar-menu relative z-50 hidden">
         <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25" />

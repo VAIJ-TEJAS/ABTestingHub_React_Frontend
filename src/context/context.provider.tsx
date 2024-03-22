@@ -11,6 +11,16 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [userAuthenticated, setUserAuthenticated] = useState<boolean>(!!localStorage.getItem('abtestinghub-access-token'))
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
+  const signInUser = (token: string) => {
+    localStorage.setItem('abtestinghub-access-token', token);
+    setUserAuthenticated(true)
+  }
+
+  const signOutUser = () => {
+    localStorage.removeItem('abtestinghub-access-token');
+    setUserAuthenticated(false)
+  }
+
   const showAuthModal = () => {
     setAuthModalOpen(true);
   };
@@ -22,6 +32,8 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
   const contextValue: any = {
     userAuthenticated,
     setUserAuthenticated,
+    signInUser,
+    signOutUser,
     showAuthModal,
     hideAuthModal,
     authModalOpen
@@ -36,9 +48,9 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
 
 // Create a custom hook to use the context
 export const Context = (): any => {
-    const context = useContext(MyContext);
-    if (!context) {
-      throw new Error('useMyContext must be used within a MyContextProvider');
-    }
-    return context;
-  };
+  const context = useContext(MyContext);
+  if (!context) {
+    throw new Error('useMyContext must be used within a MyContextProvider');
+  }
+  return context;
+};
