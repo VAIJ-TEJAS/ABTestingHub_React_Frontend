@@ -1,42 +1,63 @@
-import { Container } from "@mui/material"
-import { ArticleCard } from "../components/ArticleCard"
-import { Button } from "antd"
+import { Container } from "@mui/material";
+import { ArticleCard } from "../components/ArticleCard";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import ArticlesCategoryCard from "../components/ArticlesCategoryCard";
+
+interface ArticalCardProps {
+  id?: number;
+  title?: string;
+  short_description?: string;
+  published_date?: string;
+  popular_article?: boolean;
+  featured_article?: boolean;
+  cover_image?: {
+    id: number;
+    image: string;
+  };
+  category?: {
+    id: number;
+    name: string;
+  };
+  author?: {
+    id: number;
+    name: string;
+    picture: string;
+    role: string;
+  };
+}
 
 export const Categories = () => {
-    return (
-        <>
-            <Container>
-                <div className="flex justify-between items-center my-8">
-                    <div className="text-6xl font-medium">
-                        Newsletters
-                    </div>
-                </div>
-                <div className="flex space-x-4">
-                    <Button type="primary" size="small" className="border-black font-mono">NEWSLETTER</Button>
-                    <Button size="small" className="border-black font-mono">EXAMPLE</Button>
-                    <Button size="small" className="border-black font-mono">GUIDE</Button>
-                    <Button size="small" className="border-black font-mono">INTEGRATIONS</Button>
-                    <Button size="small" className="border-black font-mono">RELEASE NOTES</Button>
-                    <Button size="small" className="border-black font-mono">PRODUCT</Button>
-                    <Button size="small" className="border-black font-mono">COMMUNITY</Button>
-                    <Button size="small" className="border-black font-mono">TUTORIALS</Button>
-                </div>
-                <hr className="my-8" />
-                <div className="grid grid-cols-3 justify-items-center gap-8">
-                    <ArticleCard />
-                    <ArticleCard />
-                    <ArticleCard />
-                    <ArticleCard />
-                    <ArticleCard />
-                    <ArticleCard />
-                    <ArticleCard />
-                    <ArticleCard />
-                    <ArticleCard />
-                    <ArticleCard />
-                    <ArticleCard />
-                </div>
-                <hr className="my-8" />
-            </Container>
-        </>
-    )
-}
+  const { category_name } = useParams();
+
+  const [articles, setArticles] = useState<ArticalCardProps[]>([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://89.116.33.88/articles-card/?category__name=${category_name}`
+      )
+      .then((articles) => {
+        setArticles(articles.data);
+      });
+  }, [category_name]);
+
+  return (
+    <>
+      <Container>
+        <div className="flex justify-between items-center my-8">
+          <div className="text-6xl font-medium">Newsletters</div>
+        </div>
+        <ArticlesCategoryCard />
+        <hr className="my-8" />
+        <div className="grid grid-cols-3 justify-items-center gap-8">
+          {articles?.map((props) => {
+            return <ArticleCard key={props.id} {...props} />;
+          })}
+        </div>
+        <hr className="my-8" />
+      </Container>
+    </>
+  );
+};

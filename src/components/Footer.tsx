@@ -11,12 +11,12 @@ export const Footer = () => {
               href="#"
               className="flex justify-center space-x-3 lg:justify-start"
             >
-              <a className="text-3xl font-bold leading-none flex items-center gap-4" href="#">
+              <div className="text-3xl font-bold leading-none flex items-center gap-4" >
                 <img src={Logo} className="w-12" />
                 <div className="text-primary">
                   AB Testing Hub
                 </div>
-              </a>
+              </div>
             </a>
           </div>
           <div className="grid grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-4">
