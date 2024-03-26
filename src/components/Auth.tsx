@@ -1,17 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Modal, Button, Form, Input, Checkbox } from 'antd';
+import { Modal, Button, Form, Input, Checkbox, message } from 'antd';
 import { Context } from "../context/context.provider";
 import { Container } from "@mui/material";
 import Logo from "../assets/images/logo.png";
 import GoogleIcon from "../assets/svgs/google.svg";
 import { useState } from "react";
+import axios from "axios"
 
 export const Auth = () => {
+
+    const { signInUser } = Context() 
 
     const { hideAuthModal, authModalOpen } = Context();
     const [isTermsModalVisible, setIsTermsModalVisible] = useState(false);
     const [agreedToTerms, setAgreedToTerms] = useState(false);
     const [isSignUpView, setIsSignUpView] = useState(false);
+    const [formSignup] = Form.useForm();
+    const [formSignin] = Form.useForm();
 
     const toggleView = () => {
         setIsSignUpView(!isSignUpView);
@@ -29,6 +34,49 @@ export const Auth = () => {
         setIsTermsModalVisible(false);
     };
 
+    const handleSignIn = (values: any) => {
+        console.log(values)
+
+        const signInEndpoint = 'http://127.0.0.1:8000/auth/';
+
+        axios.post(signInEndpoint, values)
+            .then(response => {
+                console.log(response);  
+                signInUser()
+                
+                // Display success message
+                message.success('Sign in successful!');
+                // Close the modal
+                hideAuthModal();
+            })
+            .catch(error => {
+                message.error('Sign in failed. Please try again.');
+                console.error('SignIn Error:', error);
+                // Add logic to handle sign in error, e.g., displaying a notification
+            });
+    };
+
+    const handleSignUp = (values: any) => {
+        console.log(values)
+
+        const signUpEndpoint = 'http://127.0.0.1:8000/signup/';
+
+        axios.post(signUpEndpoint, values)
+            .then(response => {
+                console.log('SignUp Success:', response);
+
+                // Display success message
+                message.success('Sign up successful!');
+                // Close the modal
+                hideAuthModal();
+                // Add logic to handle successful sign up
+            })
+            .catch(error => {
+                console.error('SignUp Error:', error);
+                // Add logic to handle sign up error, e.g., displaying a notification
+            });
+    };
+
     return (
         <>
             <Modal open={authModalOpen} onCancel={hideAuthModal} closeIcon={null} footer={null} width={720}>
@@ -44,14 +92,14 @@ export const Auth = () => {
                                 <img src={Logo} className='opacity-20 w-60 ' />
                             </div>
                         </Container>
-                        <Form layout="vertical" className='flex flex-col'>
-                            <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
+                        <Form layout="vertical" className='flex flex-col' form={formSignin} onFinish={handleSignIn}>
+                            <Form.Item label="Email" name="username" rules={[{ required: true, message: 'Please input your email!' }]}>
                                 <Input />
                             </Form.Item>
                             <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
                                 <Input.Password />
                             </Form.Item>
-                            <Button type="primary" >
+                            <Button type="primary" htmlType='submit'>
                                 Login
                             </Button>
                             <div className='w-full flex items-center gap-3 text-zinc-500 py-3'>
@@ -85,9 +133,9 @@ export const Auth = () => {
                                     <img src={Logo} className='opacity-20' alt="AB Testing Hub Logo" />
                                 </div>
                             </div>
-                            <Form layout="vertical" className='flex flex-col justify-center flex-1'>
-                                <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
-                                    <Input/>
+                            <Form layout="vertical" className='flex flex-col justify-center flex-1' form={formSignup} onFinish={handleSignUp}>
+                                <Form.Item label="Email" name="username" rules={[{ required: true, message: 'Please input your email!' }]}>
+                                    <Input />
                                 </Form.Item>
                                 <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
                                     <Input.Password />
@@ -97,7 +145,7 @@ export const Auth = () => {
                                         I agree to the <Button type='link' href="#" onClick={showTermsModal} className='px-0'>Terms and Conditions</Button>
                                     </Checkbox>
                                 </Form.Item>
-                                <Button type="primary" disabled={!agreedToTerms}>
+                                <Button type="primary" disabled={!agreedToTerms} htmlType='submit'>
                                     Signup
                                 </Button>
                                 <div className='w-full flex items-center gap-3 text-zinc-500 py-3'>
