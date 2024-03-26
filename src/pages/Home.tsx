@@ -8,6 +8,30 @@ import ABTestingLogo from "../assets/images/ABTesting.webp";
 import { ArticleStripe } from "../articles/components/ArticleStripe";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { ArticleCard } from "../articles/components/ArticleCard";
+
+interface ArticalCardProps {
+  id?: number;
+  title?: string;
+  short_description?: string;
+  published_date?: string;
+  popular_article?: boolean;
+  featured_article?: boolean;
+  cover_image?: {
+    id: number;
+    image: string;
+  };
+  category?: {
+    id: number;
+    name: string;
+  };
+  author?: {
+    id: number;
+    name: string;
+    picture: string;
+    role: string;
+  };
+}
 
 export const Home = () => {
   const [articleCategories, setArticleCategories] = useState<
@@ -17,6 +41,16 @@ export const Home = () => {
   useEffect(() => {
     axios.get(`https://89.116.33.88/categories/`).then((res) => {
       setArticleCategories(res.data);
+    });
+  }, []);
+
+  const [articlesData, setArticlesData] = useState<ArticalCardProps[]>([]);
+
+  useEffect(() => {
+    axios.get("https://89.116.33.88/articles-card/").then((articles) => {
+      setArticlesData(
+        articles.data.filter((article) => article.popular_article)
+      );
     });
   }, []);
 
@@ -125,14 +159,15 @@ export const Home = () => {
           <div className="space-y-8 py-16">
             <div className="space-y-4">
               <div className="text-4xl font-medium py-8">Most Popular</div>
-              <div className="gap-3 flex flex-wrap justify-center">
-                <MostPopularArticleCard />
-                <MostPopularArticleCard />
-                <MostPopularArticleCard />
-                <MostPopularArticleCard />
-                <MostPopularArticleCard />
-                <MostPopularArticleCard />
-              </div>
+              {articlesData.length == 0 ? (
+                <div className="gap-3 flex flex-wrap justify-center">
+                  {articlesData.map((props) => {
+                    return <ArticleCard key={props.id} {...props} />;
+                  })}
+                </div>
+              ) : (
+                <p className="text-center">No popular articles to show</p>
+              )}
             </div>
           </div>
         </Container>
