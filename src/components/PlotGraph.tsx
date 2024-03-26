@@ -1,7 +1,13 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Plot from 'react-plotly.js';
 
-const PlotGraph = ({data, layout}) => {
+interface PlotGraphProps {
+  data: any;
+  layout: any;
+}
+
+
+const PlotGraph: React.FC<PlotGraphProps> = ({data, layout}) => {
   return (
     <Plot
       data={data}

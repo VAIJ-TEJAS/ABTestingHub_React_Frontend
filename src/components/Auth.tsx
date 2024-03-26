@@ -29,17 +29,6 @@ export const Auth = () => {
         setIsTermsModalVisible(false);
     };
 
-    const validatePassword = ({ getFieldValue }: {
-        getFieldValue: (field: string) => any;
-    }) => ({
-        validator(_: any, value: any) {
-            if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-            }
-            return Promise.reject(new Error('The two passwords that you entered do not match!'));
-        },
-    });
-
     return (
         <>
             <Modal open={authModalOpen} onCancel={hideAuthModal} closeIcon={null} footer={null} width={720}>
@@ -103,9 +92,6 @@ export const Auth = () => {
                                 <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
                                     <Input.Password />
                                 </Form.Item>
-                                <Form.Item label="Confirm Password" name="confirm" rules={[{ required: true, message: 'Please confirm your password!' }, validatePassword]}>
-                                    <Input.Password />
-                                </Form.Item>
                                 <Form.Item name="agreement" valuePropName="checked">
                                     <Checkbox checked={agreedToTerms} onChange={e => setAgreedToTerms(e.target.checked)}>
                                         I agree to the <Button type='link' href="#" onClick={showTermsModal} className='px-0'>Terms and Conditions</Button>
@@ -122,7 +108,7 @@ export const Auth = () => {
                                 <Button>
                                     <div className='flex justify-center items-center gap-2'>
                                         <img src={GoogleIcon} alt="Google" className='w-5' />
-                                        Signup with Google
+                                        Continue with Google
                                     </div>
                                 </Button>
                                 <Form.Item className='text-center my-3'>
