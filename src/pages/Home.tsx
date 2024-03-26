@@ -159,7 +159,7 @@ export const Home = () => {
           <div className="space-y-8 py-16">
             <div className="space-y-4">
               <div className="text-4xl font-medium py-8">Most Popular</div>
-              {articlesData.length == 0 ? (
+              {articlesData.length !== 0 ? (
                 <div className="gap-3 flex flex-wrap justify-center">
                   {articlesData.map((props) => {
                     return <ArticleCard key={props.id} {...props} />;
