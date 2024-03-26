@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { InputNumber, Button, Select, Checkbox, Form } from 'antd';
 const { Option } = Select;
@@ -8,13 +9,9 @@ export const ContinuousMetricTesting = () => {
 
   const [data, setData] = useState(null)
   const [layout, setLayout] = useState(null) 
-
   const [form] = Form.useForm();
 
-  const onFinish = async (values) => {
-    console.log('Received values of form: ', values);
-
-    // Define the base URL
+  const onFinish = async (values: any) => {
     const BASE_URL = 'http://127.0.0.1:8000';
 
     axios.post(`${BASE_URL}/tests/calc_continuous_metric/`, values)
@@ -22,11 +19,9 @@ export const ContinuousMetricTesting = () => {
         console.log(response.data);
         setData(response.data['Fig Confidence Level'].data);
         setLayout(response.data['Fig Confidence Level'].layout);
-        // Handle the response data here
       })
       .catch(error => {
         console.error('There was an error!', error);
-        // Handle errors here
       });
   };
   return (
