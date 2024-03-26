@@ -3,7 +3,7 @@ import { Paper } from '@mui/material'
 
 export const StatisticCard = () => {
     return (
-        <Paper className='mt-4 hover:shadow-2xl'>
+        <Paper className='mt-4 hover:shadow-lg'>
             <div className='w-64 h-28 relative'>
                 <div className='absolute flex justify-between items-end w-full px-4 -mt-1'>
                     <div className='h-14 w-14 flex justify-center items-center bg-primary rounded shadow shadow-primary -mt-2'>

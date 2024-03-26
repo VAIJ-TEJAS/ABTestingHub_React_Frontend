@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom"
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from "react-router-dom"
 import { Categories } from "./articles/pages/ArticlesCategories";
 import { ArticlesHome } from "./articles/pages/ArticlesHome";
 import { Article } from "./articles/pages/Article";
@@ -17,11 +17,15 @@ function App() {
 
   const { userAuthenticated } = Context();
 
-  return (
-    <>
-      <Router>
+  const Layout = () => {
+    const location = useLocation();
+    const noFooterRoutes = ['/dashboard/', '/ab-testing/', '/continuous-metric-testing/', '/proportional-metric-testing/'];
+    const showFooter = !noFooterRoutes.includes(location.pathname);
+
+    return (
+      <>
         <Navbar />
-        <Auth/>
+        <Auth />
         <Routes>
           <Route path="/" element={<Navigate to={"home"} />} />
           <Route path="/home" element={<Home />} />
@@ -43,7 +47,15 @@ function App() {
             </>
           )}
         </Routes>
-        <Footer />
+        {showFooter && <Footer />}
+      </>
+    );
+  };
+
+  return (
+    <>
+      <Router>
+        <Layout />
       </Router>
     </>
   );
