@@ -352,7 +352,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.totalSampleSize ?? "_._"}
+                    {numericalResults?.totalSampleSize.toLocaleString() ?? "_._"}
                   </div>
                 </div>
                 <div>
@@ -362,7 +362,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.daysRequired ?? "_._"}
+                    {numericalResults?.daysRequired.toLocaleString() ?? "_._"}
                   </div>
                 </div>
                 <div>
@@ -372,7 +372,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.controlRevenue ?? "_._"}
+                    {numericalResults?.controlRevenue?.toLocaleString() ?? "_._"}
                   </div>
                 </div>
               </div>
@@ -384,7 +384,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.sampleSizePerArm ?? "_._"}
+                    {numericalResults?.sampleSizePerArm.toLocaleString() ?? "_._"}
                   </div>
                 </div>
                 <div>
@@ -394,7 +394,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.weeksRequired ?? "_._"}
+                    {numericalResults?.weeksRequired.toLocaleString() ?? "_._"}
                   </div>
                 </div>
                 <div>
@@ -404,7 +404,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.testRevenue ?? "_._"}
+                    {numericalResults?.testRevenue?.toLocaleString() ?? "_._"}
                   </div>
                 </div>
               </div>
