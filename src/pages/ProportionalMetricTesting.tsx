@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { Form, InputNumber, Checkbox, Button, Select } from 'antd';
+import { Form, InputNumber, Checkbox, Button, Select, Tooltip } from 'antd';
 import axios from 'axios';
 import PlotGraph from '../components/PlotGraph';
 import { Paper } from '@mui/material';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -132,48 +133,140 @@ export const ProportionalMetricTesting: React.FC = () => {
           >
             <div className='flex gap-4'>
               <div className='w-60'>
-                <Form.Item name="confidence_level" label="Confidence Level | (1-\u03b1) %">
+                <Form.Item name="confidence_level" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Confidence Level | (1-\u03b1) %"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
                   <InputNumber min={90} max={100} style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item name="power" label="Statistical Power (1-\u03B2) %">
+                <Form.Item name="power" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Statistical Power (1-\u03B2) %"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
                   <InputNumber min={90} max={100} style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item name="baseline_cr" label="Baseline Conversion Rate (%)">
+                <Form.Item name="baseline_cr" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Baseline Conversion Rate (%)"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
                   <InputNumber min={0} max={100} style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item name="mde" label="Minimum Detectable Effect (%)">
+                <Form.Item name="mde" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Minimum Detectable Effect (%)"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
                   <InputNumber min={0} max={20} style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item name="daily_interactions" label="Daily Interactions">
+                <Form.Item name="daily_interactions" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Daily Interactions"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
                   <InputNumber min={1} style={{ width: '100%' }} />
                 </Form.Item>
               </div>
               <div className='w-60'>
-                <Form.Item name="arms" label="Arms">
+                <Form.Item name="arms" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Arms"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
                   <InputNumber min={2} max={20} style={{ width: '100%' }} onChange={(value) => {
                     handleArmsChange(value ?? 2)
                   }} />
                 </Form.Item>
 
                 <Form.Item name="absolute" valuePropName="checked">
-                  <Checkbox>Absolute</Checkbox>
+                  <Checkbox>
+                    Absolute
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip>
+                  </Checkbox>
                 </Form.Item>
 
                 <Form.Item name="two_tailed" valuePropName="checked">
-                  <Checkbox>Two-tail Test</Checkbox>
+                  <Checkbox>
+                    Two-tail Test
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip>
+                  </Checkbox>
                 </Form.Item>
 
                 <Form.Item name="equal_allocation" valuePropName="checked">
-                  <Checkbox checked={equalAllocation} onChange={handleEqualAllocationChange}>Equal Traffic Allocation</Checkbox>
+                  <Checkbox checked={equalAllocation} onChange={handleEqualAllocationChange}>
+                    Equal Traffic Allocation
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip>
+                  </Checkbox>
                 </Form.Item>
 
                 {!equalAllocation &&
                   allocations.map((allocation) => (
-                    <Form.Item key={allocation.id} label={`% Allocation to Test Arm #${allocation.id}`}>
+                    <Form.Item key={allocation.id} label={
+                      <div className='flex w-60 justify-between '>
+                        <div>
+                          {`% Allocation to Test Arm #${allocation.id}`}
+                        </div>
+                        <div>
+                          <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                            <QuestionCircleOutlined />
+                          </Tooltip>
+                        </div>
+                      </div>
+                    }>
                       <InputNumber
                         min={0}
                         max={100}
@@ -192,13 +285,35 @@ export const ProportionalMetricTesting: React.FC = () => {
               </div>
               <div className='flex gap-4'>
                 <div className='w-60'>
-                  <Form.Item name="revenue_per_conversion" label="Revenue per Conversion ($)">
+                  <Form.Item name="revenue_per_conversion" label={
+                    <div className='flex w-60 justify-between '>
+                      <div>
+                        {"Revenue per Conversion ($)"}
+                      </div>
+                      <div>
+                        <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                          <QuestionCircleOutlined />
+                        </Tooltip>
+                      </div>
+                    </div>
+                  }>
                     <InputNumber min={0.01} style={{ width: '100%' }} />
                   </Form.Item>
                 </div>
 
                 <div className='w-60'>
-                  <Form.Item name="expected_uplift" label="Expected Uplift in Test Arm (%)">
+                  <Form.Item name="expected_uplift" label={
+                    <div className='flex w-60 justify-between '>
+                      <div>
+                        {"Expected Uplift in Test Arm (%)"}
+                      </div>
+                      <div>
+                        <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                          <QuestionCircleOutlined />
+                        </Tooltip>
+                      </div>
+                    </div>
+                  }>
                     <InputNumber min={0} max={100} style={{ width: '100%' }} />
                   </Form.Item>
                 </div>
@@ -231,19 +346,31 @@ export const ProportionalMetricTesting: React.FC = () => {
             <div className='flex'>
               <div className='flex-1 space-y-4'>
                 <div>
-                  <div className='text-sm font-medium'>Total Sample Size</div>
+                  <div className='text-sm font-medium'>
+                    Total Sample Size
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
                   <div className='text-4xl'>
                     {numericalResults?.totalSampleSize ?? "_._"}
                   </div>
                 </div>
                 <div>
-                  <div className='text-sm font-medium'>Days Required</div>
+                  <div className='text-sm font-medium'>
+                    Days Required
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
                   <div className='text-4xl'>
                     {numericalResults?.daysRequired ?? "_._"}
                   </div>
                 </div>
                 <div>
-                  <div className='text-sm font-medium'>Control Revenue</div>
+                  <div className='text-sm font-medium'>
+                    Control Revenue
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
                   <div className='text-4xl'>
                     {numericalResults?.controlRevenue ?? "_._"}
                   </div>
@@ -251,19 +378,31 @@ export const ProportionalMetricTesting: React.FC = () => {
               </div>
               <div className='flex-1 space-y-4'>
                 <div>
-                  <div className='text-sm font-medium'>Samples Per Arm</div>
+                  <div className='text-sm font-medium'>
+                    Samples Per Arm
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
                   <div className='text-4xl'>
                     {numericalResults?.sampleSizePerArm ?? "_._"}
                   </div>
                 </div>
                 <div>
-                  <div className='text-sm font-medium'>Weeks Required</div>
+                  <div className='text-sm font-medium'>
+                    Weeks Required
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
                   <div className='text-4xl'>
                     {numericalResults?.weeksRequired ?? "_._"}
                   </div>
                 </div>
                 <div>
-                  <div className='text-sm font-medium'>Test Revenue</div>
+                  <div className='text-sm font-medium'>
+                    Test Revenue
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
                   <div className='text-4xl'>
                     {numericalResults?.testRevenue ?? "_._"}
                   </div>
@@ -273,7 +412,7 @@ export const ProportionalMetricTesting: React.FC = () => {
           </Paper>
           {numericalResults &&
             <>
-              <Paper className='p-4 space-y-4'>
+              <Paper className='p-4 space-y-4 border-primary border'>
                 <div>
                   <div className='text-lg font-medium'>Confidence Level vs. Sample Size:</div>
                   <div className='text-sm'>
