@@ -1,113 +1,457 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react';
-import { InputNumber, Button, Select, Checkbox, Form } from 'antd';
-const { Option } = Select;
-import axios from "axios"
+import React, { useEffect, useState } from 'react';
+import { Form, InputNumber, Checkbox, Button, Select, Tooltip } from 'antd';
+import axios from 'axios';
 import PlotGraph from '../components/PlotGraph';
+import { Paper } from '@mui/material';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
-export const ContinuousMetricTesting = () => {
+const { Option } = Select;
 
-  const [data, setData] = useState(null)
-  const [layout, setLayout] = useState(null) 
+export const ContinuousMetricTesting: React.FC = () => {
+
+  const [figures, setFigures] = useState<any[]>([]);
+  const [selectedFigIndex, setSelectedFigIndex] = useState<number>(0);
+  const [numericalResults, setNumericalResults] = useState<any>(null);
+  const [allocations, setAllocations] = useState<any[]>([]);
   const [form] = Form.useForm();
+  const [equalAllocation, setEqualAllocation] = useState<boolean>(true);
+
+  const createAllocations = (armsCount: number, equalAllocation: boolean) => {
+    return Array.from({ length: armsCount }, (_, index) => ({
+      id: index + 1,
+      value: equalAllocation ? 100 / armsCount : 0
+    }));
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    // Initialize allocations based on the arms count
+    const armsCount = form.getFieldValue('arms');
+    setAllocations(createAllocations(armsCount, equalAllocation));
+  }, [form]);
 
   const onFinish = async (values: any) => {
     const BASE_URL = 'http://127.0.0.1:8000';
 
-    axios.post(`${BASE_URL}/tests/calc_continuous_metric/`, values)
+    const payload = {
+      ...values,
+      allocations: {
+        arms: values.arms,
+        data: allocations,
+      }
+    };
+
+    console.log(payload);
+
+    axios.post(`${BASE_URL}/tests/calc_continuous_metric/`, payload)
       .then(response => {
+
         console.log(response.data);
-        setData(response.data['Fig Confidence Level'].data);
-        setLayout(response.data['Fig Confidence Level'].layout);
+
+        const {
+          'Total Sample Size': totalSampleSize,
+          'Sample Size Per Arm': sampleSizePerArm,
+          'Days Required': daysRequired,
+          'Weeks Required': weeksRequired,
+          'Control Revenue': controlRevenue,
+          'Test Revenue': testRevenue
+        } = response.data;
+
+        setNumericalResults({
+          totalSampleSize,
+          sampleSizePerArm,
+          daysRequired,
+          weeksRequired,
+          controlRevenue,
+          testRevenue
+        });
+
+        setFigures([
+          {
+            name: 'Confidence Level',
+            data: response.data['Fig Confidence Level'].data,
+            layout: response.data['Fig Confidence Level'].layout
+          },
+          {
+            name: 'Power',
+            data: response.data['Fig Power'].data,
+            layout: response.data['Fig Power'].layout
+          },
+          {
+            name: 'MDE',
+            data: response.data['Fig MDE'].data,
+            layout: response.data['Fig MDE'].layout
+          }
+        ]);
       })
       .catch(error => {
         console.error('There was an error!', error);
       });
   };
+
+  const handleAllocationChange = (id: number, value: number) => {
+    setAllocations(allocations.map(allocation => allocation.id === id ? { ...allocation, value } : allocation));
+  };
+
+  const handleArmsChange = (value: number) => {
+    setAllocations(Array.from({ length: value }, (_, index) => ({
+      id: index + 1,
+      value: 100 / value
+    })));
+  };
+
+  const handleEqualAllocationChange = (e: any) => {
+    const equalAlloc = e.target.checked;
+    setEqualAllocation(equalAlloc);
+    if (equalAlloc) {
+      const armsCount = form.getFieldValue('arms');
+      setAllocations(createAllocations(armsCount, true));
+    }
+  };
+
   return (
-    <div className='py-8 px-2 flex w-full justify-center'>
-      <div className='container'>
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={onFinish}
-          initialValues={{
-            confidence_level: 95.0,
-            power: 80.0,
-            baseline_kpi: 5.0,
-            standard_deviation: 1.5,
-            mde: 0.5,
-            absolute: true,
-            arms: 2,
-            daily_interactions: 1000,
-            two_tailed: true,
-            equal_allocation: true
-          }}
-        >
-          <Form.Item name="confidence_level" label="Confidence Level (1-\u03B1) %">
-            <InputNumber min={90} max={100} />
-          </Form.Item>
+    <div className='py-8 px-2 flex w-full justify-center bg-[#f5f5f550]'>
+      <div className='container flex gap-4'>
+        <Paper className='p-4'>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={onFinish}
+            initialValues={{
+              confidence_level: 95,
+              power: 90,
+              standard_deviation: 1.00,
+              baseline_kpi: 10,
+              mde: 3,
+              absolute: true,
+              arms: 2,
+              daily_interactions: 100,
+              two_tailed: true,
+              equal_allocation: true,
+              // revenue_per_conversion: 0.25,
+              // expected_uplift: 3
+            }}
+          >
+            <div className='flex gap-4'>
+              <div className='w-60'>
+                <Form.Item name="confidence_level" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Confidence Level | (1-\u03b1) %"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={90} max={100} style={{ width: '100%' }} />
+                </Form.Item>
 
-          <Form.Item name="power" label="Statistical Power (1-\u03B2) %">
-            <InputNumber min={80} max={100} />
-          </Form.Item>
+                <Form.Item name="power" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Statistical Power (1-\u03B2) %"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={90} max={100} style={{ width: '100%' }} />
+                </Form.Item>
 
-          <Form.Item name="baseline_kpi" label="KPI: Average">
-            <InputNumber min={0} max={100} />
-          </Form.Item>
+                <Form.Item name="baseline_kpi" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"KPI : Average"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={0} max={100} style={{ width: '100%' }} />
+                </Form.Item>
 
-          <Form.Item name="standard_deviation" label="Standard Deviation">
-            <InputNumber min={0} max={100} />
-          </Form.Item>
+                <Form.Item name="standard_deviation" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"KPI : Standard Deviation"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={0} style={{ width: '100%' }} />
+                </Form.Item>
 
-          <Form.Item name="mde" label="Minimum Detectable Effect (%)">
-            <InputNumber min={0} max={20} />
-          </Form.Item>
+                <Form.Item name="mde" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Minimum Detectable Effect (%)"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={0} max={20} style={{ width: '100%' }} />
+                </Form.Item>
 
-          <Form.Item name="arms" label="Arms">
-            <InputNumber min={2} max={20} />
-          </Form.Item>
+                <Form.Item name="daily_interactions" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Daily Interactions"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={1} style={{ width: '100%' }} />
+                </Form.Item>
+              </div>
+              <div className='w-60'>
+                <Form.Item name="arms" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Arms"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={2} max={20} style={{ width: '100%' }} onChange={(value) => {
+                    handleArmsChange(value ?? 2)
+                  }} />
+                </Form.Item>
 
-          <Form.Item name="daily_interactions" label="Daily Interactions">
-            <InputNumber min={1} />
-          </Form.Item>
+                <Form.Item name="absolute" valuePropName="checked">
+                  <Checkbox>
+                    Absolute
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip>
+                  </Checkbox>
+                </Form.Item>
 
-          <Form.Item name="revenue_per_conversion" label="Revenue per unit KPI $">
-            <InputNumber min={0.01} />
-          </Form.Item>
+                <Form.Item name="two_tailed" valuePropName="checked">
+                  <Checkbox>
+                    Two-tail Test
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip>
+                  </Checkbox>
+                </Form.Item>
 
-          <Form.Item name="expected_uplift" label="Expected Uplift in Test Arm (%)">
-            <InputNumber min={0} max={20} />
-          </Form.Item>
+                <Form.Item name="equal_allocation" valuePropName="checked">
+                  <Checkbox checked={equalAllocation} onChange={handleEqualAllocationChange}>
+                    Equal Traffic Allocation
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip>
+                  </Checkbox>
+                </Form.Item>
 
-          <Form.Item name="visualization" label="Choose Visualization">
-            <Select defaultValue={"confidenceLevel"}>
-              <Option value="confidenceLevel">Confidence Level</Option>
-              <Option value="power">Power</Option>
-              <Option value="mde">MDE</Option>
-            </Select>
-          </Form.Item>
+                {!equalAllocation &&
+                  allocations.map((allocation) => (
+                    <Form.Item key={allocation.id} label={
+                      <div className='flex w-60 justify-between '>
+                        <div>
+                          {`% Allocation to Test Arm #${allocation.id}`}
+                        </div>
+                        <div>
+                          <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                            <QuestionCircleOutlined />
+                          </Tooltip>
+                        </div>
+                      </div>
+                    }>
+                      <InputNumber
+                        min={0}
+                        max={100}
+                        value={allocation.value}
+                        onChange={(value) => handleAllocationChange(allocation.id, value)}
+                        style={{ width: '100%' }}
+                      />
+                    </Form.Item>
+                  ))
+                }
+              </div>
+            </div>
+            <div>
+              <div className='text-2xl font-medium py-4'>
+                Revenue Calculations (Optional)
+              </div>
+              <div className='flex gap-4'>
+                <div className='w-60'>
+                  <Form.Item name="revenue_per_conversion" label={
+                    <div className='flex w-60 justify-between '>
+                      <div>
+                        {"Revenue per Conversion ($)"}
+                      </div>
+                      <div>
+                        <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                          <QuestionCircleOutlined />
+                        </Tooltip>
+                      </div>
+                    </div>
+                  }>
+                    <InputNumber min={0.01} style={{ width: '100%' }} />
+                  </Form.Item>
+                </div>
 
-          <Form.Item name="absolute">
-              <Checkbox value="absolute">Absolute</Checkbox>
-          </Form.Item>
+                <div className='w-60'>
+                  <Form.Item name="expected_uplift" label={
+                    <div className='flex w-60 justify-between '>
+                      <div>
+                        {"Expected Uplift in Test Arm (%)"}
+                      </div>
+                      <div>
+                        <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                          <QuestionCircleOutlined />
+                        </Tooltip>
+                      </div>
+                    </div>
+                  }>
+                    <InputNumber min={0} max={100} style={{ width: '100%' }} />
+                  </Form.Item>
+                </div>
+              </div>
+            </div>
 
-          <Form.Item name="two_tailed">
-              <Checkbox value="two_tailed">Two-tail Test</Checkbox>
-          </Form.Item>
-
-          <Form.Item name="equal_allocation">
-              <Checkbox value="equal_allocation">Equal Traffic Allocation</Checkbox>
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Calculate
-            </Button>
-          </Form.Item>
-        </Form>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Calculate
+              </Button>
+            </Form.Item>
+          </Form>
+        </Paper>
+        <div className='flex-1 flex flex-col gap-4'>
+          {figures.length > 0 &&
+            <div>
+              <Form.Item label="Select Figure">
+                <Select onChange={(value) => setSelectedFigIndex(value)} defaultValue={0}>
+                  {figures.map((fig, index) => (
+                    <Option key={index} value={index}>{fig.name}</Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Paper className='flex w-full justify-center items-center'>
+                <PlotGraph data={figures[selectedFigIndex].data} layout={figures[selectedFigIndex].layout} />
+              </Paper>
+            </div>
+          }
+          <Paper className='p-4'>
+            <div className='flex'>
+              <div className='flex-1 space-y-4'>
+                <div>
+                  <div className='text-sm font-medium'>
+                    Total Sample Size
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
+                  <div className='text-4xl'>
+                    {numericalResults?.totalSampleSize.toLocaleString() ?? "_._"}
+                  </div>
+                </div>
+                <div>
+                  <div className='text-sm font-medium'>
+                    Days Required
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
+                  <div className='text-4xl'>
+                    {numericalResults?.daysRequired.toLocaleString() ?? "_._"}
+                  </div>
+                </div>
+                <div>
+                  <div className='text-sm font-medium'>
+                    Control Revenue
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
+                  <div className='text-4xl'>
+                    {numericalResults?.controlRevenue?.toLocaleString() ?? "_._"}
+                  </div>
+                </div>
+              </div>
+              <div className='flex-1 space-y-4'>
+                <div>
+                  <div className='text-sm font-medium'>
+                    Samples Per Arm
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
+                  <div className='text-4xl'>
+                    {numericalResults?.sampleSizePerArm.toLocaleString() ?? "_._"}
+                  </div>
+                </div>
+                <div>
+                  <div className='text-sm font-medium'>
+                    Weeks Required
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
+                  <div className='text-4xl'>
+                    {numericalResults?.weeksRequired.toLocaleString() ?? "_._"}
+                  </div>
+                </div>
+                <div>
+                  <div className='text-sm font-medium'>
+                    Test Revenue
+                    <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
+                      <QuestionCircleOutlined />
+                    </Tooltip></div>
+                  <div className='text-4xl'>
+                    {numericalResults?.testRevenue?.toLocaleString() ?? "_._"}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Paper>
+          {numericalResults &&
+            <>
+              <Paper className='p-4 space-y-4 border-primary border'>
+                <div>
+                  <div className='text-lg font-medium'>Confidence Level vs. Sample Size:</div>
+                  <div className='text-sm'>
+                    As the Confidence Level increases, there is a corresponding increase in the Sample Size. The graph shows how the required sample size for the experiment changes as you adjust the confidence level.
+                  </div>
+                </div>
+                <div>
+                  <div className='text-lg font-medium'>Power vs. Sample Size:</div>
+                  <div className='text-sm'>
+                    As the Power increases, there is a corresponding increase in the Sample Size. The graph shows how the required sample size for the experiment changes as you adjust the power.
+                  </div>
+                </div>
+                <div>
+                  <div className='text-lg font-medium'>MDE vs. Sample Size:</div>
+                  <div className='text-sm'>
+                    As the Minimum Detectable Effect (MDE) decreases, there is a corresponding increase in the Sample Size. The graph shows how the required sample size for the experiment changes as you adjust the MDE.
+                  </div>
+                </div>
+              </Paper>
+            </>}
+        </div>
       </div>
-      <PlotGraph data={data} layout={layout} />
     </div>
   );
 };

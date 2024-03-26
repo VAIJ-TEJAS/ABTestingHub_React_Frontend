@@ -25,6 +25,7 @@ export const ProportionalMetricTesting: React.FC = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     // Initialize allocations based on the arms count
     const armsCount = form.getFieldValue('arms');
     setAllocations(createAllocations(armsCount, equalAllocation));
