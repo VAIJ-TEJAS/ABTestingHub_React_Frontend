@@ -31,6 +31,7 @@ interface ArticalCardProps {
 
 interface ArticalsDataProps {
   articles: ArticalCardProps[];
+  popularArticles: ArticalCardProps[];
   featuredArticle: ArticalCardProps;
 }
 
@@ -38,6 +39,7 @@ export const ArticlesHome = () => {
   const [articlesData, setArticlesData] = useState<ArticalsDataProps>({
     articles: [],
     featuredArticle: {},
+    popularArticles: [],
   });
 
   useEffect(() => {
@@ -45,6 +47,9 @@ export const ArticlesHome = () => {
       setArticlesData({
         articles: articles.data,
         featuredArticle: articles.data[0],
+        popularArticles: articles.data.filter(
+          (article) => article.popular_article
+        ),
       });
     });
   }, []);
@@ -54,68 +59,77 @@ export const ArticlesHome = () => {
       <Container>
         <div className="flex justify-between items-center my-8">
           <div className="text-6xl font-medium">Articles</div>
-
           <ArticlesCategoryCard />
         </div>
         <div className="flex gap-16">
-          <div className="flex-1 group">
-            <Link
-              to={`/article/${articlesData.featuredArticle.id}`}
-              className="space-y-3 group-hover:cursor-pointer"
-            >
-              <div
-                style={{
-                  backgroundImage: `url(${articlesData.featuredArticle?.cover_image?.image})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  overflow: "hidden",
-                }}
-                className="h-96 group-hover:rounded-xl group-hover:border group-hover:border-primary transition-all duration-200"
+          {articlesData.featuredArticle ? (
+            <div className="flex-1 group">
+              <Link
+                to={`/article/${articlesData.featuredArticle.id}`}
+                className="space-y-3 group-hover:cursor-pointer"
               >
-                IMG
-              </div>
-              <div className="text-5xl font-medium group-hover:text-primary transition-colors duration-200">
-                {articlesData.featuredArticle?.title}
-              </div>
-              <div className="text-zinc-500">
-                {articlesData.featuredArticle?.short_description}
-              </div>
-              <div className="py-3">
-                <div className="flex space-x-2 items-center">
-                  <div className="flex gap-2">
-                    <img
-                      src={articlesData.featuredArticle.author?.picture}
-                      className="h-10 w-10 object-cover rounded-full"
-                    />
-                    <div>
-                      <div className="font-semibold">
-                        {articlesData.featuredArticle.author?.name}
-                      </div>
-                      <div className="text-sm text-zinc-500">
-                        {articlesData.featuredArticle.author?.role}
+                <div
+                  style={{
+                    backgroundImage: `url(${articlesData.featuredArticle?.cover_image?.image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    overflow: "hidden",
+                  }}
+                  className="h-96 group-hover:rounded-xl group-hover:border group-hover:border-primary transition-all duration-200"
+                >
+                  IMG
+                </div>
+                <div className="text-5xl font-medium group-hover:text-primary transition-colors duration-200">
+                  {articlesData.featuredArticle?.title}
+                </div>
+                <div className="text-zinc-500">
+                  {articlesData.featuredArticle?.short_description}
+                </div>
+                <div className="py-3">
+                  <div className="flex space-x-2 items-center">
+                    <div className="flex gap-2">
+                      <img
+                        src={articlesData.featuredArticle.author?.picture}
+                        className="h-10 w-10 object-cover rounded-full"
+                      />
+                      <div>
+                        <div className="font-semibold">
+                          {articlesData.featuredArticle.author?.name}
+                        </div>
+                        <div className="text-sm text-zinc-500">
+                          {articlesData.featuredArticle.author?.role}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          </div>
-          <div className="space-y-4">
-            <div className="text-4xl font-medium">Most Popular</div>
-            <div className="space-y-3">
-              {articlesData.articles.map((props) => {
-                if (props.popular_article)
-                  return <MostPopularArticleCard key={props.id} {...props} />;
-              })}
+              </Link>
             </div>
-          </div>
+          ) : (
+            <p className="w-96">No article featured</p>
+          )}
+
+          {articlesData.popularArticles && (
+            <div className="space-y-4">
+              <div className="text-4xl font-medium">Most Popular</div>
+              <div className="space-y-3">
+                {articlesData.popularArticles.map((props) => {
+                  return <MostPopularArticleCard key={props.id} {...props} />;
+                })}
+              </div>
+            </div>
+          )}
         </div>
         <hr className="my-8" />
-        <div className="grid grid-cols-3 justify-items-center gap-8">
-          {articlesData.articles.map((props) => {
-            return <ArticleCard key={props.id} {...props} />;
-          })}
-        </div>
+        {articlesData.articles ? (
+          <div className="grid grid-cols-3 justify-items-center gap-8">
+            {articlesData.articles.map((props) => {
+              return <ArticleCard key={props.id} {...props} />;
+            })}
+          </div>
+        ) : (
+          <p className="text-center">no articles found</p>
+        )}
         <hr className="my-8" />
       </Container>
     </>

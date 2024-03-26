@@ -16,6 +16,29 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import ArticlesCategoryCard from "../components/ArticlesCategoryCard";
 
+interface ArticalDataProps {
+  id?: number;
+  title?: string;
+  short_description?: string;
+  published_date?: string;
+  popular_article?: boolean;
+  featured_article?: boolean;
+  cover_image?: {
+    id: number;
+    image: string;
+  };
+  category?: {
+    id: number;
+    name: string;
+  };
+  author?: {
+    id: number;
+    name: string;
+    picture: string;
+    role: string;
+  };
+}
+
 export const Article = () => {
   const { article_id } = useParams();
 
@@ -41,6 +64,14 @@ export const Article = () => {
     };
 
     fetchArticle();
+  }, []);
+
+  const [relatedArticles, setRelatedArticles] = useState<ArticalDataProps[]>([]);
+
+  useEffect(() => {
+    axios.get("https://89.116.33.88/articles-card/").then((articles) => {
+      setRelatedArticles(articles.data);
+    });
   }, []);
 
   useEffect(() => {
@@ -266,9 +297,15 @@ export const Article = () => {
           <hr className="my-8" />
           <div className="text-4xl font-medium my-8">Related Articles</div>
           <div className="flex justify-between">
-            <ArticleCard />
-            <ArticleCard />
-            <ArticleCard />
+
+            {
+              relatedArticles.slice(0, 3).map((props) => {
+                return (
+                  <ArticleCard key={props.id} {...props} />
+                )
+              })
+            }
+
           </div>
         </Container>
       </div>
