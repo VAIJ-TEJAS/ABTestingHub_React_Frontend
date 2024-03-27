@@ -13,31 +13,8 @@ import axios from "axios";
 import "../../css/scoped-styles.css";
 import { IArticle } from "../../types/article.types";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ArticlesCategoryCard from "../components/ArticlesCategoryCard";
-
-interface ArticalDataProps {
-  id?: number;
-  title?: string;
-  short_description?: string;
-  published_date?: string;
-  popular_article?: boolean;
-  featured_article?: boolean;
-  cover_image?: {
-    id: number;
-    image: string;
-  };
-  category?: {
-    id: number;
-    name: string;
-  };
-  author?: {
-    id: number;
-    name: string;
-    picture: string;
-    role: string;
-  };
-}
 
 export const Article = () => {
   const { article_id } = useParams();
@@ -48,15 +25,15 @@ export const Article = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
 
-  useEffect(() => {
     const fetchArticle = async () => {
       try {
         const response = await axios.get(
           `https://89.116.33.88/articles/${article_id}/`
         );
         setArticle(response.data);
+        console.log(response.data);
+
         setContent(addSectionIdsToContent(response.data.content));
       } catch (error) {
         console.error("Error fetching article:", error);
@@ -64,15 +41,7 @@ export const Article = () => {
     };
 
     fetchArticle();
-  }, []);
-
-  const [relatedArticles, setRelatedArticles] = useState<ArticalDataProps[]>([]);
-
-  useEffect(() => {
-    axios.get("https://89.116.33.88/articles-card/").then((articles) => {
-      setRelatedArticles(articles.data);
-    });
-  }, []);
+  }, [article_id]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -267,46 +236,61 @@ export const Article = () => {
 
         {/* Related Articles */}
         <Container className="my-16">
-          <div className="flex justify-between gap-3">
-            <div className="flex flex-1 flex-col items-start space-y-1 group cursor-pointer">
-              <div className="text-xl flex justify-start items-start gap-1">
-                <div className="text-primary group-hover:animate-ping">
-                  <LeftOutlined />
-                </div>
-                <div>Previous</div>
-              </div>
-              <div className="text-2xl font-medium group-hover:text-primary duration-200">
-                Artificial Intelligence
-              </div>
+          {(article?.previous_article || article?.next_article) && (
+            <div className="flex justify-between gap-3">
+              {article.previous_article ? (
+                <Link
+                  to={`/article/${article.previous_article?.id}`}
+                  className="flex flex-1 flex-col items-start space-y-1 group cursor-pointer"
+                >
+                  <div className="text-xl flex justify-start items-start gap-1">
+                    <div className="text-primary group-hover:animate-ping">
+                      <LeftOutlined />
+                    </div>
+                    <div>Previous</div>
+                  </div>
+                  <div className="text-2xl font-medium group-hover:text-primary duration-200">
+                    Artificial Intelligence
+                  </div>
+                </Link>
+              ) : (
+                <p></p>
+              )}
+
+              <div className="text-zinc-500 flex-shrink-0">|</div>
+
+              {article.next_article ? (
+                <Link
+                  to={`/article/${article.next_article?.id}`}
+                  className="flex flex-1 flex-col items-end space-y-1 group cursor-pointer"
+                >
+                  <div className="text-xl flex items-start gap-1">
+                    <div>Next</div>
+                    <div className="text-primary group-hover:animate-ping">
+                      <RightOutlined />
+                    </div>
+                  </div>
+                  <div className="text-2xl font-medium group-hover:text-primary duration-200">
+                    Artificial Intelligence
+                  </div>
+                </Link>
+              ) : (
+                <p></p>
+              )}
             </div>
+          )}
 
-            <div className="text-zinc-500 flex-shrink-0">|</div>
-
-            <div className="flex flex-1 flex-col items-end space-y-1 group cursor-pointer">
-              <div className="text-xl flex items-start gap-1">
-                <div>Next</div>
-                <div className="text-primary group-hover:animate-ping">
-                  <RightOutlined />
-                </div>
+          {article?.related_articles?.length !== 0 && (
+            <>
+              <hr className="my-8" />
+              <div className="text-4xl font-medium my-8">Related Articles</div>
+              <div className="flex justify-between">
+                {article?.related_articles?.map((props) => {
+                  return <ArticleCard key={props.id} {...props} />;
+                })}
               </div>
-              <div className="text-2xl font-medium group-hover:text-primary duration-200">
-                Artificial Intelligence
-              </div>
-            </div>
-          </div>
-          <hr className="my-8" />
-          <div className="text-4xl font-medium my-8">Related Articles</div>
-          <div className="flex justify-between">
-
-            {
-              relatedArticles.slice(0, 3).map((props) => {
-                return (
-                  <ArticleCard key={props.id} {...props} />
-                )
-              })
-            }
-
-          </div>
+            </>
+          )}
         </Container>
       </div>
     </>

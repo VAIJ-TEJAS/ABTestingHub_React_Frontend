@@ -177,16 +177,15 @@ export const Home = () => {
         <Container>
           <div className="space-y-8 py-16">
             <div className="flex gap-8">
-              <div className="space-y-8 w-full p-4">
-                <ArticleStripe />
-                <ArticleStripe />
-                <ArticleStripe />
-                <ArticleStripe />
-                <ArticleStripe />
-                <ArticleStripe />
-                <ArticleStripe />
-                <ArticleStripe />
-              </div>
+              {articlesData.length !== 0 ? (
+                <div className="space-y-8 w-full p-4">
+                  {articlesData.map((props) => {
+                    return <ArticleStripe key={props.id} {...props} />;
+                  })}
+                </div>
+              ) : (
+                <p className="w-96">No data found</p>
+              )}
               <div className="w-80 flex-shrink-0 p-4 space-y-4">
                 <div className="font-medium">
                   Discover our articles in various categories
