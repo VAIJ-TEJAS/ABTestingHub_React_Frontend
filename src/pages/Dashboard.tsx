@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatisticCard } from '../components/StatisticCard';
 import { Table, Input, Button, Space, Tag } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
 import { Paper } from '@mui/material';
 
-const getTagColor = (status) => {
+const getTagColor = (status: any) => {
   switch (status) {
     case 'Concluded':
       return 'volcano';
@@ -37,7 +38,7 @@ const columns = [
     title: 'Status',
     key: 'status',
     dataIndex: 'status',
-    render: status => (
+    render: (status: any) => (
       <Tag color={getTagColor(status)}>{status}</Tag>
     ),
   },
@@ -45,7 +46,7 @@ const columns = [
     title: 'Integrity',
     key: 'integrity',
     dataIndex: 'integrity',
-    render: integrity => (
+    render: (integrity: any) => (
       <span>{integrity ? <Tag color="green">High</Tag> : <Tag color="volcano">Low</Tag>}</span>
     ),
   },

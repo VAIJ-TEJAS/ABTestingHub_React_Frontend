@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Container, Paper } from "@mui/material";
 import { Button } from "antd";
 import HeroImage from "../assets/images/hero-image.webp";
-import { MostPopularArticleCard } from "../articles/components/MostPopularArticleCard";
 import ContinuousMetricLogo from "../assets/images/ContinuousMetric.webp";
 import ProportionalMetricLogo from "../assets/images/ProportionalMetric.webp";
 import ABTestingLogo from "../assets/images/ABTesting.webp";
 import { ArticleStripe } from "../articles/components/ArticleStripe";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ArticleCard } from "../articles/components/ArticleCard";
+import { Context } from "../context/context.provider";
+import { MostPopularArticleCard } from "../articles/components/MostPopularArticleCard";
 
 interface ArticalCardProps {
   id?: number;
@@ -34,6 +35,9 @@ interface ArticalCardProps {
 }
 
 export const Home = () => {
+
+  const { showAuthModal } = Context() 
+
   const [articleCategories, setArticleCategories] = useState<
     { id: string; name: string }[]
   >([]);
@@ -49,7 +53,7 @@ export const Home = () => {
   useEffect(() => {
     axios.get("https://89.116.33.88/articles-card/").then((articles) => {
       setArticlesData(
-        articles.data.filter((article) => article.popular_article)
+        articles.data.filter((article: any) => article.popular_article)
       );
     });
   }, []);
@@ -69,7 +73,7 @@ export const Home = () => {
                 size="large"
                 type="primary"
                 className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
-                // onClick={showAuthModal}
+                onClick={showAuthModal}
               >
                 Get Started
               </Button>
@@ -162,7 +166,7 @@ export const Home = () => {
               {articlesData.length !== 0 ? (
                 <div className="gap-3 flex flex-wrap justify-center">
                   {articlesData.map((props) => {
-                    return <ArticleCard key={props.id} {...props} />;
+                    return <MostPopularArticleCard key={props.id} {...props} />;
                   })}
                 </div>
               ) : (
