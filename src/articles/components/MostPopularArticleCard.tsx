@@ -33,7 +33,7 @@ export const MostPopularArticleCard: FC<MostPopularArticalCardProps> = ({
     <div>
       <div className="w-[360px] group space-y-4">
         <Link  to={`/article/${id}`} className="space-y-1 group-hover:cursor-pointer">
-          <div className="text-2xl font-medium group-hover:text-primary transition-colors duration-200">
+          <div className="text-2xl h-20 font-medium group-hover:text-primary transition-colors duration-200">
             {title || "Article Title"}
           </div>
           <div className="flex gap-2">

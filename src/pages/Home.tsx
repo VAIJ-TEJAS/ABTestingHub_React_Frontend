@@ -8,7 +8,6 @@ import ABTestingLogo from "../assets/images/ABTesting.webp";
 import { ArticleStripe } from "../articles/components/ArticleStripe";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ArticleCard } from "../articles/components/ArticleCard";
 
 interface ArticalCardProps {
   id?: number;
@@ -157,18 +156,17 @@ export const Home = () => {
       <div>
         <Container>
           <div className="space-y-8 py-16">
-            <div className="space-y-4">
-              <div className="text-4xl font-medium py-8">Most Popular</div>
-              {articlesData.length !== 0 ? (
-                <div className="gap-3 flex flex-wrap justify-center">
+            {articlesData.length !== 0 && (
+              <div className="space-y-4">
+                <div className="text-4xl font-medium py-8">Most Popular</div>
+
+                <div className="gap-3 grid grid-cols-3">
                   {articlesData.map((props) => {
-                    return <ArticleCard key={props.id} {...props} />;
+                    return <MostPopularArticleCard key={props.id} {...props} />;
                   })}
                 </div>
-              ) : (
-                <p className="text-center">No popular articles to show</p>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </Container>
       </div>
@@ -177,14 +175,12 @@ export const Home = () => {
         <Container>
           <div className="space-y-8 py-16">
             <div className="flex gap-8">
-              {articlesData.length !== 0 ? (
+              {articlesData.length !== 0 && (
                 <div className="space-y-8 w-full p-4">
                   {articlesData.map((props) => {
                     return <ArticleStripe key={props.id} {...props} />;
                   })}
                 </div>
-              ) : (
-                <p className="w-96">No data found</p>
               )}
               <div className="w-80 flex-shrink-0 p-4 space-y-4">
                 <div className="font-medium">
