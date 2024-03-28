@@ -12,19 +12,34 @@ import { Dashboard } from "./pages/Dashboard";
 import { ContinuousMetricTesting } from "./pages/ContinuousMetricTesting";
 import { ProportionalMetricTesting } from "./pages/ProportionalMetricTesting";
 import { Auth } from "./components/Auth";
+import { DashboardNavbar } from "./components/DashboardNavbar";
 
 function App() {
 
   const { userAuthenticated } = Context();
 
   const Layout = () => {
+
     const location = useLocation();
-    const noFooterRoutes = ['/dashboard/', '/create-test/' ,'/ab-testing/', '/continuous-metric-testing/', '/proportional-metric-testing/'];
-    const showFooter = !noFooterRoutes.includes(location.pathname);
+    const noFooterRoutes = ['dashboard', 'create-test', 'ab-testing', 'continuous-metric-testing', 'proportional-metric-testing'];
+    const showFooter = !noFooterRoutes.includes(location.pathname.split('/')[1]);
+    
+    const isDashboard = location.pathname.split('/')[1] === 'dashboard';
+    const isCreateTest = location.pathname.split('/')[1] === 'create-test';
 
     return (
       <>
-        <Navbar />
+        {
+          userAuthenticated && isDashboard || isCreateTest ? (
+            <>
+              <DashboardNavbar />
+            </>
+          ) : (
+            <>
+              <Navbar />
+            </>
+          )
+        }
         <Auth />
         <Routes>
           <Route path="/" element={<Navigate to={"home"} />} />
@@ -33,17 +48,17 @@ function App() {
           <Route path="/articles/:category_name" element={<Categories />} />
           <Route path="/article/:article_id" element={<Article />} />
           <Route path="/ab-testing/" element={<ABTesting />} />
-          <Route path="/continuous-metric-testing/" element={<ContinuousMetricTesting />} />
-          <Route path="/proportional-metric-testing/" element={<ProportionalMetricTesting />} />
+          <Route path="/continuous-metric-testing" element={<ContinuousMetricTesting />} />
+          <Route path="/proportional-metric-testing" element={<ProportionalMetricTesting />} />
           {userAuthenticated ? (
             <>
-              <Route path="/create-test/" element={<CreateTest />} />
-              <Route path="/dashboard/" element={<Dashboard />} />
+              <Route path="/create-test" element={<CreateTest />} />
+              <Route path="/dashboard" element={<Dashboard />} />
             </>
           ) : (
             <>
-              <Route path="/create-test/" element={<Navigate to={"/home"} />} />
-              <Route path="/dashboard/" element={<Navigate to={"/home"} />} />
+              <Route path="/create-test" element={<Navigate to={"/home"} />} />
+              <Route path="/dashboard" element={<Navigate to={"/home"} />} />
             </>
           )}
         </Routes>

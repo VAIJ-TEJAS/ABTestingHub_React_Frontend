@@ -1,14 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { Form, InputNumber, Checkbox, Button, Select, Tooltip } from 'antd';
+import { Form, InputNumber, Checkbox, Button, Select, Tooltip, Spin } from 'antd';
 import axios from 'axios';
 import PlotGraph from '../components/PlotGraph';
 import { Paper } from '@mui/material';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import { useLocation } from 'react-router-dom';
+import { ITest } from '../types/test.types';
 
 const { Option } = Select;
 
 export const ProportionalMetricTesting: React.FC = () => {
+
+  const location = useLocation();
+  const [testData, setTestData] = useState<ITest | null>(null);
 
   const [figures, setFigures] = useState<any[]>([]);
   const [selectedFigIndex, setSelectedFigIndex] = useState<number>(0);
@@ -25,14 +30,37 @@ export const ProportionalMetricTesting: React.FC = () => {
   };
 
   useEffect(() => {
+    // Assuming the test ID is passed as state
+    const state = location.state as { testId: number };
+    if (state?.testId) {
+      fetchTestDetails(state.testId);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
     // Initialize allocations based on the arms count
     const armsCount = form.getFieldValue('arms');
     setAllocations(createAllocations(armsCount, equalAllocation));
   }, [form]);
 
+  const fetchTestDetails = async (id: number) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/tests/${id}/`, {
+        headers: {
+          'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
+        }
+      });
+      // Process response data to populate form, figures, or any other component state
+      console.log(response.data);
+      setTestData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch test details:", error);
+    }
+  };
+
   const onFinish = async (values: any) => {
-    const BASE_URL = 'https://89.116.33.88';
+    const BASE_URL = 'http://localhost:8000';
 
     const payload = {
       ...values,
@@ -110,8 +138,48 @@ export const ProportionalMetricTesting: React.FC = () => {
     }
   };
 
+  const saveResults = async () => {
+    if (!testData) return; // Check if testData is loaded
+  
+    // Assuming `values` contains all the input fields that were submitted.
+    // You might need to store `values` in a state after `onFinish` is executed or directly use form values.
+    const formValues = form.getFieldsValue();
+  
+    const payload = {
+      ...formValues, // This spreads input values into the payload
+      ...numericalResults, // Spread numerical results into the payload
+    };
+
+    console.log(payload);
+  
+    try {
+      const response = await axios.patch(`http://localhost:8000/tests/${testData.id}/`, payload, {
+        headers: {
+          'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
+        }
+      });
+      console.log('Save successful', response.data);
+      // Optionally, navigate away or show a success message
+    } catch (error) {
+      console.error('Failed to save test details:', error);
+      // Optionally, handle error, such as showing an error message
+    }
+  };
+
   return (
-    <div className='py-8 px-2 flex w-full justify-center bg-[#f5f5f550]'>
+    <div className='py-8 px-2 flex flex-col w-full justify-center items-center bg-[#f5f5f550] gap-4'>
+      {testData &&
+        <div className='container'>
+          <Paper className='p-4 flex relative'>
+            <div className='font-medium'>
+              {testData?.name}
+            </div>
+            {/* <div className='absolute w-full flex justify-center items-center'>
+              <Spin/>
+            </div> */}
+          </Paper>
+        </div>
+      }
       <div className='container flex gap-4'>
         <Paper className='p-4'>
           <Form
@@ -121,7 +189,7 @@ export const ProportionalMetricTesting: React.FC = () => {
             initialValues={{
               confidence_level: 95,
               power: 90,
-              baseline_cr: 10,
+              baseline_conversion_rate: 10,
               mde: 3,
               absolute: true,
               arms: 2,
@@ -164,7 +232,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                   <InputNumber min={90} max={100} style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item name="baseline_cr" label={
+                <Form.Item name="baseline_conversion_rate" label={
                   <div className='flex w-60 justify-between '>
                     <div>
                       {"Baseline Conversion Rate (%)"}
@@ -320,29 +388,21 @@ export const ProportionalMetricTesting: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Calculate
-              </Button>
-            </Form.Item>
+            <div className='flex w-full justify-between'>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Calculate
+                </Button>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" onClick={saveResults}>
+                  Save
+                </Button>
+              </Form.Item>
+            </div>
           </Form>
         </Paper>
         <div className='flex-1 flex flex-col gap-4'>
-          {figures.length > 0 &&
-            <div>
-              <Form.Item label="Select Figure">
-                <Select onChange={(value) => setSelectedFigIndex(value)} defaultValue={0}>
-                  {figures.map((fig, index) => (
-                    <Option key={index} value={index}>{fig.name}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Paper className='flex w-full justify-center items-center'>
-                <PlotGraph data={figures[selectedFigIndex].data} layout={figures[selectedFigIndex].layout} />
-              </Paper>
-            </div>
-          }
           <Paper className='p-4'>
             <div className='flex'>
               <div className='flex-1 space-y-4'>
@@ -411,6 +471,20 @@ export const ProportionalMetricTesting: React.FC = () => {
               </div>
             </div>
           </Paper>
+          {figures.length > 0 &&
+            <div>
+              <Form.Item label="Select Figure">
+                <Select onChange={(value) => setSelectedFigIndex(value)} defaultValue={0}>
+                  {figures.map((fig, index) => (
+                    <Option key={index} value={index}>{fig.name}</Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Paper className='flex w-full justify-center items-center'>
+                <PlotGraph data={figures[selectedFigIndex].data} layout={figures[selectedFigIndex].layout} />
+              </Paper>
+            </div>
+          }
           {numericalResults &&
             <>
               <Paper className='p-4 space-y-4 border-primary border'>

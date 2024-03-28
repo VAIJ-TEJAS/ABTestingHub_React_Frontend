@@ -3,6 +3,10 @@ import { StatisticCard } from '../components/StatisticCard';
 import { Table, Input, Button, Space, Tag } from 'antd';
 import { PlusOutlined, BarChartOutlined, SearchOutlined, RocketOutlined, DollarCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { Paper } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { ITest } from '../types/test.types';
 
 const getTagColor = (status: any) => {
   switch (status) {
@@ -17,6 +21,16 @@ const getTagColor = (status: any) => {
   }
 };
 
+export const Dashboard = () => {
+
+  const [testsData, setTestsData] = useState([]);
+  const navigate = useNavigate()
+
+  const paginationConfig = {
+    pageSize: 8,
+  };
+
+
 const columns = [
   {
     title: 'Hypothesis Name',
@@ -27,11 +41,6 @@ const columns = [
     title: 'Description',
     dataIndex: 'description',
     key: 'description',
-  },
-  {
-    title: 'Experiment ID',
-    dataIndex: 'experimentId',
-    key: 'experimentId',
   },
   {
     title: 'Status',
@@ -58,6 +67,23 @@ const columns = [
     title: 'MSS | Duration',
     dataIndex: 'mssDuration',
     key: 'mssDuration',
+    render: (text: string, record: ITest) => {
+      if (text === 'N/A') {
+        // Determine the route based on the proportional_metric attribute
+        const route = record.proportional_metric ? '/proportional-metric-testing' : '/continuous-metric-testing';
+        return (
+          <Button
+            type="primary"
+            size="small"
+            onClick={() => navigate(route, { state: { testId: record.id } })}
+          >
+            MSS
+          </Button>
+        );
+      } else {
+        return text;
+      }
+    },
   },
   {
     title: 'Revenue Impact',
@@ -71,147 +97,36 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    key: '1',
-    hypothesisName: 'test_price_alert_01',
-    description: 'Price change alert changes.',
-    experimentId: '123456',
-    status: 'Concluded',
-    integrity: true,
-    lastModifiedDate: '2024-01-03 07:42:11',
-    mssDuration: '22,000 | 7 days',
-    revenueImpact: '$ 25,000',
-    abTestResults: 'Significant | relative uplift: 20%',
-  },
-  {
-    key: '2',
-    hypothesisName: 'test_price_alert_01',
-    description: 'Price change alert changes.',
-    experimentId: '123456',
-    status: 'Concluded',
-    integrity: true,
-    lastModifiedDate: '2024-01-03 07:42:11',
-    mssDuration: '22,000 | 7 days',
-    revenueImpact: '$ 25,000',
-    abTestResults: 'Significant | relative uplift: 20%',
-  },
-  {
-    key: '3',
-    hypothesisName: 'test_price_alert_01',
-    description: 'Price change alert changes.',
-    experimentId: '123456',
-    status: 'Concluded',
-    integrity: true,
-    lastModifiedDate: '2024-01-03 07:42:11',
-    mssDuration: '22,000 | 7 days',
-    revenueImpact: '$ 25,000',
-    abTestResults: 'Significant | relative uplift: 20%',
-  },
-  {
-    key: '4',
-    hypothesisName: 'test_price_alert_01',
-    description: 'Price change alert changes.',
-    experimentId: '123456',
-    status: 'Concluded',
-    integrity: true,
-    lastModifiedDate: '2024-01-03 07:42:11',
-    mssDuration: '22,000 | 7 days',
-    revenueImpact: '$ 25,000',
-    abTestResults: 'Significant | relative uplift: 20%',
-  },
-  {
-    key: '4',
-    hypothesisName: 'test_price_alert_01',
-    description: 'Price change alert changes.',
-    experimentId: '123456',
-    status: 'Concluded',
-    integrity: true,
-    lastModifiedDate: '2024-01-03 07:42:11',
-    mssDuration: '22,000 | 7 days',
-    revenueImpact: '$ 25,000',
-    abTestResults: 'Significant | relative uplift: 20%',
-  },
-  {
-    key: '4',
-    hypothesisName: 'test_price_alert_01',
-    description: 'Price change alert changes.',
-    experimentId: '123456',
-    status: 'Concluded',
-    integrity: true,
-    lastModifiedDate: '2024-01-03 07:42:11',
-    mssDuration: '22,000 | 7 days',
-    revenueImpact: '$ 25,000',
-    abTestResults: 'Significant | relative uplift: 20%',
-  },
+  useEffect(() => {
+    // Function to fetch data using axios
+    const fetchTestsData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/tests/', {
+          headers: {
+            'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
+          }
+        }
+        );
+        setTestsData(response.data);
+      } catch (error) {
+        console.error("Failed to fetch tests data:", error);
+      }
+    };
+    fetchTestsData();
+  }, []);
 
-  {
-    key: '4',
-    hypothesisName: 'test_price_alert_01',
-    description: 'Price change alert changes.',
-    experimentId: '123456',
-    status: 'Concluded',
-    integrity: true,
-    lastModifiedDate: '2024-01-03 07:42:11',
-    mssDuration: '22,000 | 7 days',
-    revenueImpact: '$ 25,000',
-    abTestResults: 'Significant | relative uplift: 20%',
-  },
-  {
-    key: '4',
-    hypothesisName: 'test_price_alert_01',
-    description: 'Price change alert changes.',
-    experimentId: '123456',
-    status: 'Concluded',
-    integrity: true,
-    lastModifiedDate: '2024-01-03 07:42:11',
-    mssDuration: '22,000 | 7 days',
-    revenueImpact: '$ 25,000',
-    abTestResults: 'Significant | relative uplift: 20%',
-  },
-  {
-    key: '4',
-    hypothesisName: 'test_price_alert_01',
-    description: 'Price change alert changes.',
-    experimentId: '123456',
-    status: 'Concluded',
-    integrity: true,
-    lastModifiedDate: '2024-01-03 07:42:11',
-    mssDuration: '22,000 | 7 days',
-    revenueImpact: '$ 25,000',
-    abTestResults: 'Significant | relative uplift: 20%',
-  },
-  {
-    key: '4',
-    hypothesisName: 'test_price_alert_01',
-    description: 'Price change alert changes.',
-    experimentId: '123456',
-    status: 'Concluded',
-    integrity: true,
-    lastModifiedDate: '2024-01-03 07:42:11',
-    mssDuration: '22,000 | 7 days',
-    revenueImpact: '$ 25,000',
-    abTestResults: 'Significant | relative uplift: 20%',
-  },
-  {
-    key: '4',
-    hypothesisName: 'test_price_alert_01',
-    description: 'Price change alert changes.',
-    experimentId: '123456',
-    status: 'Concluded',
-    integrity: true,
-    lastModifiedDate: '2024-01-03 07:42:11',
-    mssDuration: '22,000 | 7 days',
-    revenueImpact: '$ 25,000',
-    abTestResults: 'Significant | relative uplift: 20%',
-  },
-];
-
-export const Dashboard = () => {
-
-  const paginationConfig = {
-    pageSize: 8, // Set the number of items per page
-  };
+  const dataSource = testsData.map((test: ITest) => ({
+    id: test.id,
+    hypothesisName: test.name,
+    description: test.description ?? 'Description not provided',
+    status: test.status ?? 'Status not available', 
+    integrity: test.integrity, 
+    lastModifiedDate: test.modified_date,
+    mssDuration: (test?.total_sample_size && test?.days_required) ? test?.total_sample_size + ' | ' + test?.days_required : 'N/A', 
+    revenueImpact: (test?.control_revenue && test?.test_revenue) ? (((test.test_revenue - test.control_revenue) / test.control_revenue) * 100).toFixed(2) : 'N/A',
+    abTestResults: 'N/A', 
+    proportional_metric: test.proportional_metric
+  }));
 
   return (
     <div className='flex flex-col justify-center items-center bg-[#f5f5f5] p-4'>
@@ -245,17 +160,19 @@ export const Dashboard = () => {
             amount="281"
             icon={<CheckCircleOutlined className='text-white text-3xl' />}
             bgColor="bg-primary" // This should be a tailwind css color class or a custom class defined by you
-            title="Concluded"
+            title="Results"
           />
         </div>
       </div>
       <div className='container my-8'>
         <div className='flex justify-between'>
           <div className='w-60'>
-            <Input />
+            <Input.Search placeholder='Search' />
           </div>
           <Space>
-            <Button type="primary" icon={<PlusOutlined />}>New Hypothesis</Button>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => {
+              navigate('/create-test')
+            }}>New Hypothesis</Button>
             {/* <Button icon={<FileExcelOutlined />}>Export</Button> */}
           </Space>
         </div>
@@ -263,7 +180,7 @@ export const Dashboard = () => {
       <Paper className='container '>
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={dataSource}
           pagination={paginationConfig}
         />
       </Paper>

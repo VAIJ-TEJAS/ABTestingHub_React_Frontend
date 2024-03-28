@@ -182,7 +182,7 @@ export const Home = () => {
                 <div className="font-medium">
                   Discover our articles in various categories
                 </div>
-                <ArticlesCategoryCard extraStyle="flex-wrap gap-4 space-x-0" />
+                <ArticlesCategoryCard extraStyle="flex-wrap gap-4" />
               </div>
             </div>
           </div>

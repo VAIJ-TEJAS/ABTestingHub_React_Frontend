@@ -1,12 +1,34 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Container, Paper } from "@mui/material"
-import { Button, Col, Form, Input, InputNumber, Radio, Row } from "antd"
+import { Button, Col, Form, Input, InputNumber, Radio, Row, message } from "antd"
 import { generateProjectName } from "../utils/hypothesis_title_generator";
+import axios from "axios";
 
 export const CreateTest = () => {
 
-  const onFinish = (values: any) => {
-    console.log('Received values of form:', values);
+  const onFinish = async (values: any) => {
+    // Define your API endpoint
+    const apiUrl = 'http://localhost:8000/tests/'; 
+
+    console.log(values);
+
+    try {
+      // Use axios to send a POST request
+      const response = await axios.post(apiUrl, values, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token '+ localStorage.getItem('abtestinghub-access-token')
+        },
+      });
+
+      console.log(response.data)
+
+      message.success('Test created successfully:');
+      // Handle success (e.g., show notification, redirect, etc.)
+    } catch (error) {
+      console.error('Failed to create test:', error);
+      // Handle error (e.g., show error notification)
+    }
   };
 
   const randomName = generateProjectName();
@@ -20,7 +42,7 @@ export const CreateTest = () => {
           onFinish={onFinish}
           initialValues={{
             name: randomName,  
-            metric_type: true,
+            proportional_metric: true,
             no_of_arms: 2
           }}
         >
@@ -37,7 +59,8 @@ export const CreateTest = () => {
             <Col span={12}>
               <Form.Item
                 label="Metric Type"
-                name="metric_type"
+                name="proportional_metric"
+                rules={[{ required: true, message: 'Please select the metric type!' }]} 
               >
                 <Radio.Group>
                   <Radio value={true}>Proportional Metric</Radio>
@@ -53,7 +76,7 @@ export const CreateTest = () => {
                 label="Description"
                 name="description"
               >
-                <Input.TextArea />
+                <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -61,7 +84,7 @@ export const CreateTest = () => {
                 label="Hypothesis"
                 name="hypothesis"
               >
-                <Input.TextArea />
+                <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} />
               </Form.Item>
             </Col>
           </Row>
@@ -87,8 +110,9 @@ export const CreateTest = () => {
               <Form.Item
                 label="Number of Arms"
                 name="no_of_arms"
+                rules={[{ required: true, message: 'Please input the number of arms!' }]} 
               >
-                <InputNumber min={2} className="w-full"/>
+                <InputNumber min={2} max={20} className="w-full"/>
               </Form.Item>
             </Col>
           </Row>

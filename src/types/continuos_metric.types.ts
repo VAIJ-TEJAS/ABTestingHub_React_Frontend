@@ -1,7 +1,7 @@
 export interface IContinuousMetricInputs {
     confidence_level: number;
     power: number;
-    baseline_cr: number;
+    baseline_conversion_rate: number;
     mde: number;
     absolute: boolean;
     arms: number;

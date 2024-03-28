@@ -21,9 +21,6 @@ const ArticlesCategoryCard: FC<ArticlesCategoryCardProps> = ({ extraStyle }) => 
       setArticleCategories(categories.data);
     });
   }, []);
-
- 
-  
   
   return articleCategories.length !== 0 && (
     <div className={`flex space-x-4 ${extraStyle}`}>

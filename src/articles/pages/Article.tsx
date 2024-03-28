@@ -1,11 +1,11 @@
 import { Container, Paper } from "@mui/material";
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaLinkedinIn,
-  FaRedditAlien,
-  FaRegCopy,
-} from "react-icons/fa";
+// import {
+//   FaFacebookF,
+//   FaTwitter,
+//   FaLinkedinIn,
+//   FaRedditAlien,
+//   FaRegCopy,
+// } from "react-icons/fa";
 import CoverImage from "../../assets/images/cover.webp";
 import { ArticleCard } from "../components/ArticleCard";
 import { useEffect, useState } from "react";
@@ -163,7 +163,7 @@ export const Article = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                {/* <div className="flex items-center gap-4">
                   <a
                     href="#"
                     aria-label="Share on Facebook"
@@ -195,7 +195,7 @@ export const Article = () => {
                   <button className="text-gray-600 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300">
                     <FaRegCopy size={24} />
                   </button>
-                </div>
+                </div> */}
               </div>
               <div
                 dangerouslySetInnerHTML={createMarkup(content)}

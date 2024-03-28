@@ -20,9 +20,6 @@ export const confirmation = (message: string): Promise<boolean> => {
       okButtonProps: {
         className: 'bg-primary',
       },
-      cancelButtonProps: {
-        className: 'bg-primary',
-      },
       okText: 'Yes',
       cancelText: 'Cancel',
     });

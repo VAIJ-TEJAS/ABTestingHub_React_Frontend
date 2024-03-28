@@ -37,12 +37,11 @@ export const Auth = () => {
     const handleSignIn = (values: any) => {
         console.log(values)
 
-        const signInEndpoint = 'https://89.116.33.88/auth/';
+        const signInEndpoint = 'http://localhost:8000/auth/';
 
         axios.post(signInEndpoint, values)
             .then(response => {
-                console.log(response);  
-                signInUser()
+                signInUser(response.data.token)
                 
                 // Display success message
                 message.success('Sign in successful!');
@@ -59,7 +58,7 @@ export const Auth = () => {
     const handleSignUp = (values: any) => {
         console.log(values)
 
-        const signUpEndpoint = 'https://89.116.33.88/signup/';
+        const signUpEndpoint = 'http://localhost:8000/signup/';
 
         axios.post(signUpEndpoint, values)
             .then(response => {
