@@ -20,10 +20,10 @@ export const Navbar = () => {
   return (
     <>
       <nav className={navClass}>
-        <a className="text-3xl font-bold leading-none flex items-center gap-4" href="#">
+        <a className="text-3xl font-bold leading-none flex items-center gap-4" href="/">
           <img src={Logo} className="w-12" />
           <div className="text-primary">
-            AB Testing Hub
+            A/B Testing Hub
           </div>
         </a>
         <div className="lg:hidden">
@@ -48,14 +48,6 @@ export const Navbar = () => {
             </a>
           </li>
 
-          <li>
-            <a
-              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/ab-testing/') ? 'text-primary' : ''}`}
-              onClick={() => { navigate('/ab-testing/'); }}
-            >
-              AB Testing
-            </a>
-          </li>
 
           <li>
             <a
@@ -77,6 +69,15 @@ export const Navbar = () => {
 
           <li>
             <a
+              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/ab-testing/') ? 'text-primary' : ''}`}
+              onClick={() => { navigate('/ab-testing/'); }}
+            >
+              A/B Testing
+            </a>
+          </li>
+
+          <li>
+            <a
               className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/articles/') ? 'text-primary' : ''}`}
               onClick={() => { navigate('/articles/'); }}
             >
@@ -89,6 +90,7 @@ export const Navbar = () => {
             <Button
               type="primary"
               className="hidden lg:inline-block lg:ml-3 px-6 text-white font-bold transition duration-200"
+              onClick={() => { navigate('/dashboard/'); }}
             >
               Dashboard
             </Button>

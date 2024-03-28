@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Container } from "@mui/material";
 import { ArticleCard } from "../components/ArticleCard";
 import { MostPopularArticleCard } from "../components/MostPopularArticleCard";
@@ -48,7 +49,7 @@ export const ArticlesHome = () => {
         articles: articles.data,
         featuredArticle: articles.data[0],
         popularArticles: articles.data.filter(
-          (article) => article.popular_article
+          (article: any) => article.popular_article
         ),
       });
     });

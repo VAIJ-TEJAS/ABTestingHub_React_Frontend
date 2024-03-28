@@ -37,7 +37,7 @@ export const Auth = () => {
     const handleSignIn = (values: any) => {
         console.log(values)
 
-        const signInEndpoint = 'http://127.0.0.1:8000/auth/';
+        const signInEndpoint = 'https://89.116.33.88/auth/';
 
         axios.post(signInEndpoint, values)
             .then(response => {
@@ -59,7 +59,7 @@ export const Auth = () => {
     const handleSignUp = (values: any) => {
         console.log(values)
 
-        const signUpEndpoint = 'http://127.0.0.1:8000/signup/';
+        const signUpEndpoint = 'https://89.116.33.88/signup/';
 
         axios.post(signUpEndpoint, values)
             .then(response => {
@@ -86,7 +86,7 @@ export const Auth = () => {
                             <div className='relative w-full flex justify-center items-center'>
                                 <div className='absolute w-full h-full flex justify-center items-center'>
                                     <div className='text-4xl text-primary font-bold'>
-                                        AB Testing Hub
+                                        A/B Testing Hub
                                     </div>
                                 </div>
                                 <img src={Logo} className='opacity-20 w-60 ' />
@@ -127,10 +127,10 @@ export const Auth = () => {
                                 <div className='relative'>
                                     <div className='absolute w-full h-full flex justify-center items-center'>
                                         <div className='text-4xl text-primary font-bold'>
-                                            AB Testing Hub
+                                            A/B Testing Hub
                                         </div>
                                     </div>
-                                    <img src={Logo} className='opacity-20' alt="AB Testing Hub Logo" />
+                                    <img src={Logo} className='opacity-20' alt="A/B Testing Hub Logo" />
                                 </div>
                             </div>
                             <Form layout="vertical" className='flex flex-col justify-center flex-1' form={formSignup} onFinish={handleSignUp}>

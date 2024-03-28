@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Container, Paper } from "@mui/material";
 import { Button } from "antd";
 import HeroImage from "../assets/images/hero-image.webp";
-import { MostPopularArticleCard } from "../articles/components/MostPopularArticleCard";
 import ContinuousMetricLogo from "../assets/images/ContinuousMetric.webp";
 import ProportionalMetricLogo from "../assets/images/ProportionalMetric.webp";
 import ABTestingLogo from "../assets/images/ABTesting.webp";
 import { ArticleStripe } from "../articles/components/ArticleStripe";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Context } from "../context/context.provider";
+import { MostPopularArticleCard } from "../articles/components/MostPopularArticleCard";
 
 interface ArticalCardProps {
   id?: number;
@@ -33,6 +35,9 @@ interface ArticalCardProps {
 }
 
 export const Home = () => {
+
+  const { showAuthModal } = Context() 
+
   const [articleCategories, setArticleCategories] = useState<
     { id: string; name: string }[]
   >([]);
@@ -48,7 +53,7 @@ export const Home = () => {
   useEffect(() => {
     axios.get("https://89.116.33.88/articles-card/").then((articles) => {
       setArticlesData(
-        articles.data.filter((article) => article.popular_article)
+        articles.data.filter((article: any) => article.popular_article)
       );
     });
   }, []);
@@ -61,14 +66,14 @@ export const Home = () => {
             <div className="text-7xl font-medium">Stay curious.</div>
             <div className="text-2xl w-1/2">
               Optimize Your Decisions: Uncover data-driven insights through
-              controlled AB testing and elevate your business strategy.
+              controlled A/B testing and elevate your business strategy.
             </div>
             <div>
               <Button
                 size="large"
                 type="primary"
                 className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
-                // onClick={showAuthModal}
+                onClick={showAuthModal}
               >
                 Get Started
               </Button>
@@ -127,7 +132,7 @@ export const Home = () => {
                 </div>
                 <div className="border-red-600 border rounded-xl p-4">
                   <div className="pb-4 text-red-600 text-3xl font-mono">
-                    AB Testing Tool
+                    A/B Testing Tool
                   </div>
                   <div className="flex gap-8">
                     <Paper className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
@@ -136,7 +141,7 @@ export const Home = () => {
                       </div>
                       <div className="">
                         <div className="text-xl font-medium group-hover:text-primary duration-200">
-                          AB testing Tool
+                          A/B testing Tool
                         </div>
                         <div className="text-zinc-500">
                           An experiment that compares two variations of
