@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Context } from "../context/context.provider";
 import { MostPopularArticleCard } from "../articles/components/MostPopularArticleCard";
+import ArticlesCategoryCard from "../articles/components/ArticlesCategoryCard";
 
 interface ArticalCardProps {
   id?: number;
@@ -37,16 +38,6 @@ interface ArticalCardProps {
 export const Home = () => {
 
   const { showAuthModal } = Context() 
-
-  const [articleCategories, setArticleCategories] = useState<
-    { id: string; name: string }[]
-  >([]);
-
-  useEffect(() => {
-    axios.get(`https://89.116.33.88/categories/`).then((res) => {
-      setArticleCategories(res.data);
-    });
-  }, []);
 
   const [articlesData, setArticlesData] = useState<ArticalCardProps[]>([]);
 
@@ -191,19 +182,7 @@ export const Home = () => {
                 <div className="font-medium">
                   Discover our articles in various categories
                 </div>
-                <div className="flex flex-wrap gap-4">
-                  {articleCategories.map(({ id, name }) => {
-                    return (
-                      <Button
-                        key={id}
-                        size="small"
-                        className="border-black font-mono"
-                      >
-                        {name}
-                      </Button>
-                    );
-                  })}
-                </div>
+                <ArticlesCategoryCard extraStyle="flex-wrap gap-4 space-x-0" />
               </div>
             </div>
           </div>

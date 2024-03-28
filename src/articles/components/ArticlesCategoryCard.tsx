@@ -1,9 +1,13 @@
 import { Button } from "antd";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const ArticlesCategoryCard = () => {
+interface ArticlesCategoryCardProps {
+  extraStyle?: string
+}
+
+const ArticlesCategoryCard: FC<ArticlesCategoryCardProps> = ({ extraStyle }) => {
   const navigate = useNavigate();
 
   const [articleCategories, setArticleCategories] = useState<
@@ -17,7 +21,7 @@ const ArticlesCategoryCard = () => {
   });
 
   return articleCategories.length !== 0 && (
-    <div className="flex space-x-4">
+    <div className={`flex space-x-4 ${extraStyle}`}>
       {articleCategories.map(({ id, name }) => {
         return (
           <Button

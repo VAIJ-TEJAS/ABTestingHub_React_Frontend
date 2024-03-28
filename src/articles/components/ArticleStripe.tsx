@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { Link } from "react-router-dom";
 
 interface ArticleStripeProps {
   id?: number;
@@ -29,10 +30,11 @@ export const ArticleStripe: FC<ArticleStripeProps> = ({
   short_description,
   category,
   cover_image,
+  id,
 }) => {
   return (
     <>
-      <div className="group space-y-2 cursor-pointer">
+      <Link to={`/article/${id}`} className="group space-y-2 cursor-pointer">
         <div>
           <div className="py-1">
             <div className="flex space-x-2 items-center">
@@ -75,7 +77,7 @@ export const ArticleStripe: FC<ArticleStripeProps> = ({
           <div>{category?.name || "category"}</div>
         </div>
         <hr />
-      </div>
+      </Link>
     </>
   );
 };
