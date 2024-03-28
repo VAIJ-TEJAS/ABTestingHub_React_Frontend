@@ -1,7 +1,7 @@
 import { Button } from "antd";
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface ArticlesCategoryCardProps {
   extraStyle?: string
@@ -9,6 +9,8 @@ interface ArticlesCategoryCardProps {
 
 const ArticlesCategoryCard: FC<ArticlesCategoryCardProps> = ({ extraStyle }) => {
   const navigate = useNavigate();
+
+  const path = useLocation().pathname
 
   const [articleCategories, setArticleCategories] = useState<
     { id: string; name: string }[]
@@ -18,8 +20,11 @@ const ArticlesCategoryCard: FC<ArticlesCategoryCardProps> = ({ extraStyle }) => 
     axios.get(`https://89.116.33.88/categories/`).then((categories) => {
       setArticleCategories(categories.data);
     });
-  });
+  }, []);
 
+ 
+  
+  
   return articleCategories.length !== 0 && (
     <div className={`flex space-x-4 ${extraStyle}`}>
       {articleCategories.map(({ id, name }) => {
@@ -29,6 +34,7 @@ const ArticlesCategoryCard: FC<ArticlesCategoryCardProps> = ({ extraStyle }) => 
             key={id}
             size="small"
             className="border-black font-mono"
+            type={path===encodeURI(`/articles/${name}`) ? "primary" : "default"}
           >
             {name}
           </Button>
