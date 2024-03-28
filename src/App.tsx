@@ -19,7 +19,7 @@ function App() {
 
   const Layout = () => {
     const location = useLocation();
-    const noFooterRoutes = ['/dashboard/', '/ab-testing/', '/continuous-metric-testing/', '/proportional-metric-testing/'];
+    const noFooterRoutes = ['/dashboard/', '/create-test/' ,'/ab-testing/', '/continuous-metric-testing/', '/proportional-metric-testing/'];
     const showFooter = !noFooterRoutes.includes(location.pathname);
 
     return (

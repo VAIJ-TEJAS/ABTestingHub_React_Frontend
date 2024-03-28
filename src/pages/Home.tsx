@@ -66,7 +66,7 @@ export const Home = () => {
             <div className="text-7xl font-medium">Stay curious.</div>
             <div className="text-2xl w-1/2">
               Optimize Your Decisions: Uncover data-driven insights through
-              controlled AB testing and elevate your business strategy.
+              controlled A/B testing and elevate your business strategy.
             </div>
             <div>
               <Button
@@ -132,7 +132,7 @@ export const Home = () => {
                 </div>
                 <div className="border-red-600 border rounded-xl p-4">
                   <div className="pb-4 text-red-600 text-3xl font-mono">
-                    AB Testing Tool
+                    A/B Testing Tool
                   </div>
                   <div className="flex gap-8">
                     <Paper className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
@@ -141,7 +141,7 @@ export const Home = () => {
                       </div>
                       <div className="">
                         <div className="text-xl font-medium group-hover:text-primary duration-200">
-                          AB testing Tool
+                          A/B testing Tool
                         </div>
                         <div className="text-zinc-500">
                           An experiment that compares two variations of

@@ -14,7 +14,7 @@ export const Footer = () => {
               <div className="text-3xl font-bold leading-none flex items-center gap-4" >
                 <img src={Logo} className="w-12" />
                 <div className="text-primary">
-                  AB Testing Hub
+                  A/B Testing Hub
                 </div>
               </div>
             </a>
@@ -132,7 +132,7 @@ export const Footer = () => {
           </div>
         </div>
         <div className="py-6 text-sm text-center ">
-          © 2024 AB Testing Hub. All rights reserved.
+          © 2024 A/B Testing Hub. All rights reserved.
         </div>
       </footer>
 

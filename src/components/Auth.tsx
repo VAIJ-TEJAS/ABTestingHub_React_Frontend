@@ -86,7 +86,7 @@ export const Auth = () => {
                             <div className='relative w-full flex justify-center items-center'>
                                 <div className='absolute w-full h-full flex justify-center items-center'>
                                     <div className='text-4xl text-primary font-bold'>
-                                        AB Testing Hub
+                                        A/B Testing Hub
                                     </div>
                                 </div>
                                 <img src={Logo} className='opacity-20 w-60 ' />
@@ -127,10 +127,10 @@ export const Auth = () => {
                                 <div className='relative'>
                                     <div className='absolute w-full h-full flex justify-center items-center'>
                                         <div className='text-4xl text-primary font-bold'>
-                                            AB Testing Hub
+                                            A/B Testing Hub
                                         </div>
                                     </div>
-                                    <img src={Logo} className='opacity-20' alt="AB Testing Hub Logo" />
+                                    <img src={Logo} className='opacity-20' alt="A/B Testing Hub Logo" />
                                 </div>
                             </div>
                             <Form layout="vertical" className='flex flex-col justify-center flex-1' form={formSignup} onFinish={handleSignUp}>
