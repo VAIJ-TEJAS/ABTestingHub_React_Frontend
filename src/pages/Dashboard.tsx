@@ -33,7 +33,7 @@ export const Dashboard = () => {
 
   const fetchTestsData = async () => {
     try {
-      const response = await axios.get('https://89.116.33.88/tests/', {
+      const response = await axios.get('http://localhost:8000/tests/', {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
@@ -59,7 +59,7 @@ export const Dashboard = () => {
     const isConfirmed = await confirmation('Are you sure you want to delete this test?');
     if (isConfirmed) {
       try {
-        await axios.delete(`https://89.116.33.88/tests/${testId}/`, {
+        await axios.delete(`http://localhost:8000/tests/${testId}/`, {
           headers: {
             'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
           }

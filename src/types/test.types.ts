@@ -5,8 +5,8 @@ export enum CalculationStatus {
 }
 
 export enum TestStatus {
-  INPO = "INPO",
   APPR = "APPR",
+  INPR = "INPR",
   CONC = "CONC",
 }
 

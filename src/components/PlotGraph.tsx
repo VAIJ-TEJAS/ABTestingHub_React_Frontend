@@ -12,6 +12,7 @@ const PlotGraph: React.FC<PlotGraphProps> = ({data, layout}) => {
     <Plot
       data={data}
       layout={layout}
+      
     />
   );
 };

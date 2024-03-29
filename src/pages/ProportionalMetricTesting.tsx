@@ -69,7 +69,7 @@ export const ProportionalMetricTesting: React.FC = () => {
   }, [form]);
 
   useEffect(() => {
-    if (testData && testData.status !== TestStatus.INPO) {
+    if (testData && testData.status !== TestStatus.APPR) {
       // Assuming testData contains all the required fields
       form.setFieldsValue({
         confidence_level: testData?.confidence_level ?? 95,
@@ -85,15 +85,6 @@ export const ProportionalMetricTesting: React.FC = () => {
         expected_uplift: testData?.expected_uplift ?? null
       });
 
-      // setNumericalResults({
-      //   total_sample_size: testData.total_sample_size,
-      //   sample_size_per_arm: testData.sample_size_per_arm,
-      //   days_required: testData.days_required,
-      //   weeks_required: testData.weeks_required,
-      //   control_revenue: testData.control_revenue,
-      //   test_revenue: testData.test_revenue
-      // })
-
       setTimeout(() => {
         form.submit();
         setIsNotCalculatedSaved(CalculationStatus.SAVED);
@@ -104,7 +95,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
   const fetchTestDetails = async (id: number) => {
     try {
-      const response = await axios.get(`https://89.116.33.88/tests/${id}/`, {
+      const response = await axios.get(`http://localhost:8000/tests/${id}/`, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
@@ -120,7 +111,7 @@ export const ProportionalMetricTesting: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    const BASE_URL = 'https://89.116.33.88';
+    const BASE_URL = 'http://localhost:8000';
 
     const payload = {
       ...values,
@@ -141,6 +132,7 @@ export const ProportionalMetricTesting: React.FC = () => {
           'Control Revenue': control_revenue,
           'Test Revenue': test_revenue
         } = response.data;
+
         setNumericalResults({
           total_sample_size,
           sample_size_per_arm,
@@ -215,11 +207,11 @@ export const ProportionalMetricTesting: React.FC = () => {
       ...formValues,
       ...numericalResults,
       allocations: allocations,
-      status: TestStatus.APPR
+      status: TestStatus.INPR
     };
 
     try {
-      await axios.patch(`https://89.116.33.88/tests/${testData.id}/`, payload, {
+      await axios.patch(`http://localhost:8000/tests/${testData.id}/`, payload, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
@@ -241,7 +233,7 @@ export const ProportionalMetricTesting: React.FC = () => {
         proportional_metric: true,
       };
 
-      const response = await axios.post('https://89.116.33.88/tests/', testPayload, {
+      const response = await axios.post('http://localhost:8000/tests/', testPayload, {
         headers: { Authorization: `Token ${localStorage.getItem('abtestinghub-access-token')}` },
       });
 
@@ -269,7 +261,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
   const fetchUserTests = async () => {
     try {
-      const response = await axios.get('https://89.116.33.88/tests/', {
+      const response = await axios.get('http://localhost:8000/tests/', {
         headers: { 'Authorization': `Token ${localStorage.getItem('abtestinghub-access-token')}` },
       });
       setUserTests(response.data);
@@ -294,7 +286,7 @@ export const ProportionalMetricTesting: React.FC = () => {
       proportional_metric: true,
     };
 
-    const response = await axios.post('https://89.116.33.88/tests/', testPayload, {
+    const response = await axios.post('http://localhost:8000/tests/', testPayload, {
       headers: { 'Authorization': `Token ${localStorage.getItem('abtestinghub-access-token')}` },
     });
 
@@ -326,11 +318,11 @@ export const ProportionalMetricTesting: React.FC = () => {
       ...formValues,
       ...numericalResults,
       allocations: allocations,
-      status: TestStatus.APPR,
+      status: TestStatus.INPR,
     };
 
     try {
-      await axios.patch(`https://89.116.33.88/tests/${test.id}/`, payload, {
+      await axios.patch(`http://localhost:8000/tests/${test.id}/`, payload, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token'),
         },
@@ -454,7 +446,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                     </div>
                   </div>
                 }>
-                  <InputNumber min={90} max={100} style={{ width: '100%' }} />
+                  <InputNumber min={80} max={99.99} style={{ width: '100%' }} />
                 </Form.Item>
 
                 <Form.Item name="baseline_conversion_rate" label={
