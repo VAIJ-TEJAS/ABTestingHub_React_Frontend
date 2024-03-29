@@ -32,7 +32,7 @@ export const ContinuousMetricTesting: React.FC = () => {
   }, [form]);
 
   const onFinish = async (values: any) => {
-    const BASE_URL = 'http://localhost:8000';
+    const BASE_URL = 'https://89.116.33.88';
 
     const payload = {
       ...values,

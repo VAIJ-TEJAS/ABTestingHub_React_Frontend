@@ -11,6 +11,7 @@ import axios from "axios";
 import { Context } from "../context/context.provider";
 import { MostPopularArticleCard } from "../articles/components/MostPopularArticleCard";
 import ArticlesCategoryCard from "../articles/components/ArticlesCategoryCard";
+import { useNavigate } from "react-router-dom";
 
 interface ArticalCardProps {
   id?: number;
@@ -38,11 +39,11 @@ interface ArticalCardProps {
 export const Home = () => {
 
   const { showAuthModal } = Context() 
-
+  const navigate = useNavigate()
   const [articlesData, setArticlesData] = useState<ArticalCardProps[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8000/articles-card/").then((articles) => {
+    axios.get("https://89.116.33.88/articles-card/").then((articles) => {
       setArticlesData(
         articles.data.filter((article: any) => article.popular_article)
       );
@@ -88,7 +89,9 @@ export const Home = () => {
                     MSS Tool
                   </div>
                   <div className="flex gap-8">
-                    <Paper className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
+                    <Paper onClick={()=>{
+                      navigate('/proportional-metric-testing/')
+                    }} className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
                       <div>
                         <img src={ContinuousMetricLogo} className="rounded" />
                       </div>
@@ -104,7 +107,9 @@ export const Home = () => {
                       </div>
                     </Paper>
 
-                    <Paper className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
+                    <Paper onClick={()=>{
+                      navigate('/proportional-metric-testing/')
+                    }} className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
                       <div>
                         <img src={ProportionalMetricLogo} className="rounded" />
                       </div>
@@ -126,7 +131,9 @@ export const Home = () => {
                     A/B Testing Tool
                   </div>
                   <div className="flex gap-8">
-                    <Paper className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
+                    <Paper onClick={()=>{
+                      navigate('/ab-testing/')
+                    }} className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
                       <div>
                         <img src={ABTestingLogo} className="rounded" />
                       </div>

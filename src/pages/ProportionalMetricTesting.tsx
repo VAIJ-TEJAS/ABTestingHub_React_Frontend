@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Form, InputNumber, Checkbox, Button, Select, Tooltip, message } from 'antd';
+import { Form, InputNumber, Checkbox, Button, Select, Tooltip, message, List, Modal } from 'antd';
 import axios from 'axios';
 import CountUp from 'react-countup';
 import { Paper } from '@mui/material';
@@ -10,20 +10,19 @@ import PlotGraph from '../components/PlotGraph';
 import { CalculationStatus, ITest, TestStatus } from '../types/test.types';
 import { Auth } from '../components/Auth';
 import { generateProjectName } from '../utils/hypothesis_title_generator';
+import { confirmation } from '../components/Confirmation';
+import { Context } from '../context/context.provider';
 
 const { Option } = Select;
 
 export const ProportionalMetricTesting: React.FC = () => {
 
+  const { userAuthenticated } = Context()
+
   const [isAuthVisible, setIsAuthVisible] = useState(false);
-
-  const openAuthModal = () => {
-    setIsAuthVisible(true);
-  };
-
-  const closeAuthModal = () => {
-    setIsAuthVisible(false);
-  };
+  const [userTests, setUserTests] = useState<ITest[]>([]);
+  const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
+  const [isTestsModalVisible, setIsTestsModalVisible] = useState(false);
 
   const [isNotCalculatedSaved, setIsNotCalculatedSaved] = useState<CalculationStatus>(CalculationStatus.SAVED)
   const [userInitiatedCalculation, setUserInitiatedCalculation] = useState<boolean>(false);
@@ -38,6 +37,14 @@ export const ProportionalMetricTesting: React.FC = () => {
   const [allocations, setAllocations] = useState<any[]>([]);
   const [form] = Form.useForm();
   const [equalAllocation, setEqualAllocation] = useState<boolean>(true);
+
+  const openAuthModal = () => {
+    setIsAuthVisible(true);
+  };
+
+  const closeAuthModal = () => {
+    setIsAuthVisible(false);
+  };
 
   const createAllocations = (armsCount: number, equalAllocation: boolean) => {
     return Array.from({ length: armsCount }, (_, index) => ({
@@ -97,7 +104,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
   const fetchTestDetails = async (id: number) => {
     try {
-      const response = await axios.get(`http://localhost:8000/tests/${id}/`, {
+      const response = await axios.get(`https://89.116.33.88/tests/${id}/`, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
@@ -113,7 +120,7 @@ export const ProportionalMetricTesting: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    const BASE_URL = 'http://localhost:8000';
+    const BASE_URL = 'https://89.116.33.88';
 
     const payload = {
       ...values,
@@ -190,6 +197,11 @@ export const ProportionalMetricTesting: React.FC = () => {
   };
 
   const saveResults = async (testData: ITest | null) => {
+    if(!testData && userAuthenticated){
+      handleSignInAndFetchTests()
+      return
+    }
+
     if (!testData) {
       openAuthModal()
       return
@@ -207,7 +219,7 @@ export const ProportionalMetricTesting: React.FC = () => {
     };
 
     try {
-      await axios.patch(`http://localhost:8000/tests/${testData.id}/`, payload, {
+      await axios.patch(`https://89.116.33.88/tests/${testData.id}/`, payload, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
@@ -229,7 +241,7 @@ export const ProportionalMetricTesting: React.FC = () => {
         proportional_metric: true,
       };
 
-      const response = await axios.post('http://localhost:8000/tests/', testPayload, {
+      const response = await axios.post('https://89.116.33.88/tests/', testPayload, {
         headers: { Authorization: `Token ${localStorage.getItem('abtestinghub-access-token')}` },
       });
 
@@ -255,13 +267,116 @@ export const ProportionalMetricTesting: React.FC = () => {
     message.success("Calculations completed successfully")
   };
 
+  const fetchUserTests = async () => {
+    try {
+      const response = await axios.get('https://89.116.33.88/tests/', {
+        headers: { 'Authorization': `Token ${localStorage.getItem('abtestinghub-access-token')}` },
+      });
+      setUserTests(response.data);
+      console.log(response.data)
+      setIsTestsModalVisible(true);
+    } catch (error) {
+      console.error("Failed to fetch user tests:", error);
+      message.error('Failed to fetch tests.');
+    }
+  };
+
+  const handleSignInAndFetchTests = () => {
+    fetchUserTests()
+    setIsTestsModalVisible(true);
+  };
+
+  const createNewTestForUser = async () => {
+    const testName = generateProjectName();
+    const testPayload = {
+      name: testName,
+      arms: form.getFieldValue('arms') || 2,
+      proportional_metric: true,
+    };
+
+    const response = await axios.post('https://89.116.33.88/tests/', testPayload, {
+      headers: { 'Authorization': `Token ${localStorage.getItem('abtestinghub-access-token')}` },
+    });
+
+    await patchTestData(response.data);
+    navigate('/dashboard'); // Or update the UI as needed
+  };
+
+  const overrideExistingTest = async () => {
+    if (!selectedTestId) {
+      message.error('No test selected.');
+      return;
+    }
+
+    const testToOverride = userTests.find(test => test.id === selectedTestId);
+    if (!testToOverride) {
+      message.error('Selected test not found.');
+      return;
+    }
+
+    const isConfirmed = await confirmation('Are you sure you want to override this test with the new data?');
+    if (isConfirmed) {
+      await patchTestData(testToOverride);
+    }
+  };
+
+  const patchTestData = async (test: ITest) => {
+    const formValues = form.getFieldsValue();
+    const payload = {
+      ...formValues,
+      ...numericalResults,
+      allocations: allocations,
+      status: TestStatus.APPR,
+    };
+
+    try {
+      await axios.patch(`https://89.116.33.88/tests/${test.id}/`, payload, {
+        headers: {
+          'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token'),
+        },
+      });
+      message.success('Test updated successfully!');
+      setIsNotCalculatedSaved(CalculationStatus.SAVED);
+      navigate('/dashboard')
+    } catch (error) {
+      console.error('Failed to update test:', error);
+      message.error('Failed to update test.');
+    }
+  };
+
   return (
     <div className='py-8 px-2 flex flex-col w-full justify-center items-center bg-[#f5f5f550] gap-4'>
       <Auth
         isVisible={isAuthVisible}
         onClose={closeAuthModal}
         onSignup={handleUserSignupAndTestCreation}
+        onSignin={handleSignInAndFetchTests}
       />
+      <Modal
+        title="Select a Test"
+        open={isTestsModalVisible}
+        onOk={() => setIsTestsModalVisible(false)}
+        onCancel={() => setIsTestsModalVisible(false)}
+        footer={null}
+      >
+        <List
+          dataSource={userTests}
+          renderItem={test => (
+            <List.Item
+            className={selectedTestId === test.id ? 'bg-blue-100' : ''}
+              actions={[
+                <Button type="link" onClick={() => setSelectedTestId(test.id)}>Select</Button>,
+              ]}
+            >
+              {test.name}
+            </List.Item>
+          )}
+        />
+        <div className='flex w-full justify-between'>
+          <Button type='primary' onClick={createNewTestForUser}>Create New Test</Button>
+          <Button onClick={overrideExistingTest} disabled={!selectedTestId}>Override Selected Test</Button>
+        </div>
+      </Modal>
       {testData &&
         <div className='container'>
           <Paper className='p-4 flex justify-between items-center relative'>

@@ -3,49 +3,71 @@ import { Container, Paper } from "@mui/material"
 import { Button, Col, Form, Input, InputNumber, Radio, Row, message } from "antd"
 import { generateProjectName } from "../utils/hypothesis_title_generator";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export const CreateTest = () => {
 
   const navigate = useNavigate()
+  const location = useLocation();
   const [form] = Form.useForm();
+  const [testId, setTestId] = useState();
 
-  const createTest = async (values: any, action: string) => {
-    // Define your API endpoint
-    const apiUrl = 'http://localhost:8000/tests/';
+  useEffect(() => {
+    // Check if testId is passed in the component's state
+    if (location.state?.testId) {
+      setTestId(location.state.testId);
+      fetchTestData(location.state.testId);
+    }
+  }, [location.state]);
+
+  const fetchTestData = async (testId: number) => {
+    try {
+      const response = await axios.get(`https://89.116.33.88/tests/${testId}/`, {
+        headers: {
+          'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token'),
+        },
+      });
+      form.setFieldsValue(response.data);
+    } catch (error) {
+      console.error('Failed to fetch test data:', error);
+      message.error('Failed to fetch test details.');
+    }
+  };
+
+  const createOrUpdateTest = async (values: any, action: string) => {
+    const apiUrl = testId ? `https://89.116.33.88/tests/${testId}/` : 'https://89.116.33.88/tests/';
+    const method = testId ? axios.patch : axios.post;
 
     try {
-      // Use axios to send a POST request
-      const response = await axios.post(apiUrl, values, {
+      const response = await method(apiUrl, values, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
+          'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token'),
         },
       });
 
-      message.success('Test created successfully');
+      message.success(testId ? 'Test updated successfully' : 'Test created successfully');
 
-      // Redirect based on the action
       if (action === 'return') {
         navigate('/dashboard');
       } else if (action === 'continue') {
-        const testId = response.data.id;
         const route = values.proportional_metric ? '/proportional-metric-testing' : '/continuous-metric-testing';
-        navigate(route, { state: { testId } });
+        navigate(route, { state: { testId: response.data.id } });
       }
     } catch (error) {
-      console.error('Failed to create test:', error);
+      console.error(testId ? 'Failed to update test:' : 'Failed to create test:', error);
+      message.error(testId ? 'Failed to update test.' : 'Failed to create test.');
     }
   };
 
   const onFinish = (values: any) => {
-    createTest(values, 'continue');
+    createOrUpdateTest(values, 'continue');
   };
 
   const onFinishReturn = (values: any) => {
-    createTest(values, 'return');
+    createOrUpdateTest(values, 'return');
   };
-
 
   const randomName = generateProjectName();
 

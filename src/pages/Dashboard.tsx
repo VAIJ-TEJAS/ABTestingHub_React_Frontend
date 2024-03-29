@@ -33,7 +33,7 @@ export const Dashboard = () => {
 
   const fetchTestsData = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/tests/', {
+      const response = await axios.get('https://89.116.33.88/tests/', {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
@@ -59,7 +59,7 @@ export const Dashboard = () => {
     const isConfirmed = await confirmation('Are you sure you want to delete this test?');
     if (isConfirmed) {
       try {
-        await axios.delete(`http://localhost:8000/tests/${testId}/`, {
+        await axios.delete(`https://89.116.33.88/tests/${testId}/`, {
           headers: {
             'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
           }
@@ -85,7 +85,7 @@ export const Dashboard = () => {
     </Menu>
   );
 
-  const columns = [
+  const columns: any = [
     {
       title: 'Hypothesis Name',
       dataIndex: 'hypothesisName',
@@ -149,7 +149,7 @@ export const Dashboard = () => {
     {
       title: 'Action',
       key: 'action',
-      render: (_, record) => (
+      render: (_: any, record: any) => (
         <Dropdown overlay={() => menu(record)} trigger={['click']}>
           <Button shape="circle" icon={<EllipsisOutlined />} />
         </Dropdown>
@@ -171,7 +171,7 @@ export const Dashboard = () => {
   }));
 
   return (
-    <div className='flex flex-col justify-center items-center bg-[#f5f5f5] p-4'>
+    <div className='flex flex-col justify-center items-center p-4'>
       <div className='flex-grow-0 container'>
         <div className='flex gap-4 p-4 justify-center'>
           <StatisticCard

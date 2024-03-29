@@ -44,7 +44,7 @@ export const ArticlesHome = () => {
   });
 
   useEffect(() => {
-    axios.get("http://localhost:8000/articles-card/").then((articles) => {
+    axios.get("https://89.116.33.88/articles-card/").then((articles) => {
       setArticlesData({
         articles: articles.data,
         featuredArticle: articles.data[0],
