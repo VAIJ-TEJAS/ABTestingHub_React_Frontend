@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Form, InputNumber, Checkbox, Button, Select, Tooltip, message } from 'antd';
 import axios from 'axios';
 import CountUp from 'react-countup';
@@ -8,18 +8,28 @@ import { Paper } from '@mui/material';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import PlotGraph from '../components/PlotGraph';
 import { CalculationStatus, ITest, TestStatus } from '../types/test.types';
-import { Context } from '../context/context.provider';
+import { Auth } from '../components/Auth';
+import { generateProjectName } from '../utils/hypothesis_title_generator';
 
 const { Option } = Select;
 
 export const ProportionalMetricTesting: React.FC = () => {
 
-  const { userAuthenticated, showAuthModal } = Context()
+  const [isAuthVisible, setIsAuthVisible] = useState(false);
+
+  const openAuthModal = () => {
+    setIsAuthVisible(true);
+  };
+
+  const closeAuthModal = () => {
+    setIsAuthVisible(false);
+  };
 
   const [isNotCalculatedSaved, setIsNotCalculatedSaved] = useState<CalculationStatus>(CalculationStatus.SAVED)
   const [userInitiatedCalculation, setUserInitiatedCalculation] = useState<boolean>(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
   const [testData, setTestData] = useState<ITest | null>(null);
 
   const [figures, setFigures] = useState<any[]>([]);
@@ -93,15 +103,9 @@ export const ProportionalMetricTesting: React.FC = () => {
         }
       });
       // Process response data to populate form, figures, or any other component state
-      console.log(response.data);
       setTestData(response.data);
-
       setEqualAllocation(response.data.equal_allocation);
       setAllocations(response.data.allocations)
-
-      console.log(allocations);
-      console.log(allocations);
-      console.log(allocations);
 
     } catch (error) {
       console.error("Failed to fetch test details:", error);
@@ -118,8 +122,6 @@ export const ProportionalMetricTesting: React.FC = () => {
         data: allocations,
       }
     };
-
-    console.log(payload);
 
     axios.post(`${BASE_URL}/tests/calc_proportional_metric/`, payload)
       .then(response => {
@@ -187,9 +189,9 @@ export const ProportionalMetricTesting: React.FC = () => {
     }
   };
 
-  const saveResults = async () => {
-    if (!testData){
-      showAuthModal()
+  const saveResults = async (testData: ITest | null) => {
+    if (!testData) {
+      openAuthModal()
       return
     }
 
@@ -219,6 +221,30 @@ export const ProportionalMetricTesting: React.FC = () => {
     }
   };
 
+  const handleUserSignupAndTestCreation = async () => {
+    try {
+      const testPayload = {
+        name: generateProjectName(),
+        arms: form.getFieldValue('arms') || 2,
+        proportional_metric: true,
+      };
+
+      const response = await axios.post('http://localhost:8000/tests/', testPayload, {
+        headers: { Authorization: `Token ${localStorage.getItem('abtestinghub-access-token')}` },
+      });
+
+      setTestData(response.data);
+
+      message.success('New test created successfully!');
+      await saveResults(response.data);
+      navigate('/dashboard')
+
+    } catch (error) {
+      console.error('Error during signup and test creation:', error);
+      message.error('Failed to create test.');
+    }
+  };
+
   const handleFormValuesChange = () => {
     setIsNotCalculatedSaved(CalculationStatus.IDLE);
   };
@@ -231,6 +257,11 @@ export const ProportionalMetricTesting: React.FC = () => {
 
   return (
     <div className='py-8 px-2 flex flex-col w-full justify-center items-center bg-[#f5f5f550] gap-4'>
+      <Auth
+        isVisible={isAuthVisible}
+        onClose={closeAuthModal}
+        onSignup={handleUserSignupAndTestCreation}
+      />
       {testData &&
         <div className='container'>
           <Paper className='p-4 flex justify-between items-center relative'>
@@ -474,7 +505,14 @@ export const ProportionalMetricTesting: React.FC = () => {
                 </Button>
               </Form.Item>
               <>
-                <Button type="primary" onClick={saveResults} disabled={isNotCalculatedSaved === CalculationStatus.IDLE}>
+                <Button
+                  type="primary"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    saveResults(testData);
+                  }}
+                  disabled={isNotCalculatedSaved === CalculationStatus.IDLE}
+                >
                   Save
                 </Button>
               </>
@@ -534,7 +572,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.weeks_required.toLocaleString() ?? "_._"}
+                    <CountUp start={0} end={numericalResults?.weeks_required ?? 0} duration={0.5} separator="," />
                   </div>
                 </div>
                 <div>

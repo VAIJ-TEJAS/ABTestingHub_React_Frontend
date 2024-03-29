@@ -7,11 +7,16 @@ import Logo from "../assets/images/logo.png";
 import { useState } from "react";
 import axios from "axios"
 
-export const Auth = () => {
+interface AuthProps {
+    isVisible?: boolean;
+    onClose?: () => void;
+    onSignup?: (response: any) => void; 
+    onSignin?: (response: any) => void; 
+}
 
-    const { signInUser } = Context() 
+export const Auth: React.FC<AuthProps> = ({ isVisible, onClose, onSignup, onSignin }) => {
 
-    const { hideAuthModal, authModalOpen } = Context();
+    const { signInUser, hideAuthModal, authModalOpen } = Context();
     const [isTermsModalVisible, setIsTermsModalVisible] = useState(false);
     const [agreedToTerms, setAgreedToTerms] = useState(false);
     const [isSignUpView, setIsSignUpView] = useState(false);
@@ -45,8 +50,12 @@ export const Auth = () => {
                 
                 // Display success message
                 message.success('Sign in successful!');
+                
+                // Call the onSignin callback if provided
+                if (onSignin) onSignin(response);
+
                 // Close the modal
-                hideAuthModal();
+                handleClose();
             })
             .catch(error => {
                 message.error('Sign in failed. Please try again.');
@@ -63,12 +72,13 @@ export const Auth = () => {
         axios.post(signUpEndpoint, values)
             .then(response => {
                 console.log('SignUp Success:', response);
+                signInUser(response.data.token)
 
-                // Display success message
-                message.success('Sign up successful!');
+                // Call the onSignup callback if provided
+                if (onSignup) onSignup(response);
+
                 // Close the modal
-                hideAuthModal();
-                // Add logic to handle successful sign up
+                handleClose();
             })
             .catch(error => {
                 console.error('SignUp Error:', error);
@@ -76,9 +86,17 @@ export const Auth = () => {
             });
     };
 
+    const handleClose = () => {
+        if (onClose) {
+            onClose(); // Call the onClose prop if provided
+        } else {
+            hideAuthModal(); // Otherwise, use the context method
+        }
+    };
+
     return (
         <>
-            <Modal open={authModalOpen} onCancel={hideAuthModal} closeIcon={null} footer={null} width={720}>
+            <Modal open={isVisible ?? authModalOpen} onCancel={handleClose} closeIcon={null} footer={null} width={720}>
                 {isSignUpView ? (
                     <div className='flex flex-col justify-center items-center'>
                         <Container>
