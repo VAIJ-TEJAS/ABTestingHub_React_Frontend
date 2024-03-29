@@ -3,33 +3,49 @@ import { Container, Paper } from "@mui/material"
 import { Button, Col, Form, Input, InputNumber, Radio, Row, message } from "antd"
 import { generateProjectName } from "../utils/hypothesis_title_generator";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const CreateTest = () => {
 
-  const onFinish = async (values: any) => {
-    // Define your API endpoint
-    const apiUrl = 'http://localhost:8000/tests/'; 
+  const navigate = useNavigate()
+  const [form] = Form.useForm();
 
-    console.log(values);
+  const createTest = async (values: any, action: string) => {
+    // Define your API endpoint
+    const apiUrl = 'http://localhost:8000/tests/';
 
     try {
       // Use axios to send a POST request
       const response = await axios.post(apiUrl, values, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Token '+ localStorage.getItem('abtestinghub-access-token')
+          'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         },
       });
 
-      console.log(response.data)
+      message.success('Test created successfully');
 
-      message.success('Test created successfully:');
-      // Handle success (e.g., show notification, redirect, etc.)
+      // Redirect based on the action
+      if (action === 'return') {
+        navigate('/dashboard');
+      } else if (action === 'continue') {
+        const testId = response.data.id;
+        const route = values.proportional_metric ? '/proportional-metric-testing' : '/continuous-metric-testing';
+        navigate(route, { state: { testId } });
+      }
     } catch (error) {
       console.error('Failed to create test:', error);
-      // Handle error (e.g., show error notification)
     }
   };
+
+  const onFinish = (values: any) => {
+    createTest(values, 'continue');
+  };
+
+  const onFinishReturn = (values: any) => {
+    createTest(values, 'return');
+  };
+
 
   const randomName = generateProjectName();
 
@@ -39,11 +55,12 @@ export const CreateTest = () => {
       <Paper className="p-8">
         <Form
           layout="vertical"
+          form={form}
           onFinish={onFinish}
           initialValues={{
-            name: randomName,  
+            name: randomName,
             proportional_metric: true,
-            no_of_arms: 2
+            arms: 2
           }}
         >
           <Row gutter={16}>
@@ -60,7 +77,7 @@ export const CreateTest = () => {
               <Form.Item
                 label="Metric Type"
                 name="proportional_metric"
-                rules={[{ required: true, message: 'Please select the metric type!' }]} 
+                rules={[{ required: true, message: 'Please select the metric type!' }]}
               >
                 <Radio.Group>
                   <Radio value={true}>Proportional Metric</Radio>
@@ -109,19 +126,26 @@ export const CreateTest = () => {
             <Col span={8}>
               <Form.Item
                 label="Number of Arms"
-                name="no_of_arms"
-                rules={[{ required: true, message: 'Please input the number of arms!' }]} 
+                name="arms"
+                rules={[{ required: true, message: 'Please input the number of arms!' }]}
               >
-                <InputNumber min={2} max={20} className="w-full"/>
+                <InputNumber min={2} max={20} className="w-full" />
               </Form.Item>
             </Col>
           </Row>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Create
-            </Button>
-          </Form.Item>
+          <div className="flex w-full justify-between">
+            <Form.Item>
+              <Button onClick={() => onFinishReturn(form.getFieldsValue())}>
+                Save and Return
+              </Button>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Save and Continue
+              </Button>
+            </Form.Item>
+          </div>
         </Form>
       </Paper>
     </Container>

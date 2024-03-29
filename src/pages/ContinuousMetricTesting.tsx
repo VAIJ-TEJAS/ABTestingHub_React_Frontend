@@ -32,7 +32,7 @@ export const ContinuousMetricTesting: React.FC = () => {
   }, [form]);
 
   const onFinish = async (values: any) => {
-    const BASE_URL = 'https://89.116.33.88';
+    const BASE_URL = 'http://localhost:8000';
 
     const payload = {
       ...values,
@@ -127,7 +127,7 @@ export const ContinuousMetricTesting: React.FC = () => {
               absolute: true,
               arms: 2,
               daily_interactions: 100,
-              two_tailed: true,
+              two_tailed_test: true,
               equal_allocation: true,
               // revenue_per_conversion: 0.25,
               // expected_uplift: 3
@@ -252,7 +252,7 @@ export const ContinuousMetricTesting: React.FC = () => {
                   </Checkbox>
                 </Form.Item>
 
-                <Form.Item name="two_tailed" valuePropName="checked">
+                <Form.Item name="two_tailed_test" valuePropName="checked">
                   <Checkbox>
                     Two-tail Test
                     <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">

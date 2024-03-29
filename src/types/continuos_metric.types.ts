@@ -6,7 +6,7 @@ export interface IContinuousMetricInputs {
     absolute: boolean;
     arms: number;
     daily_interactions: number;
-    two_tailed: boolean;
+    two_tailed_test: boolean;
     equal_allocation: boolean;
     revenue_per_conversion: number;
     expected_uplift: number;

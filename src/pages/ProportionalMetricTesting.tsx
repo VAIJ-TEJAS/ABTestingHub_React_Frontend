@@ -1,16 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { Form, InputNumber, Checkbox, Button, Select, Tooltip, Spin } from 'antd';
+import { useLocation } from 'react-router-dom';
+import { Form, InputNumber, Checkbox, Button, Select, Tooltip, message } from 'antd';
 import axios from 'axios';
-import PlotGraph from '../components/PlotGraph';
+import CountUp from 'react-countup';
 import { Paper } from '@mui/material';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { useLocation } from 'react-router-dom';
-import { ITest } from '../types/test.types';
+import PlotGraph from '../components/PlotGraph';
+import { CalculationStatus, ITest, TestStatus } from '../types/test.types';
+import { Context } from '../context/context.provider';
 
 const { Option } = Select;
 
 export const ProportionalMetricTesting: React.FC = () => {
+
+  const { userAuthenticated, showAuthModal } = Context()
+
+  const [isNotCalculatedSaved, setIsNotCalculatedSaved] = useState<CalculationStatus>(CalculationStatus.SAVED)
+  const [userInitiatedCalculation, setUserInitiatedCalculation] = useState<boolean>(false);
 
   const location = useLocation();
   const [testData, setTestData] = useState<ITest | null>(null);
@@ -25,7 +32,7 @@ export const ProportionalMetricTesting: React.FC = () => {
   const createAllocations = (armsCount: number, equalAllocation: boolean) => {
     return Array.from({ length: armsCount }, (_, index) => ({
       id: index + 1,
-      value: equalAllocation ? 100 / armsCount : 0
+      value: equalAllocation ? (100 / armsCount).toFixed(2) : 0
     }));
   };
 
@@ -44,6 +51,40 @@ export const ProportionalMetricTesting: React.FC = () => {
     setAllocations(createAllocations(armsCount, equalAllocation));
   }, [form]);
 
+  useEffect(() => {
+    if (testData && testData.status !== TestStatus.INPO) {
+      // Assuming testData contains all the required fields
+      form.setFieldsValue({
+        confidence_level: testData?.confidence_level ?? 95,
+        power: testData?.power ?? 90,
+        baseline_conversion_rate: testData?.baseline_conversion_rate ?? 10,
+        mde: testData?.mde ?? 3,
+        absolute: testData?.absolute ?? true,
+        arms: testData?.arms ?? 2,
+        daily_interactions: testData?.daily_interactions ?? 100,
+        two_tailed_test: testData?.two_tailed_test ?? true,
+        equal_allocation: testData?.equal_allocation ?? true,
+        revenue_per_conversion: testData?.revenue_per_conversion ?? null,
+        expected_uplift: testData?.expected_uplift ?? null
+      });
+
+      // setNumericalResults({
+      //   total_sample_size: testData.total_sample_size,
+      //   sample_size_per_arm: testData.sample_size_per_arm,
+      //   days_required: testData.days_required,
+      //   weeks_required: testData.weeks_required,
+      //   control_revenue: testData.control_revenue,
+      //   test_revenue: testData.test_revenue
+      // })
+
+      setTimeout(() => {
+        form.submit();
+        setIsNotCalculatedSaved(CalculationStatus.SAVED);
+      }, 0);
+
+    }
+  }, [testData, form]);
+
   const fetchTestDetails = async (id: number) => {
     try {
       const response = await axios.get(`http://localhost:8000/tests/${id}/`, {
@@ -54,6 +95,14 @@ export const ProportionalMetricTesting: React.FC = () => {
       // Process response data to populate form, figures, or any other component state
       console.log(response.data);
       setTestData(response.data);
+
+      setEqualAllocation(response.data.equal_allocation);
+      setAllocations(response.data.allocations)
+
+      console.log(allocations);
+      console.log(allocations);
+      console.log(allocations);
+
     } catch (error) {
       console.error("Failed to fetch test details:", error);
     }
@@ -75,24 +124,21 @@ export const ProportionalMetricTesting: React.FC = () => {
     axios.post(`${BASE_URL}/tests/calc_proportional_metric/`, payload)
       .then(response => {
 
-        console.log(response.data);
-
         const {
-          'Total Sample Size': totalSampleSize,
-          'Sample Size Per Arm': sampleSizePerArm,
-          'Days Required': daysRequired,
-          'Weeks Required': weeksRequired,
-          'Control Revenue': controlRevenue,
-          'Test Revenue': testRevenue
+          'Total Sample Size': total_sample_size,
+          'Sample Size Per Arm': sample_size_per_arm,
+          'Days Required': days_required,
+          'Weeks Required': weeks_required,
+          'Control Revenue': control_revenue,
+          'Test Revenue': test_revenue
         } = response.data;
-
         setNumericalResults({
-          totalSampleSize,
-          sampleSizePerArm,
-          daysRequired,
-          weeksRequired,
-          controlRevenue,
-          testRevenue
+          total_sample_size,
+          sample_size_per_arm,
+          days_required,
+          weeks_required,
+          control_revenue,
+          test_revenue
         });
 
         setFigures([
@@ -112,6 +158,9 @@ export const ProportionalMetricTesting: React.FC = () => {
             layout: response.data['Fig MDE'].layout
           }
         ]);
+
+        if (userInitiatedCalculation)
+          setIsNotCalculatedSaved(CalculationStatus.CALC);
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -125,7 +174,7 @@ export const ProportionalMetricTesting: React.FC = () => {
   const handleArmsChange = (value: number) => {
     setAllocations(Array.from({ length: value }, (_, index) => ({
       id: index + 1,
-      value: 100 / value
+      value: (100 / value).toFixed(2)
     })));
   };
 
@@ -139,26 +188,30 @@ export const ProportionalMetricTesting: React.FC = () => {
   };
 
   const saveResults = async () => {
-    if (!testData) return; // Check if testData is loaded
-  
+    if (!testData){
+      showAuthModal()
+      return
+    }
+
     // Assuming `values` contains all the input fields that were submitted.
     // You might need to store `values` in a state after `onFinish` is executed or directly use form values.
     const formValues = form.getFieldsValue();
-  
+
     const payload = {
-      ...formValues, // This spreads input values into the payload
-      ...numericalResults, // Spread numerical results into the payload
+      ...formValues,
+      ...numericalResults,
+      allocations: allocations,
+      status: TestStatus.APPR
     };
 
-    console.log(payload);
-  
     try {
-      const response = await axios.patch(`http://localhost:8000/tests/${testData.id}/`, payload, {
+      await axios.patch(`http://localhost:8000/tests/${testData.id}/`, payload, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
       });
-      console.log('Save successful', response.data);
+      message.success('Results saved successfully!');
+      setIsNotCalculatedSaved(CalculationStatus.SAVED);
       // Optionally, navigate away or show a success message
     } catch (error) {
       console.error('Failed to save test details:', error);
@@ -166,17 +219,42 @@ export const ProportionalMetricTesting: React.FC = () => {
     }
   };
 
+  const handleFormValuesChange = () => {
+    setIsNotCalculatedSaved(CalculationStatus.IDLE);
+  };
+
+  const handleCalculateClick = () => {
+    setUserInitiatedCalculation(true);
+    form.submit();
+    message.success("Calculations completed successfully")
+  };
+
   return (
     <div className='py-8 px-2 flex flex-col w-full justify-center items-center bg-[#f5f5f550] gap-4'>
       {testData &&
         <div className='container'>
-          <Paper className='p-4 flex relative'>
+          <Paper className='p-4 flex justify-between items-center relative'>
             <div className='font-medium'>
               {testData?.name}
             </div>
-            {/* <div className='absolute w-full flex justify-center items-center'>
-              <Spin/>
-            </div> */}
+            <Tooltip title={
+              isNotCalculatedSaved === CalculationStatus.IDLE ? 'Inputs changed, please calculate.' :
+                isNotCalculatedSaved === CalculationStatus.CALC ? 'New results calculated, please save.' :
+                  isNotCalculatedSaved === CalculationStatus.SAVED ? 'Test is saved and up to date.' :
+                    'Status unknown.'
+            }>
+              <div className={`p-1 border rounded-full 
+            ${isNotCalculatedSaved === CalculationStatus.IDLE ? 'border-red-600' : ''} 
+            ${isNotCalculatedSaved === CalculationStatus.CALC ? 'border-yellow-600 ' : ''}
+            ${isNotCalculatedSaved === CalculationStatus.SAVED ? 'border-green-600 ' : ''}            
+            `}>
+                <div className={`h-5 w-5 rounded-full 
+              ${isNotCalculatedSaved === CalculationStatus.IDLE ? 'bg-red-600 animate-ping' : ''} 
+              ${isNotCalculatedSaved === CalculationStatus.CALC ? 'bg-yellow-600 animate-pulse' : ''}
+              ${isNotCalculatedSaved === CalculationStatus.SAVED ? 'bg-green-600 animate-pulse' : ''}
+              `} />
+              </div>
+            </Tooltip>
           </Paper>
         </div>
       }
@@ -186,18 +264,19 @@ export const ProportionalMetricTesting: React.FC = () => {
             form={form}
             layout="vertical"
             onFinish={onFinish}
+            onValuesChange={handleFormValuesChange}
             initialValues={{
-              confidence_level: 95,
-              power: 90,
-              baseline_conversion_rate: 10,
-              mde: 3,
-              absolute: true,
-              arms: 2,
-              daily_interactions: 100,
-              two_tailed: true,
-              equal_allocation: true,
-              // revenue_per_conversion: 0.25,
-              // expected_uplift: 3
+              confidence_level: testData?.confidence_level ?? 95,
+              power: testData?.power ?? 90,
+              baseline_conversion_rate: testData?.baseline_conversion_rate ?? 10,
+              mde: testData?.mde ?? 3,
+              absolute: testData?.absolute ?? true,
+              arms: testData?.arms ?? 2,
+              daily_interactions: testData?.daily_interactions ?? 100,
+              two_tailed_test: testData?.two_tailed_test ?? true,
+              equal_allocation: testData?.equal_allocation ?? true,
+              revenue_per_conversion: testData?.revenue_per_conversion ?? null,
+              expected_uplift: testData?.expected_uplift ?? null
             }}
           >
             <div className='flex gap-4'>
@@ -304,7 +383,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                   </Checkbox>
                 </Form.Item>
 
-                <Form.Item name="two_tailed" valuePropName="checked">
+                <Form.Item name="two_tailed_test" valuePropName="checked">
                   <Checkbox>
                     Two-tail Test
                     <Tooltip className='text-primary px-2' title="Number of interactions users have with the product on a daily basis.">
@@ -357,7 +436,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                   <Form.Item name="revenue_per_conversion" label={
                     <div className='flex w-60 justify-between '>
                       <div>
-                        {"Revenue per Conversion ($)"}
+                        {"Revenue per Conversion (₹)"}
                       </div>
                       <div>
                         <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
@@ -390,15 +469,15 @@ export const ProportionalMetricTesting: React.FC = () => {
             </div>
             <div className='flex w-full justify-between'>
               <Form.Item>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" onClick={handleCalculateClick}>
                   Calculate
                 </Button>
               </Form.Item>
-              <Form.Item>
-                <Button type="primary" onClick={saveResults}>
+              <>
+                <Button type="primary" onClick={saveResults} disabled={isNotCalculatedSaved === CalculationStatus.IDLE}>
                   Save
                 </Button>
-              </Form.Item>
+              </>
             </div>
           </Form>
         </Paper>
@@ -413,7 +492,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.totalSampleSize.toLocaleString() ?? "_._"}
+                    <CountUp start={0} end={numericalResults?.total_sample_size ?? 0} duration={0.5} separator="," />
                   </div>
                 </div>
                 <div>
@@ -423,7 +502,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.daysRequired.toLocaleString() ?? "_._"}
+                    <CountUp start={0} end={numericalResults?.days_required ?? 0} duration={0.5} separator="," />
                   </div>
                 </div>
                 <div>
@@ -433,7 +512,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.controlRevenue?.toLocaleString() ?? "_._"}
+                    <CountUp start={0} end={numericalResults?.control_revenue ?? 0} duration={0.5} separator="," prefix="₹" />
                   </div>
                 </div>
               </div>
@@ -445,7 +524,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.sampleSizePerArm.toLocaleString() ?? "_._"}
+                    <CountUp start={0} end={numericalResults?.sample_size_per_arm ?? 0} duration={0.5} separator="," />
                   </div>
                 </div>
                 <div>
@@ -455,7 +534,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.weeksRequired.toLocaleString() ?? "_._"}
+                    {numericalResults?.weeks_required.toLocaleString() ?? "_._"}
                   </div>
                 </div>
                 <div>
@@ -465,7 +544,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip></div>
                   <div className='text-4xl'>
-                    {numericalResults?.testRevenue?.toLocaleString() ?? "_._"}
+                    <CountUp start={0} end={numericalResults?.test_revenue} duration={0.5} separator="," prefix="₹" />
                   </div>
                 </div>
               </div>

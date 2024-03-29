@@ -1,8 +1,21 @@
+export enum CalculationStatus {
+  IDLE = "IDLE",
+  CALC = "CALC",
+  SAVED = "SAVED",
+}
+
+export enum TestStatus {
+  INPO = "INPO",
+  APPR = "APPR",
+  CONC = "CONC",
+}
+
+
 export interface ITest {
     id: number; 
     user?: number; 
     name: string;
-    no_of_arms: number;
+    arms: number;
     proportional_metric: boolean;
     description?: string;
     hypothesis?: string;
@@ -19,41 +32,19 @@ export interface ITest {
     expected_uplift?: number;
     equal_allocation?: boolean;
     two_tailed_test?: boolean;
-    revenue_per_unit_kpi?: number;
+    revenue_per_conversion?: number;
     total_sample_size?: number;
     sample_size_per_arm?: number;
     days_required?: number;
     weeks_required?: number;
     control_revenue?: number;
     test_revenue?: number;
-    visitors_group_a?: number;
-    conversions_group_a?: number;
-    visitors_group_b?: number;
-    conversions_group_b?: number;
-    visitors_group_c?: number;
-    conversions_group_c?: number;
-    visitors_group_d?: number;
-    conversions_group_d?: number;
-    visitors_group_e?: number;
-    conversions_group_e?: number;
-    conversion_rate_a?: number;
-    conversion_rate_b?: number;
     test_statistic?: number;
-    p_value_b?: number;
     ci_lower_bound?: number;
     ci_upper_bound?: number;
-    conversion_rate_c?: number;
-    conversion_rate_d?: number;
-    conversion_rate_e?: number;
-    relative_uplift_in_cr_c?: number;
-    relative_uplift_in_cr_d?: number;
-    relative_uplift_in_cr_e?: number;
-    p_value_c?: number;
-    p_value_d?: number;
-    p_value_e?: number;
     disclaimer_note?: string;
     statistically_significant?: boolean;
-    status?: string;
+    status?: TestStatus;
     integrity?: string;
     created_date: string; 
     modified_date: string;

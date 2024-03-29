@@ -3,7 +3,7 @@ import { Modal, Button, Form, Input, Checkbox, message } from 'antd';
 import { Context } from "../context/context.provider";
 import { Container } from "@mui/material";
 import Logo from "../assets/images/logo.png";
-import GoogleIcon from "../assets/svgs/google.svg";
+// import GoogleIcon from "../assets/svgs/google.svg";
 import { useState } from "react";
 import axios from "axios"
 
@@ -101,7 +101,7 @@ export const Auth = () => {
                             <Button type="primary" htmlType='submit'>
                                 Login
                             </Button>
-                            <div className='w-full flex items-center gap-3 text-zinc-500 py-3'>
+                            {/* <div className='w-full flex items-center gap-3 text-zinc-500 py-3'>
                                 <hr className='flex-1' />
                                 OR
                                 <hr className='flex-1' />
@@ -113,7 +113,7 @@ export const Auth = () => {
                                         Continue with Google
                                     </div>
                                 </div>
-                            </Button>
+                            </Button> */}
                             <Form.Item className='text-center my-3'>
                                 <Button type="link" onClick={toggleView}>Don't have an account? Sign Up</Button>
                             </Form.Item>
@@ -147,7 +147,7 @@ export const Auth = () => {
                                 <Button type="primary" disabled={!agreedToTerms} htmlType='submit'>
                                     Signup
                                 </Button>
-                                <div className='w-full flex items-center gap-3 text-zinc-500 py-3'>
+                                {/* <div className='w-full flex items-center gap-3 text-zinc-500 py-3'>
                                     <hr className='flex-1' />
                                     OR
                                     <hr className='flex-1' />
@@ -157,7 +157,7 @@ export const Auth = () => {
                                         <img src={GoogleIcon} alt="Google" className='w-5' />
                                         Continue with Google
                                     </div>
-                                </Button>
+                                </Button> */}
                                 <Form.Item className='text-center my-3'>
                                     <Button type="link" onClick={toggleView}>Already have an account? Sign In</Button>
                                 </Form.Item>
