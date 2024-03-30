@@ -29,7 +29,7 @@ export const Article = () => {
     const fetchArticle = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/articles/${article_id}/`
+          `https://89.116.33.88/articles/${article_id}/`
         );
         setArticle(response.data);
         console.log(response.data);

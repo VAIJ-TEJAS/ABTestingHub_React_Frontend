@@ -30,9 +30,11 @@ export interface ITest {
     absolute?: boolean;
     daily_interactions?: number;
     expected_uplift?: number;
+    max_uplift?: number;
     equal_allocation?: boolean;
     two_tailed_test?: boolean;
     revenue_per_conversion?: number;
+    revenue_impact?: number;
     total_sample_size?: number;
     sample_size_per_arm?: number;
     days_required?: number;

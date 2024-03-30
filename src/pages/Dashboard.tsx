@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatisticCard } from '../components/StatisticCard';
 import { Table, Input, Button, Space, Tag, Menu, Dropdown, message } from 'antd';
-import { PlusOutlined, BarChartOutlined, SearchOutlined, RocketOutlined, DollarCircleOutlined, CheckCircleOutlined, EditOutlined, DeleteOutlined, EllipsisOutlined } from '@ant-design/icons';
+import { PlusOutlined, SearchOutlined, RocketOutlined, DollarCircleOutlined, CheckCircleOutlined, EditOutlined, DeleteOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -9,45 +9,108 @@ import axios from 'axios';
 import { ITest } from '../types/test.types';
 import { confirmation } from '../components/Confirmation';
 
-const getTagColor = (status: any) => {
+const getTagColor = (status: string) => {
   switch (status) {
-    case 'Concluded':
-      return 'volcano';
-    case 'In-progress':
-      return 'green';
-    case 'Aborted':
+    case 'APPR':
       return 'red';
+    case 'INPR':
+      return 'yellow';
+    case 'CONC':
+      return 'green';
     default:
       return 'default';
   }
 };
 
+const getStatusLabel = (status: string) => {
+  switch (status) {
+    case 'APPR':
+      return 'Approved';
+    case 'INPR':
+      return 'In Progress';
+    case 'CONC':
+      return 'Concluded';
+    default:
+      return status; 
+  }
+};
+
 export const Dashboard = () => {
 
+  const [totalHypotheses, setTotalHypotheses] = useState<number>(0);
+  const [inProgress, setInProgress] = useState<number>(0);
+  const [concluded, setConcluded] = useState<number>(0);
+  const [totalIncrementalRevenue, setTotalIncrementalRevenue] = useState<number>(0);
+
+  const [searchTerm, setSearchTerm] = useState('');
   const [testsData, setTestsData] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const navigate = useNavigate()
 
   const paginationConfig = {
     pageSize: 8,
   };
 
-  const fetchTestsData = async () => {
+  const fetchAllTestsData = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/tests/', {
+      const response = await axios.get('https://89.116.33.88/tests/', {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
-      }
-      );
+      });
+
+      const tests = response.data;
+      setTestsData(tests);
+
+      // Calculate the values for the cards
+      setTotalHypotheses(tests.length);
+      setInProgress(tests.filter((test: any) => test.status === 'INPR').length);
+      setConcluded(tests.filter((test: any) => test.status === 'CONC').length);
+
+      const totalRevenueImpact = tests.reduce((acc: number, test: any) => {
+        const impact = test.revenue_impact || 0; // Assuming revenue_impact is already a number
+        return acc + impact;
+      }, 0);
+      
+      setTotalIncrementalRevenue(totalRevenueImpact);
+
+    } catch (error) {
+      console.error("Failed to fetch tests data:", error);
+    }
+  };
+
+  const fetchTestsData = async (searchTerm = '') => {
+    const queryParam = searchTerm ? `?search=${searchTerm}` : '';
+    try {
+      const response = await axios.get(`https://89.116.33.88/tests/${queryParam}`, {
+        headers: {
+          'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
+        }
+      });
       setTestsData(response.data);
     } catch (error) {
       console.error("Failed to fetch tests data:", error);
     }
   };
 
+  const handleSearch = (searchTerm: string) => {
+    fetchTestsData(searchTerm);
+  };
+
+  const handleSearchChange = (event: any) => {
+    setSearchTerm(event.target.value);
+  };
+
   useEffect(() => {
-    // Function to fetch data using axios
-    fetchTestsData();
+    const delayDebounce = setTimeout(() => {
+      fetchTestsData(searchTerm);
+    }, 300); // Delay for debounce
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    fetchAllTestsData();
   }, []);
 
   const handleEditTest = (testId: number) => {
@@ -59,13 +122,13 @@ export const Dashboard = () => {
     const isConfirmed = await confirmation('Are you sure you want to delete this test?');
     if (isConfirmed) {
       try {
-        await axios.delete(`http://localhost:8000/tests/${testId}/`, {
+        await axios.delete(`https://89.116.33.88/tests/${testId}/`, {
           headers: {
             'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
           }
         });
 
-        fetchTestsData(); 
+        fetchTestsData();
         message.success('Test deleted successfully');
 
       } catch (error) {
@@ -85,6 +148,32 @@ export const Dashboard = () => {
     </Menu>
   );
 
+  const handleMassDelete = async () => {
+    const isConfirmed = await confirmation('Are you sure you want to delete the selected tests?');
+    if (isConfirmed) {
+      try {
+        await Promise.all(selectedRowKeys.map(testId =>
+          axios.delete(`https://89.116.33.88/tests/${testId}/`, {
+            headers: { 'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token') }
+          })
+        ));
+        setSelectedRowKeys([]);
+        fetchTestsData();
+        message.success('Selected tests deleted successfully');
+      } catch (error) {
+        console.error('Failed to delete selected tests:', error);
+      }
+    }
+  };
+
+  const rowSelection = {
+    selectedRowKeys, // This already matches the expected type
+    onChange: (selectedKeys: React.Key[]) => {
+      // Now this matches the expected signature, including the selectedRows parameter
+      setSelectedRowKeys(selectedKeys);
+    },
+  };
+
   const columns: any = [
     {
       title: 'Hypothesis Name',
@@ -101,15 +190,7 @@ export const Dashboard = () => {
       key: 'status',
       dataIndex: 'status',
       render: (status: any) => (
-        <Tag color={getTagColor(status)}>{status}</Tag>
-      ),
-    },
-    {
-      title: 'Integrity',
-      key: 'integrity',
-      dataIndex: 'integrity',
-      render: (integrity: any) => (
-        <span>{integrity ? <Tag color="green">High</Tag> : <Tag color="volcano">Low</Tag>}</span>
+        <Tag color={getTagColor(status)}>{getStatusLabel(status)}</Tag>
       ),
     },
     {
@@ -140,14 +221,31 @@ export const Dashboard = () => {
       title: 'Revenue Impact',
       dataIndex: 'revenueImpact',
       key: 'revenueImpact',
+      render: (revenueImpact: number) => (
+        <span className={`font-medium ${revenueImpact < 0 ? 'text-red-500' : 'text-green-500'}`}>
+          {revenueImpact}
+        </span>
+      ),
     },
     {
       title: 'A/B Test - Results',
       dataIndex: 'abTestResults',
       key: 'abTestResults',
+      render: (text: string, record: ITest) => {
+        const route = '/ab-testing';
+        return (
+          <Button
+            type="primary"
+            size="small"
+            onClick={() => navigate(route, { state: { testId: record.id } })}
+          >
+            {text === 'N/A' ? "A/B" : text}
+          </Button>
+        );
+      },
     },
     {
-      title: 'Action',
+      title: '',
       key: 'action',
       render: (_: any, record: any) => (
         <Dropdown overlay={() => menu(record)} trigger={['click']}>
@@ -159,14 +257,14 @@ export const Dashboard = () => {
 
   const dataSource = testsData.map((test: ITest) => ({
     id: test.id,
+    key: test.id,
     hypothesisName: test.name,
     description: test.description ?? 'Description not provided',
     status: test.status ?? 'Status not available',
-    integrity: test.integrity,
     lastModifiedDate: test.modified_date,
     mssDuration: (test?.total_sample_size && test?.days_required) ? test?.total_sample_size.toLocaleString() + ' | ' + test?.days_required + " days" : 'N/A',
-    revenueImpact: (test?.control_revenue && test?.test_revenue) ? " + ₹ " + (((test.test_revenue - test.control_revenue) / test.control_revenue) * 100).toFixed(2) : 'N/A',
-    abTestResults: 'N/A',
+    revenueImpact: (test?.revenue_impact) ? " ₹ " + (test?.revenue_impact) : 'N/A',
+    abTestResults: (test?.max_uplift && test?.statistically_significant)  ? (test?.statistically_significant ? "Significant": "Insignificant") + ' | ' + test?.max_uplift : 'N/A',
     proportional_metric: test.proportional_metric
   }));
 
@@ -175,41 +273,41 @@ export const Dashboard = () => {
       <div className='flex-grow-0 container'>
         <div className='flex gap-4 p-4 justify-center'>
           <StatisticCard
-            amount="874"
+            amount={totalHypotheses}
             icon={<SearchOutlined className='text-white text-3xl' />}
-            bgColor="bg-primary" // This should be a tailwind css color class or a custom class defined by you
+            bgColor="bg-primary"
             title="Total Hypothesis"
           />
           <StatisticCard
-            amount="311"
+            amount={inProgress}
             icon={<RocketOutlined className='text-white text-3xl' />}
-            bgColor="bg-red-600" // This should be a tailwind css color class or a custom class defined by you
-            title="Prompted to Experiment"
+            bgColor="bg-red-600"
+            title="In Progress"
           />
           <StatisticCard
-            amount="₹ 235,522"
-            icon={<DollarCircleOutlined className='text-white text-3xl' />}
-            bgColor="bg-green-600" // This should be a tailwind css color class or a custom class defined by you
-            title="Total Incremental Revenue"
-          />
-          <StatisticCard
-            amount="160"
-            icon={<BarChartOutlined className='text-white text-3xl' />}
-            bgColor="bg-yellow-500" // This should be a tailwind css color class or a custom class defined by you
-            title="Biased"
-          />
-          <StatisticCard
-            amount="281"
+            amount={concluded}
             icon={<CheckCircleOutlined className='text-white text-3xl' />}
-            bgColor="bg-primary" // This should be a tailwind css color class or a custom class defined by you
+            bgColor="bg-yellow-500"
             title="Results"
+          />
+          <StatisticCard
+            amount={totalIncrementalRevenue}
+            icon={<DollarCircleOutlined className='text-white text-3xl' />}
+            bgColor="bg-green-600"
+            title="Total Incremental Revenue"
+            prefix='₹'
           />
         </div>
       </div>
       <div className='container my-8'>
         <div className='flex justify-between'>
           <div className='w-60'>
-            <Input.Search placeholder='Search' />
+            <Input.Search
+              placeholder='Search'
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onSearch={handleSearch}
+            />
           </div>
           <Space>
             <Button type="primary" icon={<PlusOutlined />} onClick={() => {
@@ -219,13 +317,29 @@ export const Dashboard = () => {
           </Space>
         </div>
       </div>
-      <Paper className='container '>
-        <Table
-          columns={columns}
-          dataSource={dataSource}
-          pagination={paginationConfig}
-        />
-      </Paper>
+      <div className='flex container'>
+        {
+          selectedRowKeys.length > 0 &&
+          <div className='p-2'>
+            <Button
+              danger
+              onClick={handleMassDelete}
+              disabled={!selectedRowKeys.length}
+              type="primary"
+              icon={<DeleteOutlined />}
+            />
+          </div>
+        }
+        <Paper className='container flex-1'>
+          <Table
+            rowKey="id"
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={dataSource}
+            pagination={paginationConfig}
+          />
+        </Paper>
+      </div>
     </div>
   );
 };

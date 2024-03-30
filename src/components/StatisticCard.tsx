@@ -1,14 +1,16 @@
 import { ReactNode } from 'react';
+import CountUp from 'react-countup';
 import { Paper } from '@mui/material';
 
 interface StatisticCardProps {
-    amount: string;
+    amount: number;
     icon: ReactNode;
     bgColor: string;
     title: string;
+    prefix?: string;
 }
 
-export const StatisticCard = ({ amount, icon, bgColor, title }: StatisticCardProps) => {
+export const StatisticCard = ({ amount, icon, bgColor, title, prefix }: StatisticCardProps) => {
     return (
         <Paper className='mt-4 hover:shadow-lg'>
             <div className='w-64 h-28 relative'>
@@ -21,7 +23,7 @@ export const StatisticCard = ({ amount, icon, bgColor, title }: StatisticCardPro
                     </div>
                 </div>
                 <div className='flex w-full h-full justify-center items-center pt-12 text-4xl font-medium'>
-                    {amount}
+                    <CountUp start={0} end={amount ?? 0} duration={0.5} separator="," prefix={prefix}/>
                 </div>
             </div>
         </Paper>
