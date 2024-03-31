@@ -250,7 +250,7 @@ export const Article = () => {
                     <div>Previous</div>
                   </div>
                   <div className="text-2xl font-medium group-hover:text-primary duration-200">
-                    Artificial Intelligence
+                    {article.previous_article.title}
                   </div>
                 </Link>
               ) : (
@@ -271,7 +271,7 @@ export const Article = () => {
                     </div>
                   </div>
                   <div className="text-2xl font-medium group-hover:text-primary duration-200">
-                    Artificial Intelligence
+                    {article.next_article.title}
                   </div>
                 </Link>
               ) : (
