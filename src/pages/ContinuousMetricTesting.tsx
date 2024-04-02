@@ -5,7 +5,7 @@ import axios from 'axios';
 import CountUp from 'react-countup';
 import PlotGraph from '../components/PlotGraph';
 import { Paper } from '@mui/material';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { ArrowDownOutlined, ArrowUpOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Context } from '../context/context.provider';
 import { CalculationStatus, ITest, TestStatus } from '../types/test.types';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -714,6 +714,17 @@ export const ContinuousMetricTesting: React.FC = () => {
                     </Tooltip></div>
                   <div className='text-4xl'>
                     <CountUp start={0} end={numericalResults?.test_revenue} duration={0.5} separator="," prefix="₹" />
+                  </div>
+                  <div>
+                    {((numericalResults?.test_revenue - numericalResults?.control_revenue) * 100 / (numericalResults?.control_revenue)) > 0 ?
+                      <div className='text-green-600'>
+                        <ArrowUpOutlined /> {((numericalResults?.test_revenue - numericalResults?.control_revenue) * 100 / (numericalResults?.control_revenue)).toFixed(2)}%
+                      </div>
+                      :
+                      <div className='text-red-600'>
+                        <ArrowDownOutlined/> {((numericalResults?.test_revenue - numericalResults?.control_revenue) * 100 / (numericalResults?.control_revenue)).toFixed(2)}%
+                      </div>
+                    }
                   </div>
                 </div>
               </div>
