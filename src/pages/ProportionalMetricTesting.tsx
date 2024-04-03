@@ -95,7 +95,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
   const fetchTestDetails = async (id: number) => {
     try {
-      const response = await axios.get(`https://89.116.33.88/tests/${id}/`, {
+      const response = await axios.get(`http://localhost:8000/tests/${id}/`, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
@@ -211,7 +211,7 @@ export const ProportionalMetricTesting: React.FC = () => {
     };
 
     try {
-      await axios.patch(`https://89.116.33.88/tests/${testData.id}/`, payload, {
+      await axios.patch(`http://localhost:8000/tests/${testData.id}/`, payload, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
@@ -233,7 +233,7 @@ export const ProportionalMetricTesting: React.FC = () => {
         proportional_metric: true,
       };
 
-      const response = await axios.post('https://89.116.33.88/tests/', testPayload, {
+      const response = await axios.post('http://localhost:8000/tests/', testPayload, {
         headers: { Authorization: `Token ${localStorage.getItem('abtestinghub-access-token')}` },
       });
 
@@ -261,7 +261,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
   const fetchUserTests = async () => {
     try {
-      const response = await axios.get('https://89.116.33.88/tests/', {
+      const response = await axios.get('http://localhost:8000/tests/', {
         headers: { 'Authorization': `Token ${localStorage.getItem('abtestinghub-access-token')}` },
       });
       setUserTests(response.data);
@@ -286,7 +286,7 @@ export const ProportionalMetricTesting: React.FC = () => {
       proportional_metric: true,
     };
 
-    const response = await axios.post('https://89.116.33.88/tests/', testPayload, {
+    const response = await axios.post('http://localhost:8000/tests/', testPayload, {
       headers: { 'Authorization': `Token ${localStorage.getItem('abtestinghub-access-token')}` },
     });
 
@@ -322,7 +322,7 @@ export const ProportionalMetricTesting: React.FC = () => {
     };
 
     try {
-      await axios.patch(`https://89.116.33.88/tests/${test.id}/`, payload, {
+      await axios.patch(`http://localhost:8000/tests/${test.id}/`, payload, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token'),
         },
@@ -434,20 +434,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                   <InputNumber min={90} max={100} style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item name="power" label={
-                  <div className='flex w-60 justify-between '>
-                    <div>
-                      {"Statistical Power (1-\u03B2) %"}
-                    </div>
-                    <div>
-                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </div>
-                  </div>
-                }>
-                  <InputNumber min={80} max={99.99} style={{ width: '100%' }} />
-                </Form.Item>
+                
 
                 <Form.Item name="baseline_conversion_rate" label={
                   <div className='flex w-60 justify-between '>
@@ -464,20 +451,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                   <InputNumber min={0} max={100} style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item name="mde" label={
-                  <div className='flex w-60 justify-between '>
-                    <div>
-                      {"Minimum Detectable Effect (%)"}
-                    </div>
-                    <div>
-                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </div>
-                  </div>
-                }>
-                  <InputNumber min={0} max={20} style={{ width: '100%' }} />
-                </Form.Item>
+               
 
                 <Form.Item name="daily_interactions" label={
                   <div className='flex w-60 justify-between '>
@@ -493,24 +467,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                 }>
                   <InputNumber min={1} style={{ width: '100%' }} />
                 </Form.Item>
-              </div>
-              <div className='w-60'>
-                <Form.Item name="arms" label={
-                  <div className='flex w-60 justify-between '>
-                    <div>
-                      {"Arms"}
-                    </div>
-                    <div>
-                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </div>
-                  </div>
-                }>
-                  <InputNumber min={2} max={20} style={{ width: '100%' }} onChange={(value) => {
-                    handleArmsChange(value ?? 2)
-                  }} />
-                </Form.Item>
+
 
                 <Form.Item name="absolute" valuePropName="checked">
                   <Checkbox>
@@ -529,6 +486,58 @@ export const ProportionalMetricTesting: React.FC = () => {
                     </Tooltip>
                   </Checkbox>
                 </Form.Item>
+                
+              </div>
+              <div className='w-60'>
+
+              <Form.Item name="power" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Statistical Power (1-\u03B2) %"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={80} max={99.99} style={{ width: '100%' }} />
+                </Form.Item>
+
+                <Form.Item name="mde" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Minimum Detectable Effect (%)"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={0} max={20} style={{ width: '100%' }} />
+                </Form.Item>
+
+
+                <Form.Item name="arms" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Arms"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={2} max={20} style={{ width: '100%' }} onChange={(value) => {
+                    handleArmsChange(value ?? 2)
+                  }} />
+                </Form.Item>
+
 
                 <Form.Item name="equal_allocation" valuePropName="checked">
                   <Checkbox checked={equalAllocation} onChange={handleEqualAllocationChange}>

@@ -35,6 +35,7 @@ export const Auth: React.FC<AuthProps> = ({
 
   const provider = new GoogleAuthProvider();
 
+<<<<<<< HEAD
   const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
       .then(() => {
@@ -117,6 +118,15 @@ export const Auth: React.FC<AuthProps> = ({
       onClose(); // Call the onClose prop if provided
     } else {
       hideAuthModal(); // Otherwise, use the context method
+=======
+    const signInWithGoogle = () => {
+        signInWithPopup(auth, provider).then((data) => {
+            console.log(JSON.stringify(data));
+        })
+        .catch(err => {
+            console.log(err);
+        })
+>>>>>>> 7e6e46a8e89842d254f6d8a1ddaf0d57bf2ea18a
     }
   };
 
