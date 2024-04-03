@@ -4,6 +4,8 @@ import { useLocation } from "react-router-dom";
 import { SettingOutlined } from "@ant-design/icons";
 import { Context } from "../context/context.provider";
 import { confirmation } from "./Confirmation";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
 
 export const DashboardNavbar = () => {
 
@@ -32,7 +34,7 @@ export const DashboardNavbar = () => {
     const menu = (
         <Menu>
             <Menu.Item key="1" onClick={handleLogoutClick}>
-                <span className="text-red-600">Logout</span>
+                <button  className="text-red-600">Logout</button>
             </Menu.Item>
         </Menu>
     );

@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import React, { createContext, useState, ReactNode, useContext, useEffect } from 'react';
 import { auth } from "../../firebaseConfig"
 
@@ -17,7 +17,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
     onAuthStateChanged(auth, user => {
       console.log(user);
     })
-  }, [])
+  }, [userAuthenticated])
 
   const signInUser = (token: string) => {
     localStorage.setItem('abtestinghub-access-token', token);
@@ -25,6 +25,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
   }
 
   const signOutUser = () => {
+    signOut(auth)
     localStorage.removeItem('abtestinghub-access-token');
     setUserAuthenticated(false)
   }
@@ -44,7 +45,8 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
     signOutUser,
     showAuthModal,
     hideAuthModal,
-    authModalOpen
+    authModalOpen,
+    setAuthModalOpen
   };
 
   return (
