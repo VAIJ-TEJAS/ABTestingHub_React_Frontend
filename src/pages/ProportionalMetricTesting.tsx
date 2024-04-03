@@ -95,7 +95,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
   const fetchTestDetails = async (id: number) => {
     try {
-      const response = await axios.get(`http://localhost:8000/tests/${id}/`, {
+      const response = await axios.get(`https://89.116.33.88/tests/${id}/`, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
@@ -211,7 +211,7 @@ export const ProportionalMetricTesting: React.FC = () => {
     };
 
     try {
-      await axios.patch(`http://localhost:8000/tests/${testData.id}/`, payload, {
+      await axios.patch(`https://89.116.33.88/tests/${testData.id}/`, payload, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }

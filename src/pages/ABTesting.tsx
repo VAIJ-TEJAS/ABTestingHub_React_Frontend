@@ -50,6 +50,11 @@ export const ABTesting: React.FC = () => {
     const state = location.state as { testId: number };
     if (state?.testId) {
       fetchTestDetails(state.testId);
+    } else {
+      setVisitorsConversionsData([
+        { visitors: 1000 },
+        { visitors: 1000 }
+      ])
     }
   }, [location.state]);
 
@@ -86,7 +91,7 @@ export const ABTesting: React.FC = () => {
       setTestData(response.data);
       if (response.data.visitors_conversions_input.toString() != '') {
         setVisitorsConversionsData(response.data.visitors_conversions_input)
-      }else{
+      } else {
         setTotalSampleSize(response.data.total_sample_size)
         setVisitorsConversionsData([
           { visitors: response.data.total_sample_size },
