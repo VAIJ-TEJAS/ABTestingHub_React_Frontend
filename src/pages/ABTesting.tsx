@@ -52,8 +52,8 @@ export const ABTesting: React.FC = () => {
       fetchTestDetails(state.testId);
     } else {
       setVisitorsConversionsData([
-        { visitors: 1000 },
-        { visitors: 1000 }
+        { visitors: 1000, conversions: 200 },
+        { visitors: 1000, conversions: 240 }
       ])
     }
   }, [location.state]);
@@ -174,6 +174,8 @@ export const ABTesting: React.FC = () => {
 
         if (userInitiatedCalculation)
           setIsNotCalculatedSaved(CalculationStatus.CALC);
+
+        message.success("Calculations completed successfully")
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -266,7 +268,6 @@ export const ABTesting: React.FC = () => {
   const handleCalculateClick = () => {
     setUserInitiatedCalculation(true);
     form.submit();
-    message.success("Calculations completed successfully")
   };
 
   const fetchUserTests = async () => {

@@ -6,7 +6,7 @@ import Logo from "../assets/images/logo.png";
 import GoogleIcon from "../assets/svgs/google.svg";
 import { useState } from "react";
 import axios from "axios";
-import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 
@@ -35,7 +35,6 @@ export const Auth: React.FC<AuthProps> = ({
 
   const provider = new GoogleAuthProvider();
 
-<<<<<<< HEAD
   const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
       .then(() => {
@@ -118,15 +117,6 @@ export const Auth: React.FC<AuthProps> = ({
       onClose(); // Call the onClose prop if provided
     } else {
       hideAuthModal(); // Otherwise, use the context method
-=======
-    const signInWithGoogle = () => {
-        signInWithPopup(auth, provider).then((data) => {
-            console.log(JSON.stringify(data));
-        })
-        .catch(err => {
-            console.log(err);
-        })
->>>>>>> 7e6e46a8e89842d254f6d8a1ddaf0d57bf2ea18a
     }
   };
 
