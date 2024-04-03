@@ -6,6 +6,8 @@ import Logo from "../assets/images/logo.png";
 // import GoogleIcon from "../assets/svgs/google.svg";
 import { useState } from "react";
 import axios from "axios"
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../../firebaseConfig';
 
 interface AuthProps {
     isVisible?: boolean;
@@ -22,6 +24,17 @@ export const Auth: React.FC<AuthProps> = ({ isVisible, onClose, onSignup, onSign
     const [isSignUpView, setIsSignUpView] = useState(false);
     const [formSignup] = Form.useForm();
     const [formSignin] = Form.useForm();
+
+    const provider = new GoogleAuthProvider()
+
+    const signInWithGoogle = () => {
+        signInWithPopup(auth, provider).then(() => {
+
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
 
     const toggleView = () => {
         setIsSignUpView(!isSignUpView);
@@ -119,19 +132,19 @@ export const Auth: React.FC<AuthProps> = ({ isVisible, onClose, onSignup, onSign
                             <Button type="primary" htmlType='submit'>
                                 Login
                             </Button>
-                            {/* <div className='w-full flex items-center gap-3 text-zinc-500 py-3'>
+                            <div className='w-full flex items-center gap-3 text-zinc-500 py-3'>
                                 <hr className='flex-1' />
                                 OR
                                 <hr className='flex-1' />
                             </div>
-                            <Button>
+                            <Button onClick={signInWithGoogle}>
                                 <div className='flex justify-center items-center gap-2 '>
-                                    <img src={GoogleIcon} alt="Google" className='w-5' />
+                                    {/* <img src={GoogleIcon} alt="Google" className='w-5' /> */}
                                     <div>
                                         Continue with Google
                                     </div>
                                 </div>
-                            </Button> */}
+                            </Button>
                             <Form.Item className='text-center my-3'>
                                 <Button type="link" onClick={toggleView}>Don't have an account? Sign Up</Button>
                             </Form.Item>
@@ -165,17 +178,17 @@ export const Auth: React.FC<AuthProps> = ({ isVisible, onClose, onSignup, onSign
                                 <Button type="primary" disabled={!agreedToTerms} htmlType='submit'>
                                     Signup
                                 </Button>
-                                {/* <div className='w-full flex items-center gap-3 text-zinc-500 py-3'>
+                                <div className='w-full flex items-center gap-3 text-zinc-500 py-3'>
                                     <hr className='flex-1' />
                                     OR
                                     <hr className='flex-1' />
                                 </div>
-                                <Button>
+                                <Button onClick={signInWithGoogle}>
                                     <div className='flex justify-center items-center gap-2'>
-                                        <img src={GoogleIcon} alt="Google" className='w-5' />
+                                        {/* <img src={GoogleIcon} alt="Google" className='w-5' /> */}
                                         Continue with Google
                                     </div>
-                                </Button> */}
+                                </Button>
                                 <Form.Item className='text-center my-3'>
                                     <Button type="link" onClick={toggleView}>Already have an account? Sign In</Button>
                                 </Form.Item>
