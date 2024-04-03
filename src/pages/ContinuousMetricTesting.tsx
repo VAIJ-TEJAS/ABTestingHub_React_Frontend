@@ -49,7 +49,7 @@ export const ContinuousMetricTesting: React.FC = () => {
   const createAllocations = (armsCount: number, equalAllocation: boolean) => {
     return Array.from({ length: armsCount }, (_, index) => ({
       id: index + 1,
-      value: equalAllocation ? 100 / armsCount : 0
+      value: equalAllocation ? (100 / armsCount).toFixed(2) : 0
     }));
   };
 
@@ -443,20 +443,7 @@ export const ContinuousMetricTesting: React.FC = () => {
                   <InputNumber min={90} max={100} style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item name="power" label={
-                  <div className='flex w-60 justify-between '>
-                    <div>
-                      {"Statistical Power (1-\u03B2) %"}
-                    </div>
-                    <div>
-                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </div>
-                  </div>
-                }>
-                  <InputNumber min={80} max={99.99} style={{ width: '100%' }} />
-                </Form.Item>
+          
 
                 <Form.Item name="baseline_kpi" label={
                   <div className='flex w-60 justify-between '>
@@ -471,21 +458,6 @@ export const ContinuousMetricTesting: React.FC = () => {
                   </div>
                 }>
                   <InputNumber min={0} max={100} style={{ width: '100%' }} />
-                </Form.Item>
-
-                <Form.Item name="kpi_sd" label={
-                  <div className='flex w-60 justify-between '>
-                    <div>
-                      {"KPI : Standard Deviation"}
-                    </div>
-                    <div>
-                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </div>
-                  </div>
-                }>
-                  <InputNumber min={0} style={{ width: '100%' }} />
                 </Form.Item>
 
                 <Form.Item name="mde" label={
@@ -503,38 +475,6 @@ export const ContinuousMetricTesting: React.FC = () => {
                   <InputNumber min={0} max={20} style={{ width: '100%' }} />
                 </Form.Item>
 
-                <Form.Item name="daily_interactions" label={
-                  <div className='flex w-60 justify-between '>
-                    <div>
-                      {"Daily Interactions"}
-                    </div>
-                    <div>
-                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </div>
-                  </div>
-                }>
-                  <InputNumber min={1} style={{ width: '100%' }} />
-                </Form.Item>
-              </div>
-              <div className='w-60'>
-                <Form.Item name="arms" label={
-                  <div className='flex w-60 justify-between '>
-                    <div>
-                      {"Arms"}
-                    </div>
-                    <div>
-                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </div>
-                  </div>
-                }>
-                  <InputNumber min={2} max={20} style={{ width: '100%' }} onChange={(value) => {
-                    handleArmsChange(value ?? 2)
-                  }} />
-                </Form.Item>
 
                 <Form.Item name="absolute" valuePropName="checked">
                   <Checkbox>
@@ -552,6 +492,71 @@ export const ContinuousMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip>
                   </Checkbox>
+                </Form.Item>
+
+              </div>
+              <div className='w-60'>
+              <Form.Item name="power" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Statistical Power (1-\u03B2) %"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={80} max={99.99} style={{ width: '100%' }} />
+                </Form.Item>
+
+                <Form.Item name="kpi_sd" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"KPI : Standard Deviation"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={0} style={{ width: '100%' }} />
+                </Form.Item>
+
+
+                <Form.Item name="daily_interactions" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Daily Interactions"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={1} style={{ width: '100%' }} />
+                </Form.Item>
+
+                <Form.Item name="arms" label={
+                  <div className='flex w-60 justify-between '>
+                    <div>
+                      {"Arms"}
+                    </div>
+                    <div>
+                      <Tooltip className='text-primary' title="Number of interactions users have with the product on a daily basis.">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
+                }>
+                  <InputNumber min={2} max={20} style={{ width: '100%' }} onChange={(value) => {
+                    handleArmsChange(value ?? 2)
+                  }} />
                 </Form.Item>
 
                 <Form.Item name="equal_allocation" valuePropName="checked">

@@ -28,8 +28,8 @@ export const Auth: React.FC<AuthProps> = ({ isVisible, onClose, onSignup, onSign
     const provider = new GoogleAuthProvider()
 
     const signInWithGoogle = () => {
-        signInWithPopup(auth, provider).then(() => {
-
+        signInWithPopup(auth, provider).then((data) => {
+            console.log(JSON.stringify(data));
         })
         .catch(err => {
             console.log(err);
