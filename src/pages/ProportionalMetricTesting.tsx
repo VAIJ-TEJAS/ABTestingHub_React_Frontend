@@ -5,7 +5,7 @@ import { Form, InputNumber, Checkbox, Button, Select, Tooltip, message, List, Mo
 import axios from 'axios';
 import CountUp from 'react-countup';
 import { Paper } from '@mui/material';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { ArrowDownOutlined, ArrowUpOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import PlotGraph from '../components/PlotGraph';
 import { CalculationStatus, ITest, TestStatus } from '../types/test.types';
 import { Auth } from '../components/Auth';
@@ -189,7 +189,7 @@ export const ProportionalMetricTesting: React.FC = () => {
   };
 
   const saveResults = async (testData: ITest | null) => {
-    if(!testData && userAuthenticated){
+    if (!testData && userAuthenticated) {
       handleSignInAndFetchTests()
       return
     }
@@ -355,7 +355,7 @@ export const ProportionalMetricTesting: React.FC = () => {
           dataSource={userTests}
           renderItem={test => (
             <List.Item
-            className={selectedTestId === test.id ? 'bg-blue-100' : ''}
+              className={selectedTestId === test.id ? 'bg-blue-100' : ''}
               actions={[
                 <Button type="link" onClick={() => setSelectedTestId(test.id)}>Select</Button>,
               ]}
@@ -405,7 +405,7 @@ export const ProportionalMetricTesting: React.FC = () => {
             onValuesChange={handleFormValuesChange}
             initialValues={{
               confidence_level: testData?.confidence_level ?? 95,
-              power: testData?.power ?? 90,
+              power: testData?.power ?? 80,
               baseline_conversion_rate: testData?.baseline_conversion_rate ?? 10,
               mde: testData?.mde ?? 3,
               absolute: testData?.absolute ?? true,
@@ -690,6 +690,17 @@ export const ProportionalMetricTesting: React.FC = () => {
                     </Tooltip></div>
                   <div className='text-4xl'>
                     <CountUp start={0} end={numericalResults?.test_revenue} duration={0.5} separator="," prefix="₹" />
+                  </div>
+                  <div>
+                    {((numericalResults?.test_revenue - numericalResults?.control_revenue) * 100 / (numericalResults?.control_revenue)) > 0 ?
+                      <div className='text-green-600'>
+                        <ArrowUpOutlined /> {((numericalResults?.test_revenue - numericalResults?.control_revenue) * 100 / (numericalResults?.control_revenue)).toFixed(2)}%
+                      </div>
+                      :
+                      <div className='text-red-600'>
+                        <ArrowDownOutlined /> {((numericalResults?.test_revenue - numericalResults?.control_revenue) * 100 / (numericalResults?.control_revenue)).toFixed(2)}%
+                      </div>
+                    }
                   </div>
                 </div>
               </div>

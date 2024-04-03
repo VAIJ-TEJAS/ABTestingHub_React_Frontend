@@ -34,10 +34,8 @@ export const ABTesting: React.FC = () => {
   const [maxUplift, setMaxUplift] = useState<number>(0);
   const [statisticallySignificant, setStatisticallySignificant] = useState<boolean | null>(null)
   const [form] = Form.useForm();
-  const [visitorsConversionsData, setVisitorsConversionsData] = useState<any[]>([
-    { visitors: 1000, conversions: 200 },
-    { visitors: 1000, conversions: 300 },
-  ]);
+  const [totalSampleSize, setTotalSampleSize] = useState<number | null>(null);
+  const [visitorsConversionsData, setVisitorsConversionsData] = useState<any[]>([]);
 
   const openAuthModal = () => {
     setIsAuthVisible(true);
@@ -84,10 +82,17 @@ export const ABTesting: React.FC = () => {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
       });
-      
+
       setTestData(response.data);
-      if(response.data.visitors_conversions_input.toString() != '')
-        setVisitorsConversionsData(response.data.visitors_conversions_input) 
+      if (response.data.visitors_conversions_input.toString() != '') {
+        setVisitorsConversionsData(response.data.visitors_conversions_input)
+      }else{
+        setTotalSampleSize(response.data.total_sample_size)
+        setVisitorsConversionsData([
+          { visitors: response.data.total_sample_size },
+          { visitors: response.data.total_sample_size },
+        ])
+      }
 
     } catch (error) {
       console.error("Failed to fetch test details:", error);
@@ -133,7 +138,7 @@ export const ABTesting: React.FC = () => {
           conclusion
         } = response.data;
 
-        
+
         // Prepare the data for the table
         const newTableData = conversion_rates.map((rate: any) => {
           const uplift = relative_uplift_values.find((u: any) => u.arm === rate.arm)?.value;
@@ -147,8 +152,8 @@ export const ABTesting: React.FC = () => {
             pValue: pValue !== undefined ? pValue.toFixed(5) : '-'
           };
         });
-        
-        
+
+
         setFigure(figure);
         setTableData(newTableData);
         setMaxUplift(max_uplift)
@@ -179,7 +184,7 @@ export const ABTesting: React.FC = () => {
       }
 
       for (let i = newData.length; i < newArmsCount; i++) {
-        newData.push({ visitors: 1000, conversions: 200 }); // add new arms with default values
+        newData.push({ visitors: totalSampleSize ?? 1000 }); // add new arms with default values
       }
 
       return newData;
