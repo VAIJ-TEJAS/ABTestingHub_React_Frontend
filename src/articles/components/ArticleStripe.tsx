@@ -65,15 +65,13 @@ export const ArticleStripe: FC<ArticleStripeProps> = ({
                 backgroundPosition: "center",
                 overflow: "hidden",
               }}
-              className="w-60 h-24 flex-shrink-0 rounded group-hover:rounded-xl group-hover:border group-hover:border-primary transition-all duration-200"
+              className="hidden sm:block w-60 h-24 flex-shrink-0 rounded group-hover:rounded-xl group-hover:border group-hover:border-primary transition-all duration-200"
             >
               IMG
             </div>
           </div>
         </div>
         <div className="flex gap-2 text-sm text-zinc-500">
-          {/* <div className="font-mono">{date || ""}</div>
-          <div>·</div> */}
           <div>{category?.name || "category"}</div>
         </div>
         <hr />

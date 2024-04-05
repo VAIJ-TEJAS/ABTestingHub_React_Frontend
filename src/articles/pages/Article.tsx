@@ -202,7 +202,7 @@ export const Article = () => {
                 className="no-tailwind"
               />
             </div>
-            <div className="w-64 space-y-3 pl-3 relative">
+            <div className="w-64 space-y-3 pl-3 relative hidden md:block">
               <div className="sticky top-16">
                 <h1 className="font-mono text-xs text-zinc-500">
                   TABLE OF CONTENTS
@@ -284,7 +284,7 @@ export const Article = () => {
             <>
               <hr className="my-8" />
               <div className="text-4xl font-medium my-8">Related Articles</div>
-              <div className="flex justify-between">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-3">
                 {article?.related_articles?.map((props) => {
                   return <ArticleCard key={props.id} {...props} />;
                 })}

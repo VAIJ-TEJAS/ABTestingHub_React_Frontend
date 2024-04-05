@@ -51,7 +51,7 @@ export const Categories = () => {
         </div>
         <ArticlesCategoryCard />
         <hr className="my-8" />
-        {articles.length!==0 ?<div className="grid grid-cols-3 justify-items-center gap-8">
+        {articles.length!==0 ?<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-8">
           {articles?.map((props) => {
             return <ArticleCard key={props.id} {...props} />;
           })}

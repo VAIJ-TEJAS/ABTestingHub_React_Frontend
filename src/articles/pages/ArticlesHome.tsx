@@ -58,11 +58,12 @@ export const ArticlesHome = () => {
   return (
     <>
       <Container>
-        <div className="flex justify-between items-center my-8">
-          <div className="text-6xl font-medium">Articles</div>
+        <div className="flex justify-between flex-wrap items-center my-8">
+          <div className="text-6xl font-medium mb-4">Articles</div>
           <ArticlesCategoryCard />
         </div>
-        <div className="flex gap-16">
+
+        <div className="flex gap-16 flex-col lg:flex-row">
           {articlesData.featuredArticle ? (
             <div className="flex-1 group">
               <Link
@@ -112,8 +113,8 @@ export const ArticlesHome = () => {
 
           {articlesData.popularArticles && (
             <div className="space-y-4">
-              <div className="text-4xl font-medium">Most Popular</div>
-              <div className="space-y-3">
+              <div className="text-4xl font-medium text-center">Most Popular</div>
+              <div className="space-y-3 flex flex-wrap lg:flex-nowrap lg:flex-col items-center justify-center">
                 {articlesData.popularArticles.map((props) => {
                   return <MostPopularArticleCard key={props.id} {...props} />;
                 })}
@@ -121,9 +122,10 @@ export const ArticlesHome = () => {
             </div>
           )}
         </div>
+
         <hr className="my-8" />
         {articlesData.articles ? (
-          <div className="grid grid-cols-3 justify-items-center gap-8">
+          <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-8">
             {articlesData.articles.map((props) => {
               return <ArticleCard key={props.id} {...props} />;
             })}

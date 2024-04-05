@@ -23,7 +23,7 @@ const ArticlesCategoryCard: FC<ArticlesCategoryCardProps> = ({ extraStyle }) => 
   }, []);
   
   return articleCategories.length !== 0 && (
-    <div className={`flex space-x-4 ${extraStyle}`}>
+    <div className={`flex gap-3 flex-wrap ${extraStyle}`}>
       {articleCategories.map(({ id, name }) => {
         return (
           <Button

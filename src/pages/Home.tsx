@@ -53,7 +53,8 @@ export const Home = () => {
   return (
     <>
       <div>
-        <Container className="relative">
+        <Container className="relative flex flex-col lg:flex-row">
+
           <div className="space-y-8 py-16">
             <div className="text-7xl font-medium">Stay curious.</div>
             <div className="text-2xl w-1/2">
@@ -71,10 +72,12 @@ export const Home = () => {
               </Button>
             </div>
           </div>
+
           <img
             src={HeroImage}
             className="absolute right-0 top-0 h-full -z-50"
           />
+
         </Container>
       </div>
       {/* Tools  */}
@@ -83,12 +86,14 @@ export const Home = () => {
           <div className="gap-8 py-16">
             <div className="space-y-4">
               <div className="text-4xl font-medium py-8">Tools We Offer</div>
-              <div className="flex justify-center gap-8">
+              <div className="flex flex-wrap justify-center gap-8">
+
                 <div className=" border-primary border rounded-xl p-4">
                   <div className="pb-4 text-primary text-3xl font-mono">
                     MSS Tool
                   </div>
-                  <div className="flex gap-8">
+                  <div className="flex flex-wrap items-stretch justify-center gap-8">
+
                     <Paper onClick={()=>{
                       navigate('/proportional-metric-testing/')
                     }} className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
@@ -124,8 +129,10 @@ export const Home = () => {
                         </div>
                       </div>
                     </Paper>
+
                   </div>
                 </div>
+
                 <div className="border-red-600 border rounded-xl p-4">
                   <div className="pb-4 text-red-600 text-3xl font-mono">
                     A/B Testing Tool
@@ -150,6 +157,7 @@ export const Home = () => {
                     </Paper>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -163,7 +171,7 @@ export const Home = () => {
               <div className="space-y-4">
                 <div className="text-4xl font-medium py-8">Most Popular</div>
 
-                <div className="gap-3 grid grid-cols-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-3">
                   {articlesData.map((props) => {
                     return <MostPopularArticleCard key={props.id} {...props} />;
                   })}
@@ -177,7 +185,7 @@ export const Home = () => {
       <div>
         <Container>
           <div className="space-y-8 py-16">
-            <div className="flex gap-8">
+            <div className="flex gap-8 lg:flex-row lg:flex-nowrap flex-wrap-reverse">
               {articlesData.length !== 0 && (
                 <div className="space-y-8 w-full p-4">
                   {articlesData.map((props) => {
@@ -185,11 +193,11 @@ export const Home = () => {
                   })}
                 </div>
               )}
-              <div className="w-80 flex-shrink-0 p-4 space-y-4">
+              <div className="lg:w-80 flex-shrink-0 p-4 space-y-4 items-center justify-start flex flex-col w-full">
                 <div className="font-medium">
                   Discover our articles in various categories
                 </div>
-                <ArticlesCategoryCard extraStyle="flex-wrap gap-4" />
+                <ArticlesCategoryCard extraStyle="lg:flex-wrap gap-4" />
               </div>
             </div>
           </div>
