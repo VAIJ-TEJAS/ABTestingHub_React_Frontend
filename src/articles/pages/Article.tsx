@@ -1,11 +1,12 @@
 import { Container, Paper } from "@mui/material";
-// import {
-//   FaFacebookF,
-//   FaTwitter,
-//   FaLinkedinIn,
-//   FaRedditAlien,
-//   FaRegCopy,
-// } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaLinkedinIn,
+  FaRedditAlien,
+  FaRegCopy,
+  FaShare,
+} from "react-icons/fa";
 import CoverImage from "../../assets/images/cover.webp";
 import { ArticleCard } from "../components/ArticleCard";
 import { useEffect, useState } from "react";
@@ -22,6 +23,8 @@ export const Article = () => {
   const [article, setArticle] = useState<IArticle | null>(null);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [content, setContent] = useState<string | TrustedHTML>("");
+
+  const path = window.location.href
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -146,7 +149,7 @@ export const Article = () => {
         <Container className="-mt-16 relative z-20">
           <Paper className="p-5 pb-8 flex">
             <div className="flex-1 space-y-8">
-              <div className="w-full flex justify-between items-center">
+              <div className="w-full flex justify-between items-center flex-wrap">
                 <div className="flex space-x-2 items-center">
                   <div className="flex gap-2">
                     <img
@@ -163,7 +166,8 @@ export const Article = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className="flex items-center gap-4">
+
+                <div className="flex items-center gap-4">
                   <a
                     href="#"
                     aria-label="Share on Facebook"
@@ -192,10 +196,26 @@ export const Article = () => {
                   >
                     <FaRedditAlien size={24} />
                   </a>
-                  <button className="text-gray-600 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300">
+                  <button
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(path);
+                    }}
+                    className="text-gray-600 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300"
+                  >
                     <FaRegCopy size={24} />
                   </button>
-                </div> */}
+                  <button
+                    onClick={() => {
+                      navigator.share({
+                        url: path,
+                        title: "A/B Testing article",
+                      });
+                    }}
+                    className="text-gray-600 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300"
+                  >
+                    <FaShare size={24} />
+                  </button>
+                </div>
               </div>
               <div
                 dangerouslySetInnerHTML={createMarkup(content)}
