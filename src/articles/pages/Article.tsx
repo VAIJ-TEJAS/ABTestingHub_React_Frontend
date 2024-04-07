@@ -1,9 +1,9 @@
 import { Container, Paper } from "@mui/material";
 import {
-  FaFacebookF,
-  FaTwitter,
-  FaLinkedinIn,
-  FaRedditAlien,
+  // FaFacebookF,
+  // FaTwitter,
+  // FaLinkedinIn,
+  // FaRedditAlien,
   FaRegCopy,
   FaShare,
 } from "react-icons/fa";
@@ -16,6 +16,8 @@ import { IArticle } from "../../types/article.types";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Link, useParams } from "react-router-dom";
 import ArticlesCategoryCard from "../components/ArticlesCategoryCard";
+import { toast } from "react-toastify";
+import { toastConfig } from "../../configs/toastConfig";
 
 export const Article = () => {
   const { article_id } = useParams();
@@ -24,7 +26,7 @@ export const Article = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [content, setContent] = useState<string | TrustedHTML>("");
 
-  const path = window.location.href
+  const path = window.location.href;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -130,6 +132,7 @@ export const Article = () => {
         >
           {/* Backdrop */}
           <div
+            className=""
             style={{
               position: "absolute",
               top: 0,
@@ -168,7 +171,7 @@ export const Article = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <a
+                  {/* <a
                     href="#"
                     aria-label="Share on Facebook"
                     className="text-blue-600 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300 transition-all"
@@ -195,10 +198,11 @@ export const Article = () => {
                     className="text-orange-600 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300 transition-all"
                   >
                     <FaRedditAlien size={24} />
-                  </a>
+                  </a> */}
                   <button
                     onClick={async () => {
                       await navigator.clipboard.writeText(path);
+                      toast.success("Link copied", toastConfig);
                     }}
                     className="text-gray-600 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300"
                   >

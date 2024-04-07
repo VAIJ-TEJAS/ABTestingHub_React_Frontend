@@ -8,6 +8,8 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { ConfigProvider } from 'antd';
 import { MyContextProvider } from './context/context.provider.tsx';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ConfigProvider
@@ -19,6 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     }}
   >
     <MyContextProvider>
+    <ToastContainer />
       <App />
     </MyContextProvider>
   </ConfigProvider>,
