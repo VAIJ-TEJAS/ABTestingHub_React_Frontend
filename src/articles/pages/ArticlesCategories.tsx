@@ -36,7 +36,7 @@ export const Categories = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/articles-card/?category__name=${category_name}`
+        `https://89.116.33.88/articles-card/?category__name=${category_name}`
       )
       .then((articles) => {
         setArticles(articles.data);
