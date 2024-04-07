@@ -3,12 +3,12 @@ import { Modal, Button, Form, Input, Checkbox, message } from "antd";
 import { Context } from "../context/context.provider";
 import { Container } from "@mui/material";
 import Logo from "../assets/images/logo.png";
-import GoogleIcon from "../assets/svgs/google.svg";
+// import GoogleIcon from "../assets/svgs/google.svg";
 import { useState } from "react";
 import axios from "axios";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
-import { useNavigate } from "react-router-dom";
+// import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+// import { auth } from "../../firebaseConfig";
+// import { useNavigate } from "react-router-dom";
 
 interface AuthProps {
   isVisible?: boolean;
@@ -23,29 +23,34 @@ export const Auth: React.FC<AuthProps> = ({
   onSignup,
   onSignin,
 }) => {
-  const { signInUser, hideAuthModal, authModalOpen, setUserAuthenticated, setAuthModalOpen } =
-    Context();
+  const {
+    signInUser,
+    hideAuthModal,
+    authModalOpen,
+    // setUserAuthenticated,
+    // setAuthModalOpen,
+  } = Context();
   const [isTermsModalVisible, setIsTermsModalVisible] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isSignUpView, setIsSignUpView] = useState(false);
   const [formSignup] = Form.useForm();
   const [formSignin] = Form.useForm();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const provider = new GoogleAuthProvider();
+  // const provider = new GoogleAuthProvider();
 
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then(() => {
-        setUserAuthenticated(true);
-        setAuthModalOpen(false)
-        navigate("/dashboard");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const signInWithGoogle = () => {
+  //   signInWithPopup(auth, provider)
+  //     .then(() => {
+  //       setUserAuthenticated(true);
+  //       setAuthModalOpen(false)
+  //       navigate("/dashboard");
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const toggleView = () => {
     setIsSignUpView(!isSignUpView);
@@ -66,7 +71,7 @@ export const Auth: React.FC<AuthProps> = ({
   const handleSignIn = (values: any) => {
     console.log(values);
 
-    const signInEndpoint = "https://89.116.33.88/auth/";
+    const signInEndpoint = "http://localhost:8000/auth/";
 
     axios
       .post(signInEndpoint, values)
@@ -92,7 +97,7 @@ export const Auth: React.FC<AuthProps> = ({
   const handleSignUp = (values: any) => {
     console.log(values);
 
-    const signUpEndpoint = "https://89.116.33.88/signup/";
+    const signUpEndpoint = "http://localhost:8000/signup/";
 
     axios
       .post(signUpEndpoint, values)
@@ -168,7 +173,7 @@ export const Auth: React.FC<AuthProps> = ({
               <Button type="primary" htmlType="submit">
                 Login
               </Button>
-              <div className="w-full flex items-center gap-3 text-zinc-500 py-3">
+              {/* <div className="w-full flex items-center gap-3 text-zinc-500 py-3">
                 <hr className="flex-1" />
                 OR
                 <hr className="flex-1" />
@@ -178,7 +183,7 @@ export const Auth: React.FC<AuthProps> = ({
                   <img src={GoogleIcon} alt="Google" className="w-5" />
                   <div>Continue with Google</div>
                 </div>
-              </Button>
+              </Button> */}
               <Form.Item className="text-center my-3">
                 <Button type="link" onClick={toggleView}>
                   Don't have an account? Sign Up
@@ -250,7 +255,7 @@ export const Auth: React.FC<AuthProps> = ({
                 >
                   Signup
                 </Button>
-                <div className="w-full flex items-center gap-3 text-zinc-500 py-3">
+                {/* <div className="w-full flex items-center gap-3 text-zinc-500 py-3">
                   <hr className="flex-1" />
                   OR
                   <hr className="flex-1" />
@@ -260,7 +265,7 @@ export const Auth: React.FC<AuthProps> = ({
                     <img src={GoogleIcon} alt="Google" className="w-5" />
                     Continue with Google
                   </div>
-                </Button>
+                </Button> */}
                 <Form.Item className="text-center my-3">
                   <Button type="link" onClick={toggleView}>
                     Already have an account? Sign In

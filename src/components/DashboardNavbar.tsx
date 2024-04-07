@@ -4,8 +4,8 @@ import { useLocation } from "react-router-dom";
 import { SettingOutlined } from "@ant-design/icons";
 import { Context } from "../context/context.provider";
 import { confirmation } from "./Confirmation";
-import { signOut } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
+// import { signOut } from "firebase/auth";
+// import { auth } from "../../firebaseConfig";
 
 export const DashboardNavbar = () => {
 

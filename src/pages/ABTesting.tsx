@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { confirmation } from '../components/Confirmation';
 import { generateProjectName } from '../utils/hypothesis_title_generator';
 import { Auth } from '../components/Auth';
+import QuestionReview from '../components/QuestionReview';
 
 export const ABTesting: React.FC = () => {
 
@@ -82,7 +83,7 @@ export const ABTesting: React.FC = () => {
   const fetchTestDetails = async (id: number) => {
 
     try {
-      const response = await axios.get(`https://89.116.33.88/tests/${id}/`, {
+      const response = await axios.get(`http://localhost:8000/tests/${id}/`, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
@@ -105,7 +106,7 @@ export const ABTesting: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    const BASE_URL = 'https://89.116.33.88';
+    const BASE_URL = 'http://localhost:8000';
 
     const visitorsInput = {
       arms: values.arms,
@@ -223,7 +224,7 @@ export const ABTesting: React.FC = () => {
     };
 
     try {
-      await axios.patch(`https://89.116.33.88/tests/${testData.id}/`, payload, {
+      await axios.patch(`http://localhost:8000/tests/${testData.id}/`, payload, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token')
         }
@@ -245,7 +246,7 @@ export const ABTesting: React.FC = () => {
         proportional_metric: true,
       };
 
-      const response = await axios.post('https://89.116.33.88/tests/', testPayload, {
+      const response = await axios.post('http://localhost:8000/tests/', testPayload, {
         headers: { Authorization: `Token ${localStorage.getItem('abtestinghub-access-token')}` },
       });
 
@@ -272,7 +273,7 @@ export const ABTesting: React.FC = () => {
 
   const fetchUserTests = async () => {
     try {
-      const response = await axios.get('https://89.116.33.88/tests/', {
+      const response = await axios.get('http://localhost:8000/tests/', {
         headers: { 'Authorization': `Token ${localStorage.getItem('abtestinghub-access-token')}` },
       });
       setUserTests(response.data);
@@ -297,7 +298,7 @@ export const ABTesting: React.FC = () => {
       proportional_metric: true,
     };
 
-    const response = await axios.post('https://89.116.33.88/tests/', testPayload, {
+    const response = await axios.post('http://localhost:8000/tests/', testPayload, {
       headers: { 'Authorization': `Token ${localStorage.getItem('abtestinghub-access-token')}` },
     });
 
@@ -332,7 +333,7 @@ export const ABTesting: React.FC = () => {
     };
 
     try {
-      await axios.patch(`https://89.116.33.88/tests/${test.id}/`, payload, {
+      await axios.patch(`http://localhost:8000/tests/${test.id}/`, payload, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token'),
         },
@@ -430,6 +431,7 @@ export const ABTesting: React.FC = () => {
         </div>
       }
       <div className='container flex gap-4'>
+      <div className="flex flex-col gap-4">
         <Paper className='p-4'>
           <Form
             form={form}
@@ -556,6 +558,12 @@ export const ABTesting: React.FC = () => {
             </div>
           </Form>
         </Paper>
+        {numericalResults && (
+            <Paper className="p-4 border-red-600 border">
+              <QuestionReview />
+            </Paper>
+          )}
+        </div>
         <div className='flex-1 flex flex-col gap-4'>
           <Paper className='p-4'>
             <Table columns={columns} dataSource={tableData} pagination={false} />

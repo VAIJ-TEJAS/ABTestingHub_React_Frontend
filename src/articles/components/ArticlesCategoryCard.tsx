@@ -17,7 +17,7 @@ const ArticlesCategoryCard: FC<ArticlesCategoryCardProps> = ({ extraStyle }) => 
   >([]);
 
   useEffect(() => {
-    axios.get(`https://89.116.33.88/categories/`).then((categories) => {
+    axios.get(`http://localhost:8000/categories/`).then((categories) => {
       setArticleCategories(categories.data);
     });
   }, []);
