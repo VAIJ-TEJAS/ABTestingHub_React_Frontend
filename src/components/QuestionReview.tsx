@@ -24,7 +24,7 @@ const QuestionReview: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("https://89.116.33.88/questions/")
+      .get("https://abtestinghub.com:8000/questions/")
       .then((response) => {
         setQuestions(response.data);
       })
@@ -41,7 +41,7 @@ const QuestionReview: React.FC = () => {
         };
 
         axios
-          .post("https://89.116.33.88/answers/", payload,  {
+          .post("https://abtestinghub.com:8000/answers/", payload,  {
             headers: {
               Authorization: `Token ${localStorage.getItem(
                 "abtestinghub-access-token"

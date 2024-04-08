@@ -110,7 +110,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
   const fetchTestDetails = async (id: number) => {
     try {
-      const response = await axios.get(`https://89.116.33.88/tests/${id}/`, {
+      const response = await axios.get(`https://abtestinghub.com:8000/tests/${id}/`, {
         headers: {
           Authorization:
             "Token " + localStorage.getItem("abtestinghub-access-token"),
@@ -126,7 +126,7 @@ export const ProportionalMetricTesting: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    const BASE_URL = "https://89.116.33.88";
+    const BASE_URL = "https://abtestinghub.com:8000";
 
     const payload = {
       ...values,
@@ -233,7 +233,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
     try {
       await axios.patch(
-        `https://89.116.33.88/tests/${testData.id}/`,
+        `https://abtestinghub.com:8000/tests/${testData.id}/`,
         payload,
         {
           headers: {
@@ -260,7 +260,7 @@ export const ProportionalMetricTesting: React.FC = () => {
       };
 
       const response = await axios.post(
-        "https://89.116.33.88/tests/",
+        "https://abtestinghub.com:8000/tests/",
         testPayload,
         {
           headers: {
@@ -294,7 +294,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
   const fetchUserTests = async () => {
     try {
-      const response = await axios.get("https://89.116.33.88/tests/", {
+      const response = await axios.get("https://abtestinghub.com:8000/tests/", {
         headers: {
           Authorization: `Token ${localStorage.getItem(
             "abtestinghub-access-token"
@@ -324,7 +324,7 @@ export const ProportionalMetricTesting: React.FC = () => {
     };
 
     const response = await axios.post(
-      "https://89.116.33.88/tests/",
+      "https://abtestinghub.com:8000/tests/",
       testPayload,
       {
         headers: {
@@ -369,7 +369,7 @@ export const ProportionalMetricTesting: React.FC = () => {
     };
 
     try {
-      await axios.patch(`https://89.116.33.88/tests/${test.id}/`, payload, {
+      await axios.patch(`https://abtestinghub.com:8000/tests/${test.id}/`, payload, {
         headers: {
           Authorization:
             "Token " + localStorage.getItem("abtestinghub-access-token"),

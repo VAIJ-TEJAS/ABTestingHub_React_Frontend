@@ -43,7 +43,7 @@ export const Home = () => {
   const [articlesData, setArticlesData] = useState<ArticalCardProps[]>([]);
 
   useEffect(() => {
-    axios.get("https://89.116.33.88/articles-card/").then((articles) => {
+    axios.get("https://abtestinghub.com:8000/articles-card/").then((articles) => {
       setArticlesData(
         articles.data.filter((article: any) => article.popular_article)
       );

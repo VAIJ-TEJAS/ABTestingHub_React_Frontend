@@ -71,7 +71,7 @@ export const Auth: React.FC<AuthProps> = ({
   const handleSignIn = (values: any) => {
     console.log(values);
 
-    const signInEndpoint = "https://89.116.33.88/auth/";
+    const signInEndpoint = "https://abtestinghub.com:8000/auth/";
 
     axios
       .post(signInEndpoint, values)
@@ -97,7 +97,7 @@ export const Auth: React.FC<AuthProps> = ({
   const handleSignUp = (values: any) => {
     console.log(values);
 
-    const signUpEndpoint = "https://89.116.33.88/signup/";
+    const signUpEndpoint = "https://abtestinghub.com:8000/signup/";
 
     axios
       .post(signUpEndpoint, values)
