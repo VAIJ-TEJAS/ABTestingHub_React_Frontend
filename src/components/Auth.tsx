@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { GoogleLogin } from "@react-oauth/google";
 import { Modal, Button, Form, Input, Checkbox, message } from "antd";
 import { Context } from "../context/context.provider";
 import { Container } from "@mui/material";
@@ -125,6 +126,34 @@ export const Auth: React.FC<AuthProps> = ({
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    console.log(credentialResponse); // Debug the Google response
+
+    // Use the credentialResponse to make a backend call
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/google-complete/",
+        {
+          access_token: credentialResponse.credential, // Sending the ID token directly to your server
+        }
+      );
+
+      signInUser(response.data.token);
+
+      if (onSignin) onSignin(response);
+
+      message.success("Sign in with Google successful!");
+      handleClose();
+    } catch (error) {
+      message.error("Failed to sign in with Google. Please try again.");
+      console.error("Google sign-in error:", error);
+    }
+  };
+
+  const handleGoogleFailure = () => {
+    message.error("Google Sign-In was unsuccessful. Try again later.");
+  };
+
   return (
     <>
       <Modal
@@ -173,12 +202,17 @@ export const Auth: React.FC<AuthProps> = ({
               <Button type="primary" htmlType="submit">
                 Login
               </Button>
-              {/* <div className="w-full flex items-center gap-3 text-zinc-500 py-3">
+              <div className="w-full flex items-center gap-3 text-zinc-500 py-3">
                 <hr className="flex-1" />
                 OR
                 <hr className="flex-1" />
               </div>
-              <Button onClick={signInWithGoogle}>
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleFailure}
+                useOneTap // Optional, for one-tap sign-in experience
+              />
+              {/* <Button onClick={signInWithGoogle}>
                 <div className="flex justify-center items-center gap-2 ">
                   <img src={GoogleIcon} alt="Google" className="w-5" />
                   <div>Continue with Google</div>

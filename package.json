@@ -16,6 +16,7 @@
     "@fontsource/roboto": "^5.0.12",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
+    "@react-oauth/google": "^0.12.1",
     "@types/plotly.js": "^2.29.2",
     "@types/react-plotly.js": "^2.6.3",
     "antd": "^5.15.2",

@@ -1,28 +1,34 @@
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
 
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import { ConfigProvider } from 'antd';
-import { MyContextProvider } from './context/context.provider.tsx';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import { ConfigProvider } from "antd";
+import { MyContextProvider } from "./context/context.provider.tsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const clientId =
+  "536694079392-l8fshhc5500re28bk2dk82i9k14h14l6.apps.googleusercontent.com";
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <ConfigProvider
     theme={{
       token: {
         borderRadius: 3,
-        colorPrimary: '#1890FF',
+        colorPrimary: "#1890FF",
       },
     }}
   >
-    <MyContextProvider>
-    <ToastContainer />
-      <App />
-    </MyContextProvider>
-  </ConfigProvider>,
-)
+    <GoogleOAuthProvider clientId={clientId}>
+      <MyContextProvider>
+        <ToastContainer />
+        <App />
+      </MyContextProvider>
+    </GoogleOAuthProvider>
+  </ConfigProvider>
+);
