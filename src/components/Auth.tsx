@@ -127,7 +127,8 @@ export const Auth: React.FC<AuthProps> = ({
   };
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
-    console.log(credentialResponse); // Debug the Google response
+    console.log(credentialResponse);
+    console.log("Hello World!")
 
     // Use the credentialResponse to make a backend call
     try {
