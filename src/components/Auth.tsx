@@ -133,7 +133,7 @@ export const Auth: React.FC<AuthProps> = ({
     try {
       const response = await axios.post("https://abtestinghub.com:8000/google-complete/",
         {
-          access_token: credentialResponse.credential, // Sending the ID token directly to your server
+          code: credentialResponse.code, 
         }
       );
 
