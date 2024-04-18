@@ -208,11 +208,13 @@ export const Auth: React.FC<AuthProps> = ({
                 OR
                 <hr className="flex-1" />
               </div>
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={handleGoogleFailure}
-                useOneTap // Optional, for one-tap sign-in experience
-              />
+              <div className="w-full flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleFailure}
+                  useOneTap // Optional, for one-tap sign-in experience
+                />
+              </div>
               {/* <Button onClick={signInWithGoogle}>
                 <div className="flex justify-center items-center gap-2 ">
                   <img src={GoogleIcon} alt="Google" className="w-5" />
