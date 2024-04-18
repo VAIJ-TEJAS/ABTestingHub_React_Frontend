@@ -131,8 +131,7 @@ export const Auth: React.FC<AuthProps> = ({
 
     // Use the credentialResponse to make a backend call
     try {
-      const response = await axios.post(
-        "http://localhost:8000/google-complete/",
+      const response = await axios.post("https://abtestinghub.com:8000/google-complete/",
         {
           access_token: credentialResponse.credential, // Sending the ID token directly to your server
         }
