@@ -128,13 +128,14 @@ export const Auth: React.FC<AuthProps> = ({
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     console.log(credentialResponse);
-    console.log("Hello World!")
+    console.log("Hello World!");
 
     // Use the credentialResponse to make a backend call
     try {
-      const response = await axios.post("https://abtestinghub.com:8000/google-complete/",
+      const response = await axios.post(
+        "https://abtestinghub.com:8000/google-complete/",
         {
-          code: credentialResponse.code, 
+          token: credentialResponse.credential,
         }
       );
 
