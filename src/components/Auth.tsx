@@ -28,14 +28,12 @@ export const Auth: React.FC<AuthProps> = ({
     signInUser,
     hideAuthModal,
     authModalOpen,
-    // setUserAuthenticated,
-    // setAuthModalOpen,
   } = Context();
   const [isTermsModalVisible, setIsTermsModalVisible] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [isSignUpView, setIsSignUpView] = useState(false);
+  const [isSignInView, setIsSignInView] = useState(true);
   const [formSignup] = Form.useForm();
-  const [formSignin] = Form.useForm();
+  const [formSignin] = Form.useForm(); 
 
   // const navigate = useNavigate();
 
@@ -54,7 +52,7 @@ export const Auth: React.FC<AuthProps> = ({
   // };
 
   const toggleView = () => {
-    setIsSignUpView(!isSignUpView);
+    setIsSignInView(!isSignInView);
   };
 
   const showTermsModal = () => {
@@ -164,7 +162,7 @@ export const Auth: React.FC<AuthProps> = ({
         footer={null}
         width={720}
       >
-        {isSignUpView ? (
+        {isSignInView ? (
           <div className="flex flex-col justify-center items-center">
             <Container>
               <div className="relative w-full flex justify-center items-center">
@@ -178,7 +176,7 @@ export const Auth: React.FC<AuthProps> = ({
             </Container>
             <Form
               layout="vertical"
-              className="flex flex-col"
+              className="flex flex-col w-72"
               form={formSignin}
               onFinish={handleSignIn}
             >
@@ -212,15 +210,9 @@ export const Auth: React.FC<AuthProps> = ({
                 <GoogleLogin
                   onSuccess={handleGoogleSuccess}
                   onError={handleGoogleFailure}
-                  useOneTap // Optional, for one-tap sign-in experience
+                  useOneTap 
                 />
               </div>
-              {/* <Button onClick={signInWithGoogle}>
-                <div className="flex justify-center items-center gap-2 ">
-                  <img src={GoogleIcon} alt="Google" className="w-5" />
-                  <div>Continue with Google</div>
-                </div>
-              </Button> */}
               <Form.Item className="text-center my-3">
                 <Button type="link" onClick={toggleView}>
                   Don't have an account? Sign Up
@@ -230,24 +222,20 @@ export const Auth: React.FC<AuthProps> = ({
           </div>
         ) : (
           <div>
-            <div className="flex justify-between items-center gap-3">
-              <div className="w-64">
-                <div className="relative">
-                  <div className="absolute w-full h-full flex justify-center items-center">
-                    <div className="text-4xl text-primary font-bold">
-                      A/B Testing Hub
-                    </div>
+            <div className="flex flex-col justify-between items-center">
+            <Container>
+              <div className="relative w-full flex justify-center items-center">
+                <div className="absolute w-full h-full flex justify-center items-center">
+                  <div className="text-4xl text-primary font-bold">
+                    A/B Testing Hub
                   </div>
-                  <img
-                    src={Logo}
-                    className="opacity-20"
-                    alt="A/B Testing Hub Logo"
-                  />
                 </div>
+                <img src={Logo} className="opacity-20 w-60 " />
               </div>
+            </Container>
               <Form
                 layout="vertical"
-                className="flex flex-col justify-center flex-1"
+                className="flex flex-col w-72"
                 form={formSignup}
                 onFinish={handleSignUp}
               >
@@ -292,17 +280,18 @@ export const Auth: React.FC<AuthProps> = ({
                 >
                   Signup
                 </Button>
-                {/* <div className="w-full flex items-center gap-3 text-zinc-500 py-3">
+                <div className="w-full flex items-center gap-3 text-zinc-500 py-3">
                   <hr className="flex-1" />
                   OR
                   <hr className="flex-1" />
                 </div>
-                <Button onClick={signInWithGoogle}>
-                  <div className="flex justify-center items-center gap-2">
-                    <img src={GoogleIcon} alt="Google" className="w-5" />
-                    Continue with Google
-                  </div>
-                </Button> */}
+                <div className="w-full flex justify-center">
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleFailure}
+                    useOneTap 
+                  />
+                </div>
                 <Form.Item className="text-center my-3">
                   <Button type="link" onClick={toggleView}>
                     Already have an account? Sign In

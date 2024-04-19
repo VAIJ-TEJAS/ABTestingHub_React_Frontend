@@ -37,24 +37,24 @@ interface ArticalCardProps {
 }
 
 export const Home = () => {
-
-  const { showAuthModal } = Context() 
-  const navigate = useNavigate()
+  const { showAuthModal, userAuthenticated } = Context();
+  const navigate = useNavigate();
   const [articlesData, setArticlesData] = useState<ArticalCardProps[]>([]);
 
   useEffect(() => {
-    axios.get("https://abtestinghub.com:8000/articles-card/").then((articles) => {
-      setArticlesData(
-        articles.data.filter((article: any) => article.popular_article)
-      );
-    });
+    axios
+      .get("https://abtestinghub.com:8000/articles-card/")
+      .then((articles) => {
+        setArticlesData(
+          articles.data.filter((article: any) => article.popular_article)
+        );
+      });
   }, []);
 
   return (
     <>
       <div>
         <Container className="relative flex flex-col lg:flex-row">
-
           <div className="space-y-8 py-16">
             <div className="text-7xl font-medium">Stay curious.</div>
             <div className="text-2xl w-1/2">
@@ -62,14 +62,27 @@ export const Home = () => {
               controlled A/B testing and elevate your business strategy.
             </div>
             <div>
-              <Button
-                size="large"
-                type="primary"
-                className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
-                onClick={showAuthModal}
-              >
-                Get Started
-              </Button>
+              {userAuthenticated ? (
+                <Button
+                  size="large"
+                  type="primary"
+                  className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
+                  onClick={()=>{
+                    navigate("/dashboard")
+                  }}
+                >
+                  Dashboard
+                </Button>
+              ) : (
+                <Button
+                  size="large"
+                  type="primary"
+                  className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
+                  onClick={showAuthModal}
+                >
+                  Get Started
+                </Button>
+              )}
             </div>
           </div>
 
@@ -77,7 +90,6 @@ export const Home = () => {
             src={HeroImage}
             className="absolute right-0 top-0 h-full -z-50"
           />
-
         </Container>
       </div>
       {/* Tools  */}
@@ -87,16 +99,17 @@ export const Home = () => {
             <div className="space-y-4">
               <div className="text-4xl font-medium py-8">Tools We Offer</div>
               <div className="flex flex-wrap justify-center gap-8">
-
                 <div className=" border-primary border rounded-xl p-4">
                   <div className="pb-4 text-primary text-3xl font-mono">
                     MSS Tool
                   </div>
                   <div className="flex flex-wrap items-stretch justify-center gap-8">
-
-                    <Paper onClick={()=>{
-                      navigate('/proportional-metric-testing/')
-                    }} className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
+                    <Paper
+                      onClick={() => {
+                        navigate("/proportional-metric-testing/");
+                      }}
+                      className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group"
+                    >
                       <div>
                         <img src={ContinuousMetricLogo} className="rounded" />
                       </div>
@@ -112,9 +125,12 @@ export const Home = () => {
                       </div>
                     </Paper>
 
-                    <Paper onClick={()=>{
-                      navigate('/proportional-metric-testing/')
-                    }} className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
+                    <Paper
+                      onClick={() => {
+                        navigate("/proportional-metric-testing/");
+                      }}
+                      className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group"
+                    >
                       <div>
                         <img src={ProportionalMetricLogo} className="rounded" />
                       </div>
@@ -129,7 +145,6 @@ export const Home = () => {
                         </div>
                       </div>
                     </Paper>
-
                   </div>
                 </div>
 
@@ -138,9 +153,12 @@ export const Home = () => {
                     A/B Testing Tool
                   </div>
                   <div className="flex gap-8">
-                    <Paper onClick={()=>{
-                      navigate('/ab-testing/')
-                    }} className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group">
+                    <Paper
+                      onClick={() => {
+                        navigate("/ab-testing/");
+                      }}
+                      className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group"
+                    >
                       <div>
                         <img src={ABTestingLogo} className="rounded" />
                       </div>
@@ -157,7 +175,6 @@ export const Home = () => {
                     </Paper>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
