@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Radio, Button, message, RadioChangeEvent, Form, Input, Result } from "antd";
+import {
+  Radio,
+  Button,
+  message,
+  RadioChangeEvent,
+  Form,
+  Input,
+  Result,
+} from "antd";
 import axios from "axios";
+import { Paper } from "@mui/material";
 
 const { TextArea } = Input;
 
@@ -18,15 +27,23 @@ interface Question {
 const QuestionReview: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
-  const [textAnswer, setTextAnswer] = useState<string>('');
+  const [textAnswer, setTextAnswer] = useState<string>("");
   const [form] = Form.useForm();
-  const [submissionSuccessful, setSubmissionSuccessful] = useState<boolean>(false);
+  const [submissionSuccessful, setSubmissionSuccessful] =
+    useState<boolean>(false);
 
   useEffect(() => {
     axios
       .get("https://abtestinghub.com:8000/questions/")
       .then((response) => {
-        setQuestions(response.data);
+        const answeredQuestions = JSON.parse(
+          localStorage.getItem("answeredQuestions") || "[]"
+        );
+        const filteredQuestions = response.data.filter(
+          (question: Question) => !answeredQuestions.includes(question.id)
+        );
+        setQuestions(filteredQuestions);
+        console.log(filteredQuestions);
       })
       .catch((error) => console.error("Failed to fetch questions:", error));
   }, []);
@@ -41,7 +58,7 @@ const QuestionReview: React.FC = () => {
         };
 
         axios
-          .post("https://abtestinghub.com:8000/answers/", payload,  {
+          .post("https://abtestinghub.com:8000/answers/", payload, {
             headers: {
               Authorization: `Token ${localStorage.getItem(
                 "abtestinghub-access-token"
@@ -49,23 +66,33 @@ const QuestionReview: React.FC = () => {
             },
           })
           .then(() => {
+            const answeredQuestions = JSON.parse(
+              localStorage.getItem("answeredQuestions") || "[]"
+            );
+            localStorage.setItem(
+              "answeredQuestions",
+              JSON.stringify([...answeredQuestions, questions[0].id])
+            );
+
             message.success("Your answer has been submitted!");
             setSubmissionSuccessful(true);
             setSelectedChoice(null);
-            setTextAnswer('');
-            form.resetFields(); // Reset form after submission
+            setTextAnswer("");
+            form.resetFields();
           })
           .catch((error) => console.error("Failed to submit answer:", error));
       } else {
-        message.warning("Please select an option or enter a text answer before submitting.");
+        message.warning(
+          "Please select an option or enter a text answer before submitting."
+        );
       }
     });
   };
 
   const onChoiceChange = (e: RadioChangeEvent) => {
     setSelectedChoice(parseInt(e.target.value, 10));
-    setTextAnswer('');
-    form.setFieldsValue({ textAnswer: '' });
+    setTextAnswer("");
+    form.setFieldsValue({ textAnswer: "" });
   };
 
   const onTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -82,22 +109,29 @@ const QuestionReview: React.FC = () => {
     );
   }
 
+  if (questions.length == 0) return;
+
   return (
-    <div>
-    {questions.length > 0 && (
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={submitAnswer}
-      >
+    <Paper className="p-4 border-red-600 border">
+      <Form form={form} layout="vertical" onFinish={submitAnswer}>
         <Form.Item
           label={questions[0].question_text}
           name="selectedChoice"
-          rules={[{ required: !textAnswer, message: "Please select an option!" }]}
+          rules={[
+            { required: !textAnswer, message: "Please select an option!" },
+          ]}
         >
           <Radio.Group onChange={onChoiceChange} value={selectedChoice}>
             {questions[0].choices.map((choice) => (
-              <Radio style={{ display: 'block', height: '30px', lineHeight: '30px' }} key={choice.id} value={choice.id}>
+              <Radio
+                style={{
+                  display: "block",
+                  height: "30px",
+                  lineHeight: "30px",
+                }}
+                key={choice.id}
+                value={choice.id}
+              >
                 {choice.choice_text}
               </Radio>
             ))}
@@ -106,18 +140,26 @@ const QuestionReview: React.FC = () => {
         <Form.Item
           label="Or provide a text answer"
           name="textAnswer"
-          rules={[{ required: !selectedChoice, message: "Please enter a text answer or select a choice!" }]}
+          rules={[
+            {
+              required: !selectedChoice,
+              message: "Please enter a text answer or select a choice!",
+            },
+          ]}
         >
           <TextArea rows={4} onChange={onTextChange} value={textAnswer} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" style={{ marginTop: "10px" }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ marginTop: "10px" }}
+          >
             Submit Answer
           </Button>
         </Form.Item>
       </Form>
-    )}
-  </div>
+    </Paper>
   );
 };
 

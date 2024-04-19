@@ -806,11 +806,7 @@ export const ContinuousMetricTesting: React.FC = () => {
               </div>
             </Form>
           </Paper>
-          {figures.length > 0 && (
-            <Paper className="p-4 border-red-600 border">
-              <QuestionReview />
-            </Paper>
-          )}
+          {figures.length > 0 && <QuestionReview />}
         </div>
         <div className="flex-1 flex flex-col gap-4">
           <Paper className="p-4">
