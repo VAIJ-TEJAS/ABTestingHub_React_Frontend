@@ -106,7 +106,7 @@ export const Home = () => {
                   <div className="flex flex-wrap items-stretch justify-center gap-8">
                     <Paper
                       onClick={() => {
-                        navigate("/proportional-metric-testing/");
+                        navigate("/continuous-metric-testing/");
                       }}
                       className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group"
                     >
