@@ -11,7 +11,8 @@ import axios from "axios";
 import { Context } from "../context/context.provider";
 import { MostPopularArticleCard } from "../articles/components/MostPopularArticleCard";
 import ArticlesCategoryCard from "../articles/components/ArticlesCategoryCard";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import parse from 'html-react-parser';
 
 interface ArticalCardProps {
   id?: number;
@@ -39,6 +40,7 @@ interface ArticalCardProps {
 export const Home = () => {
   const { showAuthModal, userAuthenticated } = Context();
   const navigate = useNavigate();
+  const location = useLocation();
   const [articlesData, setArticlesData] = useState<ArticalCardProps[]>([]);
 
   useEffect(() => {
@@ -51,8 +53,21 @@ export const Home = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }, [location]);
+
   return (
     <>
+      <div>
+        {parse(``)}
+      </div>
       <div>
         <Container className="relative flex flex-col lg:flex-row">
           <div className="space-y-8 py-16">
@@ -67,8 +82,8 @@ export const Home = () => {
                   size="large"
                   type="primary"
                   className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
-                  onClick={()=>{
-                    navigate("/dashboard")
+                  onClick={() => {
+                    navigate("/dashboard");
                   }}
                 >
                   Dashboard
@@ -93,7 +108,7 @@ export const Home = () => {
         </Container>
       </div>
       {/* Tools  */}
-      <div>
+      <div id="tools-we-offer">
         <Container>
           <div className="gap-8 py-16">
             <div className="space-y-4">
@@ -210,12 +225,14 @@ export const Home = () => {
                   })}
                 </div>
               )}
-              <div className="lg:w-80 flex-shrink-0 p-4 space-y-4 items-center justify-start flex flex-col w-full">
-                <div className="font-medium">
-                  Discover our articles in various categories
+              {articlesData.length !== 0 && (
+                <div className="lg:w-80 flex-shrink-0 p-4 space-y-4 items-center justify-start flex flex-col w-full">
+                  <div className="font-medium">
+                    Discover our articles in various categories
+                  </div>
+                  <ArticlesCategoryCard extraStyle="lg:flex-wrap gap-4" />
                 </div>
-                <ArticlesCategoryCard extraStyle="lg:flex-wrap gap-4" />
-              </div>
+              )}
             </div>
           </div>
         </Container>

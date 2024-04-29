@@ -14,7 +14,8 @@ import {
 import axios from "axios";
 import CountUp from "react-countup";
 import PlotGraph from "../components/PlotGraph";
-import { Paper } from "@mui/material";
+import { Fab, Paper } from "@mui/material";
+import FeedbackIcon from "@mui/icons-material/Feedback";
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
@@ -31,6 +32,16 @@ import QuestionReview from "../components/QuestionReview";
 const { Option } = Select;
 
 export const ContinuousMetricTesting: React.FC = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
   const { userAuthenticated } = Context();
 
   const [isAuthVisible, setIsAuthVisible] = useState(false);
@@ -65,7 +76,7 @@ export const ContinuousMetricTesting: React.FC = () => {
   const createAllocations = (armsCount: number, equalAllocation: boolean) => {
     return Array.from({ length: armsCount }, (_, index) => ({
       id: index + 1,
-      value: equalAllocation ? (100 / armsCount).toFixed(2) : 0,
+      value: parseInt(equalAllocation ? (100 / armsCount).toFixed(2) : '0')
     }));
   };
 
@@ -391,6 +402,17 @@ export const ContinuousMetricTesting: React.FC = () => {
 
   return (
     <div className="py-8 px-2 flex flex-col w-full justify-center items-center bg-[#f5f5f550] gap-4">
+      <QuestionReview isVisible={isModalVisible} onClose={closeModal} />
+      {figures.length > 0 && (
+        <Fab
+          color="primary"
+          aria-label="feedback"
+          style={{ position: "fixed", bottom: 20, right: 20 }}
+          onClick={showModal}
+        >
+          <FeedbackIcon />
+        </Fab>
+      )}
       <Auth
         isVisible={isAuthVisible}
         onClose={closeAuthModal}
@@ -806,7 +828,7 @@ export const ContinuousMetricTesting: React.FC = () => {
               </div>
             </Form>
           </Paper>
-          {figures.length > 0 && <QuestionReview />}
+          {/* {figures.length > 0 && <QuestionReview />} */}
         </div>
         <div className="flex-1 flex flex-col gap-4">
           <Paper className="p-4">

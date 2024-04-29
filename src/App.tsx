@@ -13,6 +13,8 @@ import { ContinuousMetricTesting } from "./pages/ContinuousMetricTesting";
 import { ProportionalMetricTesting } from "./pages/ProportionalMetricTesting";
 import { Auth } from "./components/Auth";
 import { DashboardNavbar } from "./components/DashboardNavbar";
+import { TermsAndConditions } from "./pages/TermsAndConditions";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 
 function App() {
 
@@ -44,6 +46,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to={"home"} />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/articles" element={<ArticlesHome />} />
           <Route path="/articles/:category_name" element={<Categories />} />
           <Route path="/article/:article_id" element={<Article />} />

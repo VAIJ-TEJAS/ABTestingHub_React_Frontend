@@ -44,15 +44,17 @@ export const ArticlesHome = () => {
   });
 
   useEffect(() => {
-    axios.get("https://abtestinghub.com:8000/articles-card/").then((articles) => {
-      setArticlesData({
-        articles: articles.data,
-        featuredArticle: articles.data[0],
-        popularArticles: articles.data.filter(
-          (article: any) => article.popular_article
-        ),
+    axios
+      .get("https://abtestinghub.com:8000/articles-card/")
+      .then((articles) => {
+        setArticlesData({
+          articles: articles.data,
+          featuredArticle: articles.data[0],
+          popularArticles: articles.data.filter(
+            (article: any) => article.popular_article
+          ),
+        });
       });
-    });
   }, []);
 
   return (
@@ -113,11 +115,17 @@ export const ArticlesHome = () => {
 
           {articlesData.popularArticles && (
             <div className="space-y-4">
-              <div className="text-4xl font-medium text-center">Most Popular</div>
+              <div className="text-4xl font-medium text-center">
+                Most Popular
+              </div>
               <div className="space-y-3 flex flex-wrap lg:flex-nowrap lg:flex-col items-center justify-center">
-                {articlesData.popularArticles.map((props) => {
-                  return <MostPopularArticleCard key={props.id} {...props} />;
-                })}
+                {articlesData.popularArticles.length > 0 ? (
+                  articlesData.popularArticles?.map((props) => {
+                    return <MostPopularArticleCard key={props.id} {...props} />;
+                  })
+                ) : (
+                  <p className="text-center">no articles found</p>
+                )}
               </div>
             </div>
           )}

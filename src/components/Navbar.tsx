@@ -1,30 +1,33 @@
-import { Button } from "antd"
-import Logo from "../assets/images/logo.png"
+import { Button } from "antd";
+import Logo from "../assets/images/logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Context } from "../context/context.provider";
+import { useState } from "react";
 
 export const Navbar = () => {
-
   const { userAuthenticated, showAuthModal } = Context();
 
   const navigate = useNavigate();
   const location = useLocation();
-  const isActive = (pathname: string) => location.pathname.split('/')[1] === pathname.split('/')[1];
+  const isActive = (pathname: string) =>
+    location.pathname.split("/")[1] === pathname.split("/")[1];
 
-  const isArticlePage = location.pathname.includes('/article/');
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+  const isArticlePage = location.pathname.includes("/article/");
   const navClass = isArticlePage
     ? "relative px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary"
     : "sticky top-0 px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary shadow-md z-50";
 
-
   return (
     <>
-      <nav className={navClass}>
-        <a className="text-3xl font-bold leading-none flex items-center gap-4" href="/">
+      <nav className={navClass} onMouseLeave={() => setDropdownOpen(false)}>
+        <a
+          className="text-3xl font-bold leading-none flex items-center gap-4"
+          href="/"
+        >
           <img src={Logo} className="w-12" />
-          <div className="text-primary">
-            A/B Testing Hub
-          </div>
+          <div className="text-primary">A/B Testing Hub</div>
         </a>
         <div className="lg:hidden">
           <button className="navbar-burger flex items-center text-primary p-3">
@@ -39,17 +42,60 @@ export const Navbar = () => {
           </button>
         </div>
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
-          <li>
+          <li className="hover:bg-blue-100 cursor-pointer p-2"  onClick={() => {
+                navigate("/home/");
+              }}>
             <a
-              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/home/') ? 'text-primary' : ''}`}
-              onClick={() => { navigate('/home/'); }}
+              className={`hover:text-primary  transition-all duration-300  ${
+                isActive("/home/") ? "text-primary" : ""
+              }`}
             >
               Home
             </a>
           </li>
 
+          <li
+            className="relative"
+            onMouseEnter={() => setDropdownOpen(true)}
+          >
+            <button className="hover:text-primary transition-all duration-300 cursor-pointer">
+              MSS Calculator
+            </button>
+            {isDropdownOpen && (
+              <ul
+                className="absolute bg-white shadow-md rounded z-50 mt-5 w-52"
+                onMouseEnter={() => setDropdownOpen(true)}
+                onMouseLeave={() => setDropdownOpen(false)}
+              >
+                <li className="px-4 py-2">
+                  <a
+                    className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                      isActive("/proportional-metric-testing/")
+                        ? "text-primary"
+                        : ""
+                    }`}
+                    onClick={() => navigate("/proportional-metric-testing/")}
+                  >
+                    Proportional Metric
+                  </a>
+                </li>
+                <li className="px-4 py-2 pb-4">
+                  <a
+                    className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                      isActive("/continuous-metric-testing/")
+                        ? "text-primary"
+                        : ""
+                    }`}
+                    onClick={() => navigate("/continuous-metric-testing/")}
+                  >
+                    Continuous Metric
+                  </a>
+                </li>
+              </ul>
+            )}
+          </li>
 
-          <li>
+          {/* <li>
             <a
               className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/proportional-metric-testing/') ? 'text-primary' : ''}`}
               onClick={() => { navigate('/proportional-metric-testing/'); }}
@@ -65,12 +111,16 @@ export const Navbar = () => {
             >
               Continuous Metric
             </a>
-          </li>
+          </li> */}
 
           <li>
             <a
-              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/ab-testing/') ? 'text-primary' : ''}`}
-              onClick={() => { navigate('/ab-testing/'); }}
+              className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                isActive("/ab-testing/") ? "text-primary" : ""
+              }`}
+              onClick={() => {
+                navigate("/ab-testing/");
+              }}
             >
               A/B Testing
             </a>
@@ -78,32 +128,36 @@ export const Navbar = () => {
 
           <li>
             <a
-              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/articles/') ? 'text-primary' : ''}`}
-              onClick={() => { navigate('/articles/'); }}
+              className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                isActive("/articles/") ? "text-primary" : ""
+              }`}
+              onClick={() => {
+                navigate("/articles/");
+              }}
             >
               Articles
             </a>
           </li>
         </ul>
-        {
-          userAuthenticated ? (
-            <Button
-              type="primary"
-              className="hidden lg:inline-block lg:ml-3 px-6 text-white font-bold transition duration-200"
-              onClick={() => { navigate('/dashboard/'); }}
-            >
-              Dashboard
-            </Button>
-          ) : (
-            <Button
-              type="primary"
-              className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
-              onClick={showAuthModal}
-            >
-              Get Started
-            </Button>
-          )
-        }
+        {userAuthenticated ? (
+          <Button
+            type="primary"
+            className="hidden lg:inline-block lg:ml-3 px-6 text-white font-bold transition duration-200"
+            onClick={() => {
+              navigate("/dashboard/");
+            }}
+          >
+            Dashboard
+          </Button>
+        ) : (
+          <Button
+            type="primary"
+            className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
+            onClick={showAuthModal}
+          >
+            Login
+          </Button>
+        )}
       </nav>
       <div className="navbar-menu relative z-50 hidden">
         <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25" />
@@ -200,5 +254,5 @@ export const Navbar = () => {
         </nav>
       </div>
     </>
-  )
-}
+  );
+};

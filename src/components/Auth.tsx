@@ -1,14 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { GoogleLogin } from "@react-oauth/google";
-import { Modal, Button, Form, Input, Checkbox, message } from "antd";
+import { Modal, Button, Form, message, Checkbox, Input } from "antd";
 import { Context } from "../context/context.provider";
 import { Container } from "@mui/material";
 import Logo from "../assets/images/logo.png";
 // import GoogleIcon from "../assets/svgs/google.svg";
 import { useState } from "react";
 import axios from "axios";
-// import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-// import { auth } from "../../firebaseConfig";
 // import { useNavigate } from "react-router-dom";
 
 interface AuthProps {
@@ -31,7 +29,10 @@ export const Auth: React.FC<AuthProps> = ({
   } = Context();
   const [isTermsModalVisible, setIsTermsModalVisible] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [isSignInView, setIsSignInView] = useState(true);
+  const [
+    isSignInView, 
+    setIsSignInView
+  ] = useState(true);
   const [formSignup] = Form.useForm();
   const [formSignin] = Form.useForm(); 
 

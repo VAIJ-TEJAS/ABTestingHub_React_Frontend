@@ -8,11 +8,17 @@ interface PlotGraphProps {
 
 
 const PlotGraph: React.FC<PlotGraphProps> = ({data, layout}) => {
+  const adjustedLayout = {
+    ...layout,
+    autosize: true,
+  };
+
   return (
     <Plot
       data={data}
-      layout={layout}
-      
+      layout={adjustedLayout}
+      useResizeHandler={true} // Ensures the plot resizes correctly with the parent component
+      style={{ width: "100%", height: "100%" }} // Set the width and height to 100%
     />
   );
 };

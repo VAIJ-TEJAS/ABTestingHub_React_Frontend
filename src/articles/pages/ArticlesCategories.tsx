@@ -47,7 +47,7 @@ export const Categories = () => {
     <>
       <Container>
         <div className="flex justify-between items-center my-8">
-          <div className="text-6xl font-medium">Newsletters</div>
+          <div className="text-6xl font-medium">{category_name}</div>
         </div>
         <ArticlesCategoryCard />
         <hr className="my-8" />
@@ -55,7 +55,7 @@ export const Categories = () => {
           {articles?.map((props) => {
             return <ArticleCard key={props.id} {...props} />;
           })}
-        </div>: <p className="text-center">No categories in this category</p> }
+        </div>: <p className="text-center">No articles in this category</p> }
         <hr className="my-8" />
       </Container>
     </>

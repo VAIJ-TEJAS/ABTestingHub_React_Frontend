@@ -23,22 +23,22 @@ export const Footer = () => {
             <div className="space-y-3">
               <h3 className="tracking-wide uppercase ">Product</h3>
               <ul className="space-y-1">
-                <li>
-                  <a rel="noopener noreferrer" href="#">
-                    Features
+                <li className="">
+                  <a rel="noopener noreferrer" href="/home/#tools-we-offer">
+                    Tools We Offer
                   </a>
                 </li>
-                <li>
+                <li className="opacity-10">
                   <a rel="noopener noreferrer" href="#">
                     Integrations
                   </a>
                 </li>
-                <li>
+                <li className="opacity-10">
                   <a rel="noopener noreferrer" href="#">
                     Pricing
                   </a>
                 </li>
-                <li>
+                <li className="opacity-10">
                   <a rel="noopener noreferrer" href="#">
                     FAQ
                   </a>
@@ -49,18 +49,18 @@ export const Footer = () => {
               <h3 className="tracking-wide uppercase ">Company</h3>
               <ul className="space-y-1">
                 <li>
-                  <a rel="noopener noreferrer" href="#">
+                  <a rel="noopener noreferrer" href="/privacy-policy">
                     Privacy
                   </a>
                 </li>
                 <li>
-                  <a rel="noopener noreferrer" href="#">
-                    Terms of Service
+                  <a rel="noopener noreferrer" href="/terms-and-conditions">
+                    Terms And Conditions
                   </a>
                 </li>
               </ul>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 opacity-10">
               <h3 className="uppercase ">Developers</h3>
               <ul className="space-y-1">
                 <li>
@@ -80,7 +80,7 @@ export const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 opacity-10">
               <div className="uppercase ">Social media</div>
               <div className="flex justify-start space-x-3">
                 <a

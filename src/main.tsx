@@ -12,8 +12,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
-const clientId =
-  "536694079392-l8fshhc5500re28bk2dk82i9k14h14l6.apps.googleusercontent.com";
+const clientId = "536694079392-l8fshhc5500re28bk2dk82i9k14h14l6.apps.googleusercontent.com";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <ConfigProvider

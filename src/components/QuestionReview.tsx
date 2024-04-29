@@ -7,9 +7,9 @@ import {
   Form,
   Input,
   Result,
+  Modal,
 } from "antd";
 import axios from "axios";
-import { Paper } from "@mui/material";
 
 const { TextArea } = Input;
 
@@ -24,7 +24,12 @@ interface Question {
   choices: Choice[];
 }
 
-const QuestionReview: React.FC = () => {
+interface QuestionReviewProps {
+  isVisible: boolean;
+  onClose: () => void;
+}
+
+const QuestionReview = ({ isVisible, onClose }:QuestionReviewProps) => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
   const [textAnswer, setTextAnswer] = useState<string>("");
@@ -101,65 +106,92 @@ const QuestionReview: React.FC = () => {
 
   if (submissionSuccessful) {
     return (
-      <Result
-        status="success"
-        title="Successfully Submitted!"
-        subTitle="Your answer has been recorded. Thank you for your feedback."
-      />
+      <Modal
+        title="Feedback Form"
+        open={isVisible}
+        onCancel={onClose}
+        footer={null}
+      >
+        <Result
+          status="success"
+          title="Successfully Submitted!"
+          subTitle="Your answer has been recorded. Thank you for your feedback."
+        />
+      </Modal>
     );
   }
 
-  if (questions.length == 0) return;
+  if (questions.length == 0) return (
+    <Modal
+      title="Feedback Form"
+      open={isVisible}
+      onCancel={onClose}
+      footer={null}
+    >
+      <Result
+        status="success"
+        title="You are up to date!"
+        subTitle="You will receive a new question once we have something in our mind!"
+      />
+    </Modal>
+  );
 
   return (
-    <Paper className="p-4 border-red-600 border">
-      <Form form={form} layout="vertical" onFinish={submitAnswer}>
-        <Form.Item
-          label={questions[0].question_text}
-          name="selectedChoice"
-          rules={[
-            { required: !textAnswer, message: "Please select an option!" },
-          ]}
-        >
-          <Radio.Group onChange={onChoiceChange} value={selectedChoice}>
-            {questions[0].choices.map((choice) => (
-              <Radio
-                style={{
-                  display: "block",
-                  height: "30px",
-                  lineHeight: "30px",
-                }}
-                key={choice.id}
-                value={choice.id}
-              >
-                {choice.choice_text}
-              </Radio>
-            ))}
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item
-          label="Or provide a text answer"
-          name="textAnswer"
-          rules={[
-            {
-              required: !selectedChoice,
-              message: "Please enter a text answer or select a choice!",
-            },
-          ]}
-        >
-          <TextArea rows={4} onChange={onTextChange} value={textAnswer} />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{ marginTop: "10px" }}
+    <Modal
+      title="Feedback Form"
+      open={isVisible}
+      onCancel={onClose}
+      footer={null}
+    >
+      <div>
+        <Form form={form} layout="vertical" onFinish={submitAnswer}>
+          <Form.Item
+            label={questions[0].question_text}
+            name="selectedChoice"
+            rules={[
+              { required: !textAnswer, message: "Please select an option!" },
+            ]}
           >
-            Submit Answer
-          </Button>
-        </Form.Item>
-      </Form>
-    </Paper>
+            <Radio.Group onChange={onChoiceChange} value={selectedChoice}>
+              {questions[0].choices.map((choice) => (
+                <Radio
+                  style={{
+                    display: "block",
+                    height: "30px",
+                    lineHeight: "30px",
+                  }}
+                  key={choice.id}
+                  value={choice.id}
+                >
+                  {choice.choice_text}
+                </Radio>
+              ))}
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item
+            label="Or provide a text answer"
+            name="textAnswer"
+            rules={[
+              {
+                required: !selectedChoice,
+                message: "Please enter a text answer or select a choice!",
+              },
+            ]}
+          >
+            <TextArea rows={4} onChange={onTextChange} value={textAnswer} />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ marginTop: "10px" }}
+            >
+              Submit Answer
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </Modal>
   );
 };
 

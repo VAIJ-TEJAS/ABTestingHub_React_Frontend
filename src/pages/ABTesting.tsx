@@ -13,7 +13,8 @@ import {
 } from "antd";
 import axios from "axios";
 import PlotGraph from "../components/PlotGraph";
-import { Paper } from "@mui/material";
+import { Fab, Paper } from "@mui/material";
+import FeedbackIcon from "@mui/icons-material/Feedback";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Context } from "../context/context.provider";
 import { CalculationStatus, ITest, TestStatus } from "../types/test.types";
@@ -24,6 +25,16 @@ import { Auth } from "../components/Auth";
 import QuestionReview from "../components/QuestionReview";
 
 export const ABTesting: React.FC = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
   const { userAuthenticated } = Context();
 
   const [isAuthVisible, setIsAuthVisible] = useState(false);
@@ -122,7 +133,8 @@ export const ABTesting: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    const BASE_URL = "https://abtestinghub.com:8000";
+    // const BASE_URL = "https://abtestinghub.com:8000";
+    const BASE_URL = "http://localhost:8000";
 
     const visitorsInput = {
       arms: values.arms,
@@ -425,6 +437,17 @@ export const ABTesting: React.FC = () => {
 
   return (
     <div className="py-8 px-2 flex flex-col w-full justify-center items-center bg-[#f5f5f550] gap-4">
+      <QuestionReview isVisible={isModalVisible} onClose={closeModal} />
+      {numericalResults && (
+        <Fab
+          color="primary"
+          aria-label="feedback"
+          style={{ position: "fixed", bottom: 20, right: 20 }}
+          onClick={showModal}
+        >
+          <FeedbackIcon />
+        </Fab>
+      )}
       <Auth
         isVisible={isAuthVisible}
         onClose={closeAuthModal}
@@ -686,7 +709,7 @@ export const ABTesting: React.FC = () => {
               </div>
             </Form>
           </Paper>
-          {numericalResults && <QuestionReview />}
+          {/* {numericalResults && <QuestionReview />} */}
         </div>
         <div className="flex-1 flex flex-col gap-4">
           <Paper className="p-4">
