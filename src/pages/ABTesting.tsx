@@ -133,8 +133,8 @@ export const ABTesting: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    // const BASE_URL = "https://abtestinghub.com:8000";
-    const BASE_URL = "http://localhost:8000";
+    const BASE_URL = "https://abtestinghub.com:8000";
+    // const BASE_URL = "http://localhost:8000";
 
     const visitorsInput = {
       arms: values.arms,
