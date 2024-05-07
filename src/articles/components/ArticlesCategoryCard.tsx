@@ -17,7 +17,7 @@ const ArticlesCategoryCard: FC<ArticlesCategoryCardProps> = ({ extraStyle }) => 
   >([]);
 
   useEffect(() => {
-    axios.get(`https://abtestinghub.com:8000/categories/`).then((categories) => {
+    axios.get(`${import.meta.env.VITE_BASE_URL}/categories/`).then((categories) => {
       setArticleCategories(categories.data);
     });
   }, []);

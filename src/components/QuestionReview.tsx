@@ -39,7 +39,7 @@ const QuestionReview = ({ isVisible, onClose }:QuestionReviewProps) => {
 
   useEffect(() => {
     axios
-      .get("https://abtestinghub.com:8000/questions/")
+      .get(`${import.meta.env.VITE_BASE_URL}/questions/`)
       .then((response) => {
         const answeredQuestions = JSON.parse(
           localStorage.getItem("answeredQuestions") || "[]"
@@ -63,7 +63,7 @@ const QuestionReview = ({ isVisible, onClose }:QuestionReviewProps) => {
         };
 
         axios
-          .post("https://abtestinghub.com:8000/answers/", payload, {
+          .post(`${import.meta.env.VITE_BASE_URL}/answers/`, payload, {
             headers: {
               Authorization: `Token ${localStorage.getItem(
                 "abtestinghub-access-token"

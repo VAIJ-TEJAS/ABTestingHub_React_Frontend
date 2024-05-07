@@ -45,7 +45,7 @@ export const ArticlesHome = () => {
 
   useEffect(() => {
     axios
-      .get("https://abtestinghub.com:8000/articles-card/")
+      .get(`${import.meta.env.VITE_BASE_URL}/articles-card/`)
       .then((articles) => {
         setArticlesData({
           articles: articles.data,

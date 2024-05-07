@@ -71,7 +71,7 @@ export const Auth: React.FC<AuthProps> = ({
   const handleSignIn = (values: any) => {
     console.log(values);
 
-    const signInEndpoint = "https://abtestinghub.com:8000/auth/";
+    const signInEndpoint = `${import.meta.env.VITE_BASE_URL}/auth/`;
 
     axios
       .post(signInEndpoint, values)
@@ -97,7 +97,7 @@ export const Auth: React.FC<AuthProps> = ({
   const handleSignUp = (values: any) => {
     console.log(values);
 
-    const signUpEndpoint = "https://abtestinghub.com:8000/signup/";
+    const signUpEndpoint = `${import.meta.env.VITE_BASE_URL}/signup/`;
 
     axios
       .post(signUpEndpoint, values)
@@ -132,7 +132,7 @@ export const Auth: React.FC<AuthProps> = ({
     // Use the credentialResponse to make a backend call
     try {
       const response = await axios.post(
-        "https://abtestinghub.com:8000/google-complete/",
+        `${import.meta.env.VITE_BASE_URL}/google-complete/`,
         {
           token: credentialResponse.credential,
         }

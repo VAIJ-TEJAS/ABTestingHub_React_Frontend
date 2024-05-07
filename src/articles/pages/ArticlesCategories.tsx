@@ -36,7 +36,7 @@ export const Categories = () => {
   useEffect(() => {
     axios
       .get(
-        `https://abtestinghub.com:8000/articles-card/?category__name=${category_name}`
+        `${import.meta.env.VITE_BASE_URL}/articles-card/?category__name=${category_name}`
       )
       .then((articles) => {
         setArticles(articles.data);

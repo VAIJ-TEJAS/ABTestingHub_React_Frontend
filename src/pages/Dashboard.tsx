@@ -73,7 +73,7 @@ export const Dashboard = () => {
 
   const fetchAllTestsData = async () => {
     try {
-      const response = await axios.get("https://abtestinghub.com:8000/tests/", {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/tests/`, {
         headers: {
           Authorization:
             "Token " + localStorage.getItem("abtestinghub-access-token"),
@@ -103,7 +103,7 @@ export const Dashboard = () => {
     const queryParam = searchTerm ? `?search=${searchTerm}` : "";
     try {
       const response = await axios.get(
-        `https://abtestinghub.com:8000/tests/${queryParam}`,
+        `${import.meta.env.VITE_BASE_URL}/tests/${queryParam}`,
         {
           headers: {
             Authorization:
@@ -111,6 +111,7 @@ export const Dashboard = () => {
           },
         }
       );
+      console.log(response.data);
       setTestsData(response.data);
     } catch (error) {
       console.error("Failed to fetch tests data:", error);
@@ -148,7 +149,7 @@ export const Dashboard = () => {
     );
     if (isConfirmed) {
       try {
-        await axios.delete(`https://abtestinghub.com:8000/tests/${testId}/`, {
+        await axios.delete(`${import.meta.env.VITE_BASE_URL}/tests/${testId}/`, {
           headers: {
             Authorization:
               "Token " + localStorage.getItem("abtestinghub-access-token"),
@@ -190,7 +191,7 @@ export const Dashboard = () => {
       try {
         await Promise.all(
           selectedRowKeys.map((testId) =>
-            axios.delete(`https://abtestinghub.com:8000/tests/${testId}/`, {
+            axios.delete(`${import.meta.env.VITE_BASE_URL}/tests/${testId}/`, {
               headers: {
                 Authorization:
                   "Token " + localStorage.getItem("abtestinghub-access-token"),
@@ -227,7 +228,7 @@ export const Dashboard = () => {
 
     try {
       const response = await axios.patch(
-        `https://abtestinghub.com:8000/tests/${testId}/`,
+        `${import.meta.env.VITE_BASE_URL}/tests/${testId}/`,
         {
           status: newStatus,
         },
@@ -383,9 +384,9 @@ export const Dashboard = () => {
           test?.days_required +
           " days"
         : "N/A",
-    revenueImpact: test?.revenue_impact ? " ₹ " + test?.revenue_impact : "N/A",
+    revenueImpact: test?.revenue_impact ? " ₹ " + Math.round(test.revenue_impact) : "N/A",
     abTestResults:
-      test?.max_uplift && test?.statistically_significant
+      test?.max_uplift
         ? (test?.statistically_significant ? "Significant" : "Insignificant") +
           " | " +
           test?.max_uplift

@@ -23,7 +23,7 @@ export const CreateTest = () => {
 
   const fetchTestData = async (testId: number) => {
     try {
-      const response = await axios.get(`https://abtestinghub.com:8000/tests/${testId}/`, {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/tests/${testId}/`, {
         headers: {
           'Authorization': 'Token ' + localStorage.getItem('abtestinghub-access-token'),
         },
@@ -36,7 +36,7 @@ export const CreateTest = () => {
   };
 
   const createOrUpdateTest = async (values: any, action: string) => {
-    const apiUrl = testId ? `https://abtestinghub.com:8000/tests/${testId}/` : 'https://abtestinghub.com:8000/tests/';
+    const apiUrl = testId ? `${import.meta.env.VITE_BASE_URL}/tests/${testId}/` : `${import.meta.env.VITE_BASE_URL}/tests/`;
     const method = testId ? axios.patch : axios.post;
 
     try {

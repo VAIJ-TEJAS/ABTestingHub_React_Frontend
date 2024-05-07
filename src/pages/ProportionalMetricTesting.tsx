@@ -93,10 +93,12 @@ export const ProportionalMetricTesting: React.FC = () => {
     // Initialize allocations based on the arms count
     const armsCount = form.getFieldValue("arms");
     setAllocations(createAllocations(armsCount, equalAllocation));
+    console.log(allocations)
+
   }, [form]);
 
   useEffect(() => {
-    if (testData && testData.status !== TestStatus.APPR) {
+    if (testData) {
       // Assuming testData contains all the required fields
       form.setFieldsValue({
         confidence_level: testData?.confidence_level ?? 95,
@@ -122,7 +124,7 @@ export const ProportionalMetricTesting: React.FC = () => {
   const fetchTestDetails = async (id: number) => {
     try {
       const response = await axios.get(
-        `https://abtestinghub.com:8000/tests/${id}/`,
+        `${import.meta.env.VITE_BASE_URL}/tests/${id}/`,
         {
           headers: {
             Authorization:
@@ -130,17 +132,19 @@ export const ProportionalMetricTesting: React.FC = () => {
           },
         }
       );
-      // Process response data to populate form, figures, or any other component state
+
       setTestData(response.data);
       setEqualAllocation(response.data.equal_allocation);
-      setAllocations(response.data.allocations);
+      if(response.data.allocations.toString() != "") {
+        setAllocations(response.data.allocations);
+      }
     } catch (error) {
       console.error("Failed to fetch test details:", error);
     }
   };
 
   const onFinish = async (values: any) => {
-    const BASE_URL = "https://abtestinghub.com:8000";
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
 
     const payload = {
       ...values,
@@ -215,8 +219,13 @@ export const ProportionalMetricTesting: React.FC = () => {
   };
 
   const handleEqualAllocationChange = (e: any) => {
+
     const equalAlloc = e.target.checked;
+
     setEqualAllocation(equalAlloc);
+    console.log(equalAllocation)
+
+    form.setFieldsValue({ equal_allocation: equalAlloc });
     if (equalAlloc) {
       const armsCount = form.getFieldValue("arms");
       setAllocations(createAllocations(armsCount, true));
@@ -247,7 +256,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
     try {
       await axios.patch(
-        `https://abtestinghub.com:8000/tests/${testData.id}/`,
+        `${import.meta.env.VITE_BASE_URL}/tests/${testData.id}/`,
         payload,
         {
           headers: {
@@ -274,7 +283,7 @@ export const ProportionalMetricTesting: React.FC = () => {
       };
 
       const response = await axios.post(
-        "https://abtestinghub.com:8000/tests/",
+        `${import.meta.env.VITE_BASE_URL}/tests/`,
         testPayload,
         {
           headers: {
@@ -308,7 +317,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
   const fetchUserTests = async () => {
     try {
-      const response = await axios.get("https://abtestinghub.com:8000/tests/", {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/tests/`, {
         headers: {
           Authorization: `Token ${localStorage.getItem(
             "abtestinghub-access-token"
@@ -338,7 +347,7 @@ export const ProportionalMetricTesting: React.FC = () => {
     };
 
     const response = await axios.post(
-      "https://abtestinghub.com:8000/tests/",
+      `${import.meta.env.VITE_BASE_URL}/tests/`,
       testPayload,
       {
         headers: {
@@ -384,7 +393,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
     try {
       await axios.patch(
-        `https://abtestinghub.com:8000/tests/${test.id}/`,
+        `${import.meta.env.VITE_BASE_URL}/tests/${test.id}/`,
         payload,
         {
           headers: {
@@ -510,7 +519,7 @@ export const ProportionalMetricTesting: React.FC = () => {
           </Paper>
         </div>
       )}
-      <div className="container flex gap-4">
+      <div className="container flex flex-col lg:flex-row gap-4">
         <div className="flex flex-col gap-4">
           <Paper className="p-4">
             <Form
@@ -535,11 +544,11 @@ export const ProportionalMetricTesting: React.FC = () => {
               }}
             >
               <div className="flex gap-4">
-                <div className="w-60">
+                <div className="w-full lg:w-60">
                   <Form.Item
                     name="confidence_level"
                     label={
-                      <div className="flex w-60 justify-between ">
+                      <div className="flex w-full lg:w-60 justify-between ">
                         <div>{"Confidence Level | (1-\u03b1) %"}</div>
                         <div>
                           <Tooltip
@@ -570,7 +579,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                               </span>
                             }
                           >
-                            <QuestionCircleOutlined />
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
                           </Tooltip>
                         </div>
                       </div>
@@ -582,7 +591,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                   <Form.Item
                     name="baseline_conversion_rate"
                     label={
-                      <div className="flex w-60 justify-between ">
+                      <div className="flex w-full lg:w-60 justify-between ">
                         <div>{"Baseline Conversion Rate (%)"}</div>
                         <div>
                           <Tooltip
@@ -638,7 +647,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                               </span>
                             }
                           >
-                            <QuestionCircleOutlined />
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
                           </Tooltip>
                         </div>
                       </div>
@@ -650,7 +659,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                   <Form.Item
                     name="daily_interactions"
                     label={
-                      <div className="flex w-60 justify-between ">
+                      <div className="flex w-full lg:w-60 justify-between ">
                         <div>{"Daily Interactions"}</div>
                         <div>
                           <Tooltip
@@ -718,7 +727,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                               </span>
                             }
                           >
-                            <QuestionCircleOutlined />
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
                           </Tooltip>
                         </div>
                       </div>
@@ -801,7 +810,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                           </span>
                         }
                       >
-                        <QuestionCircleOutlined />
+                        <QuestionCircleOutlined/>
                       </Tooltip>
                     </Checkbox>
                   </Form.Item>
@@ -890,11 +899,11 @@ export const ProportionalMetricTesting: React.FC = () => {
                     </Checkbox>
                   </Form.Item>
                 </div>
-                <div className="w-60">
+                <div className="w-full lg:w-60">
                   <Form.Item
                     name="power"
                     label={
-                      <div className="flex w-60 justify-between ">
+                      <div className="flex w-full lg:w-60 justify-between ">
                         <div>{"Statistical Power (1-\u03B2) %"}</div>
                         <div>
                           <Tooltip
@@ -933,7 +942,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                               </span>
                             }
                           >
-                            <QuestionCircleOutlined />
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
                           </Tooltip>
                         </div>
                       </div>
@@ -949,7 +958,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                   <Form.Item
                     name="mde"
                     label={
-                      <div className="flex w-60 justify-between ">
+                      <div className="flex w-full lg:w-60 justify-between ">
                         <div>{"Minimum Detectable Effect (%)"}</div>
                         <div>
                           <Tooltip
@@ -992,7 +1001,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                               </span>
                             }
                           >
-                            <QuestionCircleOutlined />
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
                           </Tooltip>
                         </div>
                       </div>
@@ -1004,7 +1013,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                   <Form.Item
                     name="arms"
                     label={
-                      <div className="flex w-60 justify-between ">
+                      <div className="flex w-full lg:w-60 justify-between ">
                         <div>{"Arms"}</div>
                         <div>
                           <Tooltip
@@ -1072,7 +1081,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                               </span>
                             }
                           >
-                            <QuestionCircleOutlined />
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
                           </Tooltip>
                         </div>
                       </div>
@@ -1102,13 +1111,12 @@ export const ProportionalMetricTesting: React.FC = () => {
                       </Tooltip>
                     </Checkbox>
                   </Form.Item>
-
                   {!equalAllocation &&
                     allocations.map((allocation) => (
                       <Form.Item
                         key={allocation.id}
                         label={
-                          <div className="flex w-60 justify-between ">
+                          <div className="flex w-full lg:w-60 justify-between ">
                             <div>
                               {`% Allocation to Test Arm #${allocation.id}`}
                             </div>
@@ -1141,11 +1149,11 @@ export const ProportionalMetricTesting: React.FC = () => {
                   Revenue Calculations (Optional)
                 </div>
                 <div className="flex gap-4">
-                  <div className="w-60">
+                  <div className="w-full lg:w-60">
                     <Form.Item
                       name="revenue_per_conversion"
                       label={
-                        <div className="flex w-60 justify-between ">
+                        <div className="flex w-full lg:w-60 justify-between ">
                           <div>{"Revenue per Conversion (₹)"}</div>
                           <div>
                             <Tooltip
@@ -1172,7 +1180,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                                 </span>
                               }
                             >
-                              <QuestionCircleOutlined />
+                              <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
                             </Tooltip>
                           </div>
                         </div>
@@ -1182,11 +1190,11 @@ export const ProportionalMetricTesting: React.FC = () => {
                     </Form.Item>
                   </div>
 
-                  <div className="w-60">
+                  <div className="w-full lg:w-60">
                     <Form.Item
                       name="expected_uplift"
                       label={
-                        <div className="flex w-60 justify-between ">
+                        <div className="flex w-full lg:w-60 justify-between ">
                           <div>{"Expected Uplift in Test Arm (%)"}</div>
                           <div>
                             <Tooltip
@@ -1201,7 +1209,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                                 </span>
                               }
                             >
-                              <QuestionCircleOutlined />
+                              <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
                             </Tooltip>
                           </div>
                         </div>

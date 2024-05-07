@@ -34,7 +34,7 @@ export const Article = () => {
     const fetchArticle = async () => {
       try {
         const response = await axios.get(
-          `https://abtestinghub.com:8000/articles/${article_id}/`
+          `${import.meta.env.VITE_BASE_URL}/articles/${article_id}/`
         );
         setArticle(response.data);
         console.log(response.data);

@@ -24,6 +24,11 @@ import { generateProjectName } from "../utils/hypothesis_title_generator";
 import { Auth } from "../components/Auth";
 import QuestionReview from "../components/QuestionReview";
 
+interface ArmData {
+  id: number;
+  value: number | null;  
+}
+
 export const ABTesting: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -90,8 +95,9 @@ export const ABTesting: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (testData && testData.status !== TestStatus.APPR) {
+    if (testData) {
       // Assuming testData contains all the required fields
+
       form.setFieldsValue({
         confidence_level: testData?.confidence_level ?? 95,
         arms: testData?.arms ?? 2,
@@ -108,7 +114,7 @@ export const ABTesting: React.FC = () => {
   const fetchTestDetails = async (id: number) => {
     try {
       const response = await axios.get(
-        `https://abtestinghub.com:8000/tests/${id}/`,
+        `${import.meta.env.VITE_BASE_URL}/tests/${id}/`,
         {
           headers: {
             Authorization:
@@ -117,15 +123,17 @@ export const ABTesting: React.FC = () => {
         }
       );
 
+      console.log(response.data);
+
       setTestData(response.data);
       if (response.data.visitors_conversions_input.toString() != "") {
         setVisitorsConversionsData(response.data.visitors_conversions_input);
       } else {
         setTotalSampleSize(response.data.total_sample_size);
-        setVisitorsConversionsData([
-          { visitors: response.data.total_sample_size },
-          { visitors: response.data.total_sample_size },
-        ]);
+        const newData = Array.from({ length: response.data.arms }, () => ({
+          visitors: 1000, // default visitor count
+        }));
+        setVisitorsConversionsData(newData);
       }
     } catch (error) {
       console.error("Failed to fetch test details:", error);
@@ -133,24 +141,23 @@ export const ABTesting: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    const BASE_URL = "https://abtestinghub.com:8000";
-    // const BASE_URL = "http://localhost:8000";
+    // const BASE_URL = import.meta.env.VITE_BASE_URL;
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-    const visitorsInput = {
-      arms: values.arms,
-      data: visitorsConversionsData.map((arm, index) => ({
-        id: index + 1,
-        value: arm.visitors,
-      })),
-    };
+    const armsCount = values.arms;
+    const visitorsInput = { arms: armsCount, data: [] as ArmData[] };
+    const conversionsInput = { arms: armsCount, data: [] as ArmData[] };
 
-    const conversionsInput = {
-      arms: values.arms,
-      data: visitorsConversionsData.map((arm, index) => ({
-        id: index + 1,
-        value: arm.conversions,
-      })),
-    };
+    for (let i = 1; i <= armsCount; i++) {
+      visitorsInput.data.push({
+        id: i,
+        value: values[`visitors_arm_${i}`], 
+      });
+      conversionsInput.data.push({
+        id: i,
+        value: values[`conversions_arm_${i}`],
+      });
+    }
 
     const payload = {
       visitors_input: visitorsInput,
@@ -222,11 +229,11 @@ export const ABTesting: React.FC = () => {
       const newData = [...currentArmData];
 
       if (newArmsCount < newData.length) {
-        return newData.slice(0, newArmsCount); // remove arms from the end
+        return newData.slice(0, newArmsCount);
       }
 
       for (let i = newData.length; i < newArmsCount; i++) {
-        newData.push({ visitors: totalSampleSize ?? 1000 }); // add new arms with default values
+        newData.push({ visitors: totalSampleSize ?? 1000, conversions: null }); // add new arms with default values
       }
 
       return newData;
@@ -257,9 +264,11 @@ export const ABTesting: React.FC = () => {
       status: TestStatus.CONC,
     };
 
+    console.log(payload);
+
     try {
       await axios.patch(
-        `https://abtestinghub.com:8000/tests/${testData.id}/`,
+        `${import.meta.env.VITE_BASE_URL}/tests/${testData.id}/`,
         payload,
         {
           headers: {
@@ -286,7 +295,7 @@ export const ABTesting: React.FC = () => {
       };
 
       const response = await axios.post(
-        "https://abtestinghub.com:8000/tests/",
+        `${import.meta.env.VITE_BASE_URL}/tests/`,
         testPayload,
         {
           headers: {
@@ -314,18 +323,21 @@ export const ABTesting: React.FC = () => {
 
   const handleCalculateClick = () => {
     setUserInitiatedCalculation(true);
-    form.submit();
+    // form.submit();
   };
 
   const fetchUserTests = async () => {
     try {
-      const response = await axios.get("https://abtestinghub.com:8000/tests/", {
-        headers: {
-          Authorization: `Token ${localStorage.getItem(
-            "abtestinghub-access-token"
-          )}`,
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/tests/`,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem(
+              "abtestinghub-access-token"
+            )}`,
+          },
+        }
+      );
       setUserTests(response.data);
       console.log(response.data);
       setIsTestsModalVisible(true);
@@ -349,7 +361,7 @@ export const ABTesting: React.FC = () => {
     };
 
     const response = await axios.post(
-      "https://abtestinghub.com:8000/tests/",
+      `${import.meta.env.VITE_BASE_URL}/tests/`,
       testPayload,
       {
         headers: {
@@ -394,7 +406,7 @@ export const ABTesting: React.FC = () => {
 
     try {
       await axios.patch(
-        `https://abtestinghub.com:8000/tests/${test.id}/`,
+        `${import.meta.env.VITE_BASE_URL}/tests/${test.id}/`,
         payload,
         {
           headers: {
@@ -543,7 +555,7 @@ export const ABTesting: React.FC = () => {
           </Paper>
         </div>
       )}
-      <div className="container flex gap-4">
+      <div className="container flex flex-col lg:flex-row gap-4">
         <div className="flex flex-col gap-4">
           <Paper className="p-4">
             <Form
@@ -558,7 +570,7 @@ export const ABTesting: React.FC = () => {
               }}
             >
               <div className="flex gap-4">
-                <div className="w-60">
+                <div className="w-full lg:w-60">
                   <Form.Item
                     name="confidence_level"
                     rules={[
@@ -568,14 +580,38 @@ export const ABTesting: React.FC = () => {
                       },
                     ]}
                     label={
-                      <div className="flex w-60 justify-between ">
+                      <div className="flex w-full lg:w-60 justify-between ">
                         <div>{"Confidence Level | (1-\u03b1) %"}</div>
                         <div>
                           <Tooltip
                             className="text-primary"
-                            title="Number of interactions users have with the product on a daily basis."
+                            overlayInnerStyle={{ width: "600px" }}
+                            title={
+                              <span>
+                                <strong>
+                                  The Confidence Level in Statistics
+                                </strong>
+                                <br />
+                                <br />
+                                The confidence level is a statistical concept
+                                that represents the level of certainty or
+                                reliability associated with an estimate. It is
+                                often expressed as a percentage and is commonly
+                                used in the context of confidence intervals.
+                                <br />
+                                <br />
+                                For example, a <em>
+                                  95% confidence level
+                                </em>{" "}
+                                implies that if we were to conduct the same
+                                experiment or sampling procedure multiple times,
+                                we would expect the calculated confidence
+                                interval to contain the true population
+                                parameter in about 95% of those experiments.
+                              </span>
+                            }
                           >
-                            <QuestionCircleOutlined />
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0" />
                           </Tooltip>
                         </div>
                       </div>
@@ -590,7 +626,7 @@ export const ABTesting: React.FC = () => {
                     </Radio.Group>
                   </Form.Item>
                 </div>
-                <div className="w-60">
+                <div className="w-full lg:w-60">
                   <Form.Item
                     name="arms"
                     rules={[
@@ -600,14 +636,75 @@ export const ABTesting: React.FC = () => {
                       },
                     ]}
                     label={
-                      <div className="flex w-60 justify-between ">
+                      <div className="flex w-full lg:w-60 justify-between ">
                         <div>{"Arms"}</div>
                         <div>
                           <Tooltip
                             className="text-primary"
-                            title="Number of interactions users have with the product on a daily basis."
+                            overlayInnerStyle={{ width: "600px" }}
+                            title={
+                              <span className="no-tailwind">
+                                <strong>Arms of an Experiment</strong>
+                                <br />
+                                <br />
+                                In experimental design, particularly in clinical
+                                trials, A/B testing, and other comparative
+                                studies, the term "arms" refers to the different
+                                groups or conditions that participants are
+                                assigned to. Each arm represents a distinct set
+                                of conditions, interventions, or variations
+                                being tested.
+                                <br />
+                                <br />
+                                Key points about the arms of an experiment
+                                include:
+                                <br />
+                                <ul>
+                                  <li>
+                                    <strong>Treatment Groups</strong>: Arms
+                                    typically consist of different treatment
+                                    groups or conditions. For example, in an A/B
+                                    test, there may be an experimental group
+                                    (treatment) and a control group.
+                                  </li>
+                                  <li>
+                                    <strong>Randomization</strong>: Participants
+                                    are often randomly assigned to different
+                                    arms to minimize biases and ensure that the
+                                    groups are comparable at the start of the
+                                    experiment.
+                                  </li>
+                                  <li>
+                                    <strong>Comparative Analysis</strong>: The
+                                    primary objective of having multiple arms is
+                                    to compare the outcomes or effects of
+                                    different conditions. This enables
+                                    researchers to assess the impact of
+                                    interventions and make informed conclusions.
+                                  </li>
+                                  <li>
+                                    <strong>Control Group</strong>: One common
+                                    configuration involves a control arm and one
+                                    or more experimental arms. The control arm
+                                    provides a baseline against which the
+                                    effects of the interventions in the
+                                    experimental arms are measured.
+                                  </li>
+                                </ul>
+                                For example, in a drug trial, there might be
+                                three arms: a placebo arm (control), a low-dose
+                                drug arm, and a high-dose drug arm. Comparing
+                                outcomes across these arms helps determine the
+                                efficacy of the drug.
+                                <br />
+                                <br />
+                                Understanding and carefully designing the arms
+                                of an experiment are critical for drawing valid
+                                conclusions and making evidence-based decisions.
+                              </span>
+                            }
                           >
-                            <QuestionCircleOutlined />
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0" />
                           </Tooltip>
                         </div>
                       </div>
@@ -625,64 +722,68 @@ export const ABTesting: React.FC = () => {
                 </div>
               </div>
               <div>
-                {visitorsConversionsData.map((arm, index) => (
-                  <div key={index} className="flex gap-4">
-                    <Form.Item
-                      className="w-60"
-                      label={`Visitors Group ${String.fromCharCode(
-                        65 + index
-                      )}`}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input the number of visitors!",
-                        },
-                      ]}
-                      name={`visitors_arm_${index + 1}`}
-                      initialValue={arm.visitors}
-                    >
-                      <InputNumber
-                        min={0}
-                        onChange={(value) =>
-                          setVisitorsConversionsData(
-                            visitorsConversionsData.map((data, i) =>
-                              i === index ? { ...data, visitors: value } : data
+                {visitorsConversionsData.map((arm, index) => {
+                  return (
+                    <div key={index} className="flex gap-4">
+                      <Form.Item
+                        className="w-full lg:w-60"
+                        label={`Visitors Group ${String.fromCharCode(
+                          65 + index
+                        )}`}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input the number of visitors!",
+                          },
+                        ]}
+                        name={`visitors_arm_${index + 1}`}
+                        initialValue={arm.visitors}
+                      >
+                        <InputNumber
+                          min={0}
+                          onChange={(value) =>
+                            setVisitorsConversionsData(
+                              visitorsConversionsData.map((data, i) =>
+                                i === index
+                                  ? { ...data, visitors: value }
+                                  : data
+                              )
                             )
-                          )
-                        }
-                        style={{ width: "100%" }}
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      className="w-60"
-                      label={`Conversions Group ${String.fromCharCode(
-                        65 + index
-                      )}`}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input the number of conversions!",
-                        },
-                      ]}
-                      name={`conversions_arm_${index + 1}`}
-                      initialValue={arm.conversions}
-                    >
-                      <InputNumber
-                        min={0}
-                        onChange={(value) =>
-                          setVisitorsConversionsData(
-                            visitorsConversionsData.map((data, i) =>
-                              i === index
-                                ? { ...data, conversions: value }
-                                : data
+                          }
+                          style={{ width: "100%" }}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        className="w-full lg:w-60"
+                        label={`Conversions Group ${String.fromCharCode(
+                          65 + index
+                        )}`}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input the number of conversions!",
+                          },
+                        ]}
+                        name={`conversions_arm_${index + 1}`}
+                        initialValue={arm.conversions}
+                      >
+                        <InputNumber
+                          min={0}
+                          onChange={(value) =>
+                            setVisitorsConversionsData(
+                              visitorsConversionsData.map((data, i) =>
+                                i === index
+                                  ? { ...data, conversions: value }
+                                  : data
+                              )
                             )
-                          )
-                        }
-                        style={{ width: "100%" }}
-                      />
-                    </Form.Item>
-                  </div>
-                ))}
+                          }
+                          style={{ width: "100%" }}
+                        />
+                      </Form.Item>
+                    </div>
+                  );
+                })}
               </div>
               <div className="flex w-full justify-between">
                 <Form.Item>
@@ -727,14 +828,43 @@ export const ABTesting: React.FC = () => {
             </div>
           )}
           {numericalResults && (
-            <>
-              <Paper className="p-4 space-y-4 border-primary border">
-                <div>
-                  <div className="text-lg font-medium">Conclusion</div>
-                  <div className="text-sm">{numericalResults?.conclusion}</div>
-                </div>
-              </Paper>
-            </>
+            <Paper className="p-4 space-y-4 border-primary border">
+              <div className="text-lg font-medium text-zinc-500">
+                Conclusion
+              </div>
+              <div className="text-sm">
+                {numericalResults.conclusion.map((item: any, index: number) => (
+                  <div key={index} className={item.className}>
+                    {item.text !== "" ? (
+                      <>
+                        {item.text === "The test results are statistically" ? (
+                          <div className="font-bold">
+                            The test results are statistically
+                            <span className="text-3xl">
+                              {statisticallySignificant ? (
+                                <span className="text-green-600">
+                                  &nbsp;Significant
+                                </span>
+                              ) : (
+                                <span className="text-red-600">
+                                  &nbsp;Insignificant
+                                </span>
+                              )}
+                            </span>
+                          </div>
+                        ) : (
+                          <>{item.text}</>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <br />
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </Paper>
           )}
         </div>
       </div>
