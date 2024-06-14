@@ -1,11 +1,13 @@
-import { Button } from "antd";
+import { Button, Dropdown, Menu } from "antd";
+import { Context } from "../context/context.provider";
 import Logo from "../assets/images/logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Context } from "../context/context.provider";
+import { SettingOutlined } from "@ant-design/icons";
+import { confirmation } from "./Confirmation";
 import { useState } from "react";
 
 export const Navbar = () => {
-  const { userAuthenticated, showAuthModal } = Context();
+  const { userAuthenticated, showAuthModal, signOutUser } = Context();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -13,6 +15,23 @@ export const Navbar = () => {
     location.pathname.split("/")[1] === pathname.split("/")[1];
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleLogoutClick = () => {
+    confirmation('Are you sure you want to logout?').then(isConfirmed => {
+        if (isConfirmed) {
+            signOutUser(); // Call your sign out function here
+        }
+    });
+  };
+
+  const menu = (
+    <Menu>
+        <Menu.Item key="1" onClick={handleLogoutClick}>
+            <button  className="text-red-600">Logout</button>
+        </Menu.Item>
+    </Menu>
+  );
+  
 
   const isArticlePage = location.pathname.includes("/article/");
   const navClass = isArticlePage
@@ -140,15 +159,32 @@ export const Navbar = () => {
           </li>
         </ul>
         {userAuthenticated ? (
-          <Button
-            type="primary"
-            className="hidden lg:inline-block lg:ml-3 px-6 text-white font-bold transition duration-200"
-            onClick={() => {
-              navigate("/dashboard/");
-            }}
-          >
-            Dashboard
-          </Button>
+          <div className="flex space-x-2">
+            <Button
+              type="primary"
+              className="hidden lg:inline-block lg:ml-3 px-6 text-white font-bold transition duration-200"
+              onClick={() => {
+                navigate("/dashboard/");
+              }}
+            >
+              Dashboard
+            </Button>
+            <div className="space-x-2">
+            {/* <Button
+                className="hidden lg:inline-block lg:ml-auto font-bold transition duration-200"
+                icon={isDarkMode ? <SunOutlined /> : <MoonOutlined />}
+                onClick={toggleTheme}
+            /> */}
+              <Dropdown overlay={menu} trigger={['click']}>
+                <Button
+                    type="primary"
+                    className="hidden lg:inline-block lg:ml-auto font-bold  transition duration-200"
+                    icon={<SettingOutlined />}
+                />
+              </Dropdown>
+            </div>
+          </div>
+          
         ) : (
           <Button
             type="primary"
@@ -235,7 +271,7 @@ export const Navbar = () => {
           <div className="mt-auto">
             <div className="pt-6">
               <a
-                className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100 rounded-xl"
+                className="block px-4 py-3 mb-3 text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100 rounded-xl"
                 href="#"
               >
                 Sign in

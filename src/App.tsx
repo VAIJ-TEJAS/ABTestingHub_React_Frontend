@@ -15,6 +15,7 @@ import { Auth } from "./components/Auth";
 import { DashboardNavbar } from "./components/DashboardNavbar";
 import { TermsAndConditions } from "./pages/TermsAndConditions";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
+import { NewHome } from "./pages/NewHome";
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
           <Route path="/ab-testing/" element={<ABTesting />} />
           <Route path="/continuous-metric-testing" element={<ContinuousMetricTesting />} />
           <Route path="/proportional-metric-testing" element={<ProportionalMetricTesting />} />
+          <Route path="/testing" element={<NewHome />} />
           {userAuthenticated ? (
             <>
               <Route path="/create-test" element={<CreateTest />} />

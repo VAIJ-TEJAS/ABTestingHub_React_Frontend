@@ -42,12 +42,15 @@ export const ProportionalMetricTesting: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const { userAuthenticated } = Context();
+  const { userAuthenticated, rates } = Context();
+  console.log(rates)
 
   const [isAuthVisible, setIsAuthVisible] = useState(false);
   const [userTests, setUserTests] = useState<ITest[]>([]);
   const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [isTestsModalVisible, setIsTestsModalVisible] = useState(false);
+  const [conversionNum, setConversionNum] = useState(0.0);
+  const [conversionName, setConversionName] = useState<string | null>(null);
 
   const [isNotCalculatedSaved, setIsNotCalculatedSaved] =
     useState<CalculationStatus>(CalculationStatus.SAVED);
@@ -411,6 +414,34 @@ export const ProportionalMetricTesting: React.FC = () => {
     }
   };
 
+  const onCurrencyChange = (value: string) => {
+    console.log(`selected ${value}`);
+    
+    const parts = value.split(',');
+    setConversionNum(parseFloat(parts[1]));
+    setConversionName(parts[0]);
+    console.log(parts[0]);
+    console.log(parseFloat(parts[1]));
+  };
+  
+  const onSearch = (value: string) => {
+    console.log('search:', value);
+  };
+  
+  // Filter `option.label` match the user type `input`
+  const filterOption = (input: string, option?: { label: string; value: string }) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
+  const options = Object.keys(rates).map(key => ({
+    value: `${rates[key].code},${rates[key].value}`,
+    label: `${rates[key].code}`
+  }));
+
+  useEffect(() => {
+    // Trigger onChange function when the component mounts with the default value
+    onCurrencyChange('USD,1');
+  }, []);
+
   return (
     <div className="py-8 px-2 flex flex-col w-full justify-center items-center bg-[#f5f5f550] gap-4">
       <QuestionReview isVisible={isModalVisible} onClose={closeModal} />
@@ -519,9 +550,23 @@ export const ProportionalMetricTesting: React.FC = () => {
           </Paper>
         </div>
       )}
+
       <div className="container flex flex-col lg:flex-row gap-4">
         <div className="flex flex-col gap-4">
           <Paper className="p-4">
+            <div className="mb-5">
+              <label htmlFor="">Select a Currency</label><br />
+              <Select
+                showSearch
+                defaultValue={'USD'}
+                placeholder="Select a currency"
+                optionFilterProp="children"
+                onChange={onCurrencyChange}
+                onSearch={onSearch}
+                filterOption={filterOption}
+                options={options}
+              />
+            </div>
             <Form
               form={form}
               layout="vertical"
@@ -1154,7 +1199,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       name="revenue_per_conversion"
                       label={
                         <div className="flex w-full lg:w-60 justify-between ">
-                          <div>{"Revenue per Conversion (₹)"}</div>
+                          <div>{`Revenue per Conversion (${conversionName})`}</div>
                           <div>
                             <Tooltip
                               overlayInnerStyle={{ width: "600px" }}
@@ -1250,6 +1295,7 @@ export const ProportionalMetricTesting: React.FC = () => {
             </Form>
           </Paper>
         </div>
+
         <div className="flex-1 flex flex-col gap-4">
           <Paper className="p-4">
             <div className="flex">
@@ -1294,7 +1340,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                 </div>
                 <div>
                   <div className="text-sm font-medium">
-                    Control Revenue
+                    Control Revenue ({conversionName})
                     <Tooltip
                       className="text-primary px-2"
                       title="Revenue will only be calculated if you enter both revenue per conversion and expected uplift."
@@ -1305,10 +1351,10 @@ export const ProportionalMetricTesting: React.FC = () => {
                   <div className="text-4xl">
                     <CountUp
                       start={0}
-                      end={numericalResults?.control_revenue ?? 0}
+                      end={numericalResults?.control_revenue*conversionNum ?? 0}
                       duration={0.5}
                       separator=","
-                      prefix="₹"
+                      // prefix={conversionName}
                     />
                   </div>
                 </div>
@@ -1354,7 +1400,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                 </div>
                 <div>
                   <div className="text-sm font-medium">
-                    Test Revenue
+                    Test Revenue ({conversionName})
                     <Tooltip
                       className="text-primary px-2"
                       title="Revenue will only be calculated if you enter both revenue per conversion and expected uplift."
@@ -1365,10 +1411,9 @@ export const ProportionalMetricTesting: React.FC = () => {
                   <div className="text-4xl">
                     <CountUp
                       start={0}
-                      end={numericalResults?.test_revenue}
+                      end={numericalResults?.test_revenue*conversionNum}
                       duration={0.5}
                       separator=","
-                      prefix="₹"
                     />
                   </div>
                   <div>
@@ -1404,6 +1449,7 @@ export const ProportionalMetricTesting: React.FC = () => {
               </div>
             </div>
           </Paper>
+          
           {figures.length > 0 && (
             <div>
               <Form.Item label="Select Figure">

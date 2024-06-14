@@ -70,9 +70,9 @@ export const Home = () => {
       </div>
       <div>
         <Container className="relative flex flex-col lg:flex-row">
-          <div className="space-y-8 py-16">
-            <div className="text-7xl font-medium">Stay curious.</div>
-            <div className="text-2xl w-1/2">
+          <div className="space-y-8 py-16 ">
+            <div className="text-4xl font-medium lg:text-left text-center lg:text-7xl sm:text-5xl">Stay curious.</div>
+            <div className="text-xl mx-auto w-3/4 text-center lg:mx-0 lg:text-left sm:w-1/2 sm:text-2xl">
               Optimize Your Decisions: Uncover data-driven insights through
               controlled A/B testing and elevate your business strategy.
             </div>
@@ -103,7 +103,7 @@ export const Home = () => {
 
           <img
             src={HeroImage}
-            className="absolute right-0 top-0 h-full -z-50"
+            className="absolute right-1/2 translate-x-1/2 top-0 h-full -z-50 opacity-25 lg:opacity-100 lg:right-0 lg:translate-x-0"
           />
         </Container>
       </div>
