@@ -12,6 +12,8 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [userAuthenticated, setUserAuthenticated] = useState<boolean>(!!localStorage.getItem('abtestinghub-access-token'))
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [rates, setRates] = useState({});
+  const [conversionNum, setConversionNum] = useState(0.0);
+  const [conversionName, setConversionName] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchRates = async () => {
@@ -25,6 +27,27 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
     };
     fetchRates();
   }, []);
+
+    useEffect(() => {
+        // Trigger onChange function when the component mounts with the default value
+          const storedCurrency = localStorage.getItem("abtestinghub-currency");
+          if (storedCurrency) {
+            onCurrencyChange(storedCurrency);
+          }
+          else{
+            onCurrencyChange('USD,1');
+          }
+    }, []);
+
+  const onCurrencyChange = (value: string) => {
+    console.log(`selected ${value}`);
+    localStorage.setItem('abtestinghub-currency', value);
+    const parts = value.split(',');
+    setConversionNum(parseFloat(parts[1]));
+    setConversionName(parts[0]);
+    console.log(parts[0]);
+    console.log(parseFloat(parts[1]));
+  };
 
   const signInUser = (token: string) => {
     localStorage.setItem('abtestinghub-access-token', token);
@@ -46,6 +69,9 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
 
   const contextValue: any = {
     rates,
+    onCurrencyChange,
+    conversionNum,
+    conversionName,
     userAuthenticated,
     setUserAuthenticated,
     signInUser,

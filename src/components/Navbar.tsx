@@ -1,13 +1,15 @@
-import { Button, Dropdown, Menu } from "antd";
+import { Avatar, Button, Dropdown, Menu } from "antd";
 import { Context } from "../context/context.provider";
 import Logo from "../assets/images/logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
-import { SettingOutlined } from "@ant-design/icons";
+import { CheckOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { confirmation } from "./Confirmation";
 import { useState } from "react";
+import { SideDrawer } from "./SideDrawer";
+
 
 export const Navbar = () => {
-  const { userAuthenticated, showAuthModal, signOutUser } = Context();
+  const { userAuthenticated, showAuthModal, signOutUser, conversionName, onCurrencyChange, rates } = Context();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,13 +26,34 @@ export const Navbar = () => {
     });
   };
 
+  const currencyMenuItems = Object.keys(rates).map((key) => {
+    const value = `${rates[key].code},${rates[key].value}`;
+    return (
+      <Menu.Item key={value} onClick={() => onCurrencyChange(value)}>
+        {rates[key].code} {value.split(',')[0] === conversionName && <CheckOutlined />}
+      </Menu.Item>
+    );
+  });
+
   const menu = (
     <Menu>
+        <Menu.Item key="2" >
+            <div className="flex items-center p-4 border-b border-gray-200">
+                <Avatar size={40} icon={<UserOutlined />} />
+                <span className="ml-4 font-bold text-gray-800">Username</span>
+            </div>
+        </Menu.Item>
+        <Menu.SubMenu key="sub1" title={`Choose Currency (${conversionName})`}>
+            <div className="max-h-48 overflow-y-auto">
+                {currencyMenuItems}
+            </div>
+        </Menu.SubMenu>
+        <Menu.Divider />
         <Menu.Item key="1" onClick={handleLogoutClick}>
-            <button  className="text-red-600">Logout</button>
+            <span className="text-red-600">Logout</span>
         </Menu.Item>
     </Menu>
-  );
+);
   
 
   const isArticlePage = location.pathname.includes("/article/");
@@ -48,18 +71,9 @@ export const Navbar = () => {
           <img src={Logo} className="w-12" />
           <div className="text-primary">A/B Testing Hub</div>
         </a>
-        <div className="lg:hidden">
-          <button className="navbar-burger flex items-center text-primary p-3">
-            <svg
-              className="block h-4 w-4 fill-current"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Mobile menu</title>
-              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-            </svg>
-          </button>
-        </div>
+
+        <SideDrawer />
+
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
           <li className="hover:bg-blue-100 cursor-pointer p-2"  onClick={() => {
                 navigate("/home/");
@@ -159,31 +173,34 @@ export const Navbar = () => {
           </li>
         </ul>
         {userAuthenticated ? (
-          <div className="flex space-x-2">
-            <Button
-              type="primary"
-              className="hidden lg:inline-block lg:ml-3 px-6 text-white font-bold transition duration-200"
-              onClick={() => {
-                navigate("/dashboard/");
-              }}
-            >
-              Dashboard
-            </Button>
-            <div className="space-x-2">
-            {/* <Button
-                className="hidden lg:inline-block lg:ml-auto font-bold transition duration-200"
-                icon={isDarkMode ? <SunOutlined /> : <MoonOutlined />}
-                onClick={toggleTheme}
-            /> */}
-              <Dropdown overlay={menu} trigger={['click']}>
-                <Button
-                    type="primary"
-                    className="hidden lg:inline-block lg:ml-auto font-bold  transition duration-200"
-                    icon={<SettingOutlined />}
-                />
-              </Dropdown>
+          <div className="hidden lg:block">
+            <div className="flex space-x-2 ">
+              <Button
+                type="primary"
+                className="hidden lg:inline-block lg:ml-3 px-6 text-white font-bold transition duration-200"
+                onClick={() => {
+                  navigate("/dashboard/");
+                }}
+              >
+                Dashboard
+              </Button>
+              <div className="space-x-2">
+              {/* <Button
+                  className="hidden lg:inline-block lg:ml-auto font-bold transition duration-200"
+                  icon={isDarkMode ? <SunOutlined /> : <MoonOutlined />}
+                  onClick={toggleTheme}
+              /> */}
+                <Dropdown overlay={menu} trigger={['click']}>
+                  <Button
+                      type="primary"
+                      className="hidden lg:inline-block lg:ml-auto font-bold  transition duration-200"
+                      icon={<SettingOutlined />}
+                  />
+                </Dropdown>
+              </div>
             </div>
           </div>
+
           
         ) : (
           <Button

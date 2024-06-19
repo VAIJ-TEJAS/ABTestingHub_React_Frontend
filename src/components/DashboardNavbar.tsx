@@ -1,17 +1,21 @@
-import { Button, Dropdown, Menu } from "antd"
+import { Avatar, Button, Dropdown, Menu } from "antd"
 import Logo from "../assets/images/logo.png"
-import { useLocation } from "react-router-dom";
-import { SettingOutlined } from "@ant-design/icons";
+import { useLocation} from "react-router-dom";
+import { CheckOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { Context } from "../context/context.provider";
 import { confirmation } from "./Confirmation";
+import { useState } from "react";
+import { SideDrawer } from "./SideDrawer";
 // import { signOut } from "firebase/auth";
 // import { auth } from "../../firebaseConfig";
 
+
 export const DashboardNavbar = () => {
 
-    const { signOutUser } = Context()
+    const { signOutUser, onCurrencyChange, rates, conversionName } = Context()
 
     const location = useLocation();
+    const [dropdownVisible, setDropdownVisible] = useState(false);
 
     // const [isDarkMode, setIsDarkMode] = useState(false);
     // const toggleTheme = () => {
@@ -23,6 +27,7 @@ export const DashboardNavbar = () => {
         ? "relative px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary"
         : "sticky top-0 px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary shadow-md z-50";
 
+
     const handleLogoutClick = () => {
         confirmation('Are you sure you want to logout?').then(isConfirmed => {
             if (isConfirmed) {
@@ -31,15 +36,34 @@ export const DashboardNavbar = () => {
         });
     };
 
+    const currencyMenuItems = Object.keys(rates).map((key) => {
+        const value = `${rates[key].code},${rates[key].value}`;
+        return (
+          <Menu.Item key={value} onClick={() => onCurrencyChange(value)}>
+            {rates[key].code} {value.split(',')[0] === conversionName && <CheckOutlined />}
+          </Menu.Item>
+        );
+    });
+    
     const menu = (
         <Menu>
+            <Menu.Item key="2" >
+                <div className="flex items-center p-4 border-b border-gray-200">
+                    <Avatar size={40} icon={<UserOutlined />} />
+                    <span className="ml-4 font-bold text-gray-800">Username</span>
+                </div>
+            </Menu.Item>
+            <Menu.SubMenu key="sub1" title={`Choose Currency (${conversionName})`}>
+                <div className="max-h-48 overflow-y-auto">
+                    {currencyMenuItems}
+                </div>
+            </Menu.SubMenu>
+            <Menu.Divider />
             <Menu.Item key="1" onClick={handleLogoutClick}>
-                <button  className="text-red-600">Logout</button>
+                <span className="text-red-600">Logout</span>
             </Menu.Item>
         </Menu>
     );
-
-
 
     return (
         <>
@@ -50,26 +74,16 @@ export const DashboardNavbar = () => {
                         A/B Testing Hub
                     </div>
                 </a>
-                <div className="lg:hidden">
-                    <button className="navbar-burger flex items-center text-primary p-3">
-                        <svg
-                            className="block h-4 w-4 fill-current"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <title>Mobile menu</title>
-                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-                        </svg>
-                    </button>
-                </div>
+                <SideDrawer />
 
-                <div className="space-x-2">
+                <div className="space-x-2 hidden lg:block">
                     {/* <Button
                         className="hidden lg:inline-block lg:ml-auto font-bold transition duration-200"
                         icon={isDarkMode ? <SunOutlined /> : <MoonOutlined />}
                         onClick={toggleTheme}
                     /> */}
-                    <Dropdown overlay={menu} trigger={['click']}>
+                    <Dropdown overlay={menu} trigger={['click']} visible={dropdownVisible}
+          onVisibleChange={(flag) => setDropdownVisible(flag)}>
                         <Button
                             type="primary"
                             className="hidden lg:inline-block lg:ml-auto font-bold  transition duration-200"
@@ -155,7 +169,7 @@ export const DashboardNavbar = () => {
                     <div className="mt-auto">
                         <div className="pt-6">
                             <a
-                                className="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100 rounded-xl"
+                                className="block px-4 py-3 mb-3 text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100 rounded-xl"
                                 href="#"
                             >
                                 Sign in

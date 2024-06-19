@@ -42,15 +42,13 @@ export const ProportionalMetricTesting: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const { userAuthenticated, rates } = Context();
+  const { userAuthenticated, rates, conversionName, conversionNum } = Context();
   console.log(rates)
 
   const [isAuthVisible, setIsAuthVisible] = useState(false);
   const [userTests, setUserTests] = useState<ITest[]>([]);
   const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [isTestsModalVisible, setIsTestsModalVisible] = useState(false);
-  const [conversionNum, setConversionNum] = useState(0.0);
-  const [conversionName, setConversionName] = useState<string | null>(null);
 
   const [isNotCalculatedSaved, setIsNotCalculatedSaved] =
     useState<CalculationStatus>(CalculationStatus.SAVED);
@@ -414,34 +412,6 @@ export const ProportionalMetricTesting: React.FC = () => {
     }
   };
 
-  const onCurrencyChange = (value: string) => {
-    console.log(`selected ${value}`);
-    
-    const parts = value.split(',');
-    setConversionNum(parseFloat(parts[1]));
-    setConversionName(parts[0]);
-    console.log(parts[0]);
-    console.log(parseFloat(parts[1]));
-  };
-  
-  const onSearch = (value: string) => {
-    console.log('search:', value);
-  };
-  
-  // Filter `option.label` match the user type `input`
-  const filterOption = (input: string, option?: { label: string; value: string }) =>
-    (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
-
-  const options = Object.keys(rates).map(key => ({
-    value: `${rates[key].code},${rates[key].value}`,
-    label: `${rates[key].code}`
-  }));
-
-  useEffect(() => {
-    // Trigger onChange function when the component mounts with the default value
-    onCurrencyChange('USD,1');
-  }, []);
-
   return (
     <div className="py-8 px-2 flex flex-col w-full justify-center items-center bg-[#f5f5f550] gap-4">
       <QuestionReview isVisible={isModalVisible} onClose={closeModal} />
@@ -554,33 +524,20 @@ export const ProportionalMetricTesting: React.FC = () => {
       <div className="container flex flex-col lg:flex-row gap-4">
         <div className="flex flex-col gap-4">
           <Paper className="p-4">
-            <div className="mb-5">
-              <label htmlFor="">Select a Currency</label><br />
-              <Select
-                showSearch
-                defaultValue={'USD'}
-                placeholder="Select a currency"
-                optionFilterProp="children"
-                onChange={onCurrencyChange}
-                onSearch={onSearch}
-                filterOption={filterOption}
-                options={options}
-              />
-            </div>
             <Form
               form={form}
               layout="vertical"
               onFinish={onFinish}
               onValuesChange={handleFormValuesChange}
               initialValues={{
-                confidence_level: testData?.confidence_level ?? 95,
-                power: testData?.power ?? 80,
+                confidence_level: testData?.confidence_level ?? null,
+                power: testData?.power ?? null,
                 baseline_conversion_rate:
-                  testData?.baseline_conversion_rate ?? 10,
-                mde: testData?.mde ?? 3,
+                  testData?.baseline_conversion_rate ?? null,
+                mde: testData?.mde ?? null,
                 absolute: testData?.absolute ?? true,
-                arms: testData?.arms ?? 2,
-                daily_interactions: testData?.daily_interactions ?? 100,
+                arms: testData?.arms ?? null,
+                daily_interactions: testData?.daily_interactions ?? null,
                 two_tailed_test: testData?.two_tailed_test ?? true,
                 equal_allocation: testData?.equal_allocation ?? true,
                 revenue_per_conversion:

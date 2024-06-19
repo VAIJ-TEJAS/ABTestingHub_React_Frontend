@@ -46,7 +46,7 @@ function App() {
         <Auth />
         <Routes>
           <Route path="/" element={<Navigate to={"home"} />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/home2" element={<Home />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/articles" element={<ArticlesHome />} />
@@ -55,7 +55,7 @@ function App() {
           <Route path="/ab-testing/" element={<ABTesting />} />
           <Route path="/continuous-metric-testing" element={<ContinuousMetricTesting />} />
           <Route path="/proportional-metric-testing" element={<ProportionalMetricTesting />} />
-          <Route path="/testing" element={<NewHome />} />
+          <Route path="/home" element={<NewHome />} />
           {userAuthenticated ? (
             <>
               <Route path="/create-test" element={<CreateTest />} />

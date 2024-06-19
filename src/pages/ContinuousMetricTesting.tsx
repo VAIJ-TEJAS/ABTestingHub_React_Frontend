@@ -42,7 +42,7 @@ export const ContinuousMetricTesting: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const { userAuthenticated } = Context();
+  const { userAuthenticated, conversionNum, conversionName } = Context();
 
   const [isAuthVisible, setIsAuthVisible] = useState(false);
   const [userTests, setUserTests] = useState<ITest[]>([]);
@@ -99,14 +99,14 @@ export const ContinuousMetricTesting: React.FC = () => {
     if (testData) {
       // Assuming testData contains all the required fields
       form.setFieldsValue({
-        confidence_level: testData?.confidence_level ?? 95,
-        power: testData?.power ?? 90,
-        kpi_sd: 1.0,
-        baseline_kpi: testData?.baseline_kpi ?? 10,
-        mde: testData?.mde ?? 3,
+        confidence_level: testData?.confidence_level ?? null,
+        power: testData?.power ?? null,
+        kpi_sd: null,
+        baseline_kpi: testData?.baseline_kpi ?? null,
+        mde: testData?.mde ?? null,
         absolute: testData?.absolute ?? true,
-        arms: testData?.arms ?? 2,
-        daily_interactions: testData?.daily_interactions ?? 100,
+        arms: testData?.arms ?? null,
+        daily_interactions: testData?.daily_interactions ?? null,
         two_tailed_test: testData?.two_tailed_test ?? true,
         equal_allocation: testData?.equal_allocation ?? true,
         revenue_per_conversion: testData?.revenue_per_conversion ?? null,
@@ -528,14 +528,14 @@ export const ContinuousMetricTesting: React.FC = () => {
               onFinish={onFinish}
               onValuesChange={handleFormValuesChange}
               initialValues={{
-                confidence_level: testData?.confidence_level ?? 95,
-                power: testData?.power ?? 90,
-                kpi_sd: 1.0,
-                baseline_kpi: testData?.baseline_kpi ?? 10,
-                mde: testData?.mde ?? 3,
+                confidence_level: testData?.confidence_level ?? null,
+                power: testData?.power ?? null,
+                kpi_sd: null,
+                baseline_kpi: testData?.baseline_kpi ?? null,
+                mde: testData?.mde ?? null,
                 absolute: testData?.absolute ?? true,
-                arms: testData?.arms ?? 2,
-                daily_interactions: testData?.daily_interactions ?? 100,
+                arms: testData?.arms ?? null,
+                daily_interactions: testData?.daily_interactions ?? null,
                 two_tailed_test: testData?.two_tailed_test ?? true,
                 equal_allocation: testData?.equal_allocation ?? true,
                 revenue_per_conversion:
@@ -1186,7 +1186,7 @@ export const ContinuousMetricTesting: React.FC = () => {
                       name="revenue_per_conversion"
                       label={
                         <div className="flex w-full lg:w-60 justify-between ">
-                          <div>{"Revenue per Conversion (₹)"}</div>
+                          <div>{`Revenue per Conversion (${conversionName})`}</div>
                           <div>
                             <Tooltip
                               className="text-primary"
@@ -1333,7 +1333,7 @@ export const ContinuousMetricTesting: React.FC = () => {
                 </div>
                 <div>
                   <div className="text-sm font-medium">
-                    Control Revenue
+                    Control Revenue ({conversionName})
                     <Tooltip
                       className="text-primary px-2"
                       title="Revenue will only be calculated if you enter both revenue per conversion and expected uplift."
@@ -1344,10 +1344,9 @@ export const ContinuousMetricTesting: React.FC = () => {
                   <div className="text-4xl">
                     <CountUp
                       start={0}
-                      end={numericalResults?.control_revenue ?? 0}
+                      end={numericalResults?.control_revenue*conversionNum ?? 0}
                       duration={0.5}
                       separator=","
-                      prefix="₹"
                     />
                   </div>
                 </div>
@@ -1393,7 +1392,7 @@ export const ContinuousMetricTesting: React.FC = () => {
                 </div>
                 <div>
                   <div className="text-sm font-medium">
-                    Test Revenue
+                    Test Revenue ({conversionName})
                     <Tooltip
                       className="text-primary px-2"
                       title="Revenue will only be calculated if you enter both revenue per conversion and expected uplift."
@@ -1404,10 +1403,9 @@ export const ContinuousMetricTesting: React.FC = () => {
                   <div className="text-4xl">
                     <CountUp
                       start={0}
-                      end={numericalResults?.test_revenue}
+                      end={numericalResults?.test_revenue*conversionNum}
                       duration={0.5}
                       separator=","
-                      prefix="₹"
                     />
                   </div>
                   <div>

@@ -397,7 +397,7 @@ export const Dashboard = () => {
   return (
     <div className="flex flex-col justify-center items-center p-4">
       <div className="flex-grow-0 container">
-        <div className="flex gap-4 p-4 justify-center">
+        <div className="flex gap-4 p-4 justify-center flex-wrap">
           <StatisticCard
             amount={totalHypotheses}
             icon={<SearchOutlined className="text-white text-3xl" />}
@@ -426,8 +426,8 @@ export const Dashboard = () => {
         </div>
       </div>
       <div className="container my-8">
-        <div className="flex justify-between">
-          <div className="w-60">
+        <div className="flex justify-between flex-col-reverse sm:flex-row">
+          <div className="w-full sm:w-60 border my-2 sm:my-0">
             <Input.Search
               placeholder="Search"
               value={searchTerm}
@@ -461,7 +461,7 @@ export const Dashboard = () => {
             />
           </div>
         )}
-        <Paper className="container flex-1">
+        <Paper className="container flex-1 overflow-x-auto sm:overflow-x-visible">
           <Table
             rowKey="id"
             rowSelection={rowSelection}
