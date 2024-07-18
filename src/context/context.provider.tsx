@@ -1,7 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useState, ReactNode, useContext, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import currencyData from "../data/currency.json";
 
 // Create the context
 const MyContext = createContext<any | undefined>(undefined);
@@ -18,9 +19,9 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const response = await axios.get('https://api.currencyapi.com/v3/latest?apikey=cur_live_oWV71FQIJL9Dh2YlsFSD8uVwdCTFEWaXZW20Dxws');
+        const response = currencyData
         console.log(response);
-        setRates(response.data.data);
+        setRates(response.data);
       } catch (error) {
         console.error('Error fetching conversion rates:', error);
       } 

@@ -619,7 +619,92 @@ export const ABTesting: React.FC = () => {
                   >
                     <InputNumber min={90} max={100} style={{ width: "100%" }} />
                   </Form.Item>
-                  <Form.Item name="tail_type" label="Tail Type of Hypothesis">
+                  <Form.Item 
+                    name="tail_type" 
+                    label={
+                      <span>
+                        Tail Type of Hypothesis&nbsp;
+                        <Tooltip
+                        className="text-primary px-2"
+                        overlayInnerStyle={{ width: "600px" }}
+                        title={
+                          <span className="no-tailwind">
+                            <strong>Tail of a Test</strong>
+                            <br />
+                            <br />
+                            <em>Definition:</em> The "tail" of a statistical
+                            test refers to the region(s) in the probability
+                            distribution under the null hypothesis where extreme
+                            values are considered evidence against the null
+                            hypothesis. Statistical tests are classified as
+                            one-tailed or two-tailed based on the number of
+                            tails considered.
+                            <br />
+                            <ul>
+                              <li>
+                                <strong>One-Tailed Test</strong>: Focuses on
+                                extreme values in one direction (either the
+                                upper or lower tail) of the distribution. It is
+                                used when the hypothesis specifies a directional
+                                change.
+                              </li>
+                              <li>
+                                <strong>Two-Tailed Test</strong>: Considers
+                                extreme values in both directions of the
+                                distribution. It is used when the hypothesis
+                                does not specify a directional change, and
+                                interest lies in deviations from the null
+                                hypothesis in either direction.
+                              </li>
+                            </ul>
+                            <em>Example:</em> Suppose you're conducting a
+                            hypothesis test to determine if a new drug has a
+                            different effect than a placebo.
+                            <br />
+                            <ul>
+                              <li>
+                                <strong>One-Tailed Test</strong>: If the
+                                hypothesis predicts that the new drug increases
+                                the observed effect, a one-tailed test focuses
+                                on extreme values in the upper tail of the
+                                distribution.
+                              </li>
+                              <li>
+                                <strong>Two-Tailed Test</strong>: If the
+                                hypothesis is agnostic about the direction of
+                                the effect (increase or decrease), a two-tailed
+                                test considers extreme values in both the upper
+                                and lower tails of the distribution.
+                              </li>
+                            </ul>
+                            <strong>Considerations:</strong>
+                            <br />
+                            <ul>
+                              <li>
+                                <strong>Directional Hypotheses</strong>: Use a
+                                one-tailed test when the research hypothesis
+                                specifies a clear direction of the effect.
+                              </li>
+                              <li>
+                                <strong>Non-Directional Hypotheses</strong>: Use
+                                a two-tailed test when the research hypothesis
+                                is non-directional, and you want to detect
+                                deviations from the null hypothesis in either
+                                direction.
+                              </li>
+                            </ul>
+                            Understanding the tail of a test is crucial for
+                            selecting the appropriate statistical test and
+                            interpreting the results in the context of the
+                            research question.
+                          </span>
+                        }
+                      >
+                        <QuestionCircleOutlined />
+                        </Tooltip>
+                      </span>
+                    }
+                  >
                     <Radio.Group>
                       <Radio value={true}>two-tailed</Radio>
                       <Radio value={false}>one-tailed</Radio>
