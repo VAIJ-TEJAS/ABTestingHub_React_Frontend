@@ -66,6 +66,8 @@ export const ProportionalMetricTesting: React.FC = () => {
   const [allocations, setAllocations] = useState<any[]>([]);
   const [form] = Form.useForm();
   const [equalAllocation, setEqualAllocation] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
 
   const openAuthModal = () => {
     setIsAuthVisible(true);
@@ -122,6 +124,23 @@ export const ProportionalMetricTesting: React.FC = () => {
       }, 0);
     }
   }, [testData, form]);
+
+  useEffect(() => {
+    console.log(allocations)
+    const verifyTotalIs100 = (allocations: any) => {
+      const total = allocations.reduce((sum: any, allocation: any) => {
+        return sum + parseFloat(allocation.value);
+      }, 0);
+
+      if (total !== 100 && allocations.length) {
+        setError('The sum of the values must be 100!');
+      } else {
+        setError(null);
+      }
+    };
+
+    verifyTotalIs100(allocations);
+  }, [allocations]);
 
   const fetchTestDetails = async (id: number) => {
     try {
@@ -1146,6 +1165,11 @@ export const ProportionalMetricTesting: React.FC = () => {
                         />
                       </Form.Item>
                     ))}
+                  {error && (
+                      <Form.Item wrapperCol={{ offset: 8, span: 16 }} className="m-0">
+                        <div style={{ color: 'red' }} className="m-0">{error}</div>
+                      </Form.Item>
+                  )}
                 </div>
               </div>
               <div>
@@ -1234,6 +1258,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                     type="primary"
                     htmlType="submit"
                     onClick={handleCalculateClick}
+                    disabled={!!error}
                   >
                     Calculate
                   </Button>
