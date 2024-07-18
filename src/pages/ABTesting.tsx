@@ -84,8 +84,8 @@ export const ABTesting: React.FC = () => {
       fetchTestDetails(state.testId);
     } else {
       setVisitorsConversionsData([
-        { visitors: null, conversions: null },
-        { visitors: null, conversions: null },
+        { visitors: 1000, conversions: 200 },
+        { visitors: 1000, conversions: 240 },
       ]);
     }
   }, [location.state]);
@@ -564,8 +564,8 @@ export const ABTesting: React.FC = () => {
               onFinish={onFinish}
               onValuesChange={handleFormValuesChange}
               initialValues={{
-                confidence_level: null,
-                arms: null,
+                confidence_level: 95,
+                arms: 2,
                 tail_type: true,
               }}
             >

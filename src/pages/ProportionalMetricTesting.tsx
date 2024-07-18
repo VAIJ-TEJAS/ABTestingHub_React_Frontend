@@ -532,14 +532,14 @@ export const ProportionalMetricTesting: React.FC = () => {
               onFinish={onFinish}
               onValuesChange={handleFormValuesChange}
               initialValues={{
-                confidence_level: testData?.confidence_level ?? null,
-                power: testData?.power ?? null,
+                confidence_level: testData?.confidence_level ?? 95,
+                power: testData?.power ?? 80,
                 baseline_conversion_rate:
-                  testData?.baseline_conversion_rate ?? null,
-                mde: testData?.mde ?? null,
+                  testData?.baseline_conversion_rate ?? 10,
+                mde: testData?.mde ?? 3,
                 absolute: testData?.absolute ?? true,
-                arms: testData?.arms ?? null,
-                daily_interactions: testData?.daily_interactions ?? null,
+                arms: testData?.arms ?? 2,
+                daily_interactions: testData?.daily_interactions ?? 100,
                 two_tailed_test: testData?.two_tailed_test ?? true,
                 equal_allocation: testData?.equal_allocation ?? true,
                 revenue_per_conversion:
