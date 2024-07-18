@@ -58,6 +58,7 @@ export const ProportionalMetricTesting: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [testData, setTestData] = useState<ITest | null>(null);
+  const [testDataCopy, setTestDataCopy] = useState<ITest | null>(null);
 
   const [figures, setFigures] = useState<any[]>([]);
   const [selectedFigIndex, setSelectedFigIndex] = useState<number>(0);
@@ -193,6 +194,7 @@ export const ProportionalMetricTesting: React.FC = () => {
             layout: response.data["Fig MDE"].layout,
           },
         ]);
+        message.success("Calculations completed successfully");
 
         if (userInitiatedCalculation)
           setIsNotCalculatedSaved(CalculationStatus.CALC);
@@ -306,14 +308,14 @@ export const ProportionalMetricTesting: React.FC = () => {
     }
   };
 
-  const handleFormValuesChange = () => {
+  const handleFormValuesChange = (_value: any, allValues: any) => {
+    setTestDataCopy(allValues);
     setIsNotCalculatedSaved(CalculationStatus.IDLE);
   };
 
   const handleCalculateClick = () => {
     setUserInitiatedCalculation(true);
-    form.submit();
-    message.success("Calculations completed successfully");
+    // form.submit();
   };
 
   const fetchUserTests = async () => {
@@ -1262,7 +1264,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                     Total Sample Size
                     <Tooltip
                       className="text-primary px-2"
-                      title="The necessary sample size for conducting a test at a 80.0% power, aiming to detect a 3.0% difference with 95.0% confidence"
+                      title={`The necessary sample size for conducting a test at a ${testDataCopy?.power ?? 90}% power, aiming to detect a ${testDataCopy?.mde ?? 3}% difference with ${testDataCopy?.confidence_level ?? 90}% confidence`}
                     >
                       <QuestionCircleOutlined />
                     </Tooltip>
@@ -1281,7 +1283,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                     Days Required
                     <Tooltip
                       className="text-primary px-2"
-                      title="Total number of days required to get 3,258 samples if 100 daily visitors are allocated to the A/B test."
+                      title={`Total number of days required to get ${(numericalResults?.total_sample_size ?? 0).toLocaleString()} samples if ${testDataCopy?.daily_interactions ?? 100} daily visitors are allocated to the A/B test.`}
                     >
                       <QuestionCircleOutlined />
                     </Tooltip>
@@ -1341,7 +1343,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                     Weeks Required
                     <Tooltip
                       className="text-primary px-2"
-                      title="Total number of weeks required to get 3,258 samples if 100 daily visitors are allocated to the A/B test."
+                      title={`Total number of weeks required to get ${(numericalResults?.total_sample_size ?? 0).toLocaleString()} samples if ${testDataCopy?.daily_interactions ?? 100} daily visitors are allocated to the A/B test.`}
                     >
                       <QuestionCircleOutlined />
                     </Tooltip>
