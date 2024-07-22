@@ -145,8 +145,8 @@ export const Auth: React.FC<AuthProps> = ({
       signInUser(token);
 
       // Extract user information
-      const { name, picture } = user;
-      setUser({ name, picture });
+      const { username, picture } = user;
+      setUser({ username, picture });
 
       if (onSignin) onSignin(response);
 

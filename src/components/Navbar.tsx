@@ -1,8 +1,8 @@
-import { Avatar, Button, Dropdown, Menu } from "antd";
+import { Button, Dropdown, Menu } from "antd";
 import { Context } from "../context/context.provider";
 import Logo from "../assets/images/logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
-import { CheckOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { CheckOutlined, SettingOutlined } from "@ant-design/icons";
 import { confirmation } from "./Confirmation";
 import { useState } from "react";
 import { SideDrawer } from "./SideDrawer";
@@ -38,9 +38,9 @@ export const Navbar = () => {
   const menu = (
     <Menu>
         <Menu.Item key="2" >
-            <div className="flex items-center p-4 border-b border-gray-200">
-                <Avatar size={40} icon={<UserOutlined />} />
-                <span className="ml-4 font-bold text-gray-800">Username</span>
+            <div className="flex items-center py-4 border-b border-gray-200">
+                {/* <Avatar size={40} icon={<UserOutlined />} /> */}
+                <span className="font-bold text-gray-800">Username</span>
             </div>
         </Menu.Item>
         <Menu.SubMenu key="sub1" title={`Choose Currency (${conversionName})`}>
