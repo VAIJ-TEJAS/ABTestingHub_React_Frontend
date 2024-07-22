@@ -58,7 +58,7 @@ const getStatusLabel = (status: string) => {
 
 export const Dashboard = () => {
 
-  const { conversionSymbol } = Context()
+  const { conversionSymbol, conversionNum } = Context()
 
   const [totalHypotheses, setTotalHypotheses] = useState<number>(0);
   const [inProgress, setInProgress] = useState<number>(0);
@@ -421,7 +421,7 @@ export const Dashboard = () => {
             title="Results"
           />
           <StatisticCard
-            amount={totalIncrementalRevenue}
+            amount={totalIncrementalRevenue*conversionNum}
             icon={<DollarCircleOutlined className="text-white text-3xl" />}
             bgColor="bg-green-600"
             title="Total Incremental Revenue"
