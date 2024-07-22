@@ -15,8 +15,8 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [rates, setRates] = useState({});
   const [conversionNum, setConversionNum] = useState(0.0);
   const [conversionName, setConversionName] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null);
-
+  const [username, setUsername] = useState<string | null>(localStorage.getItem('ab_testing_hub_username') ?? "");
+  
   useEffect(() => {
     const fetchRates = async () => {
       try {
@@ -82,8 +82,8 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
     hideAuthModal,
     authModalOpen,
     setAuthModalOpen,
-    user,
-    setUser
+    username,
+    setUsername
   };
 
   return (

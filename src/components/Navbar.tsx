@@ -9,7 +9,7 @@ import { SideDrawer } from "./SideDrawer";
 
 
 export const Navbar = () => {
-  const { userAuthenticated, showAuthModal, signOutUser, conversionName, onCurrencyChange, rates } = Context();
+  const { username, userAuthenticated, showAuthModal, signOutUser, conversionName, onCurrencyChange, rates } = Context();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -40,7 +40,7 @@ export const Navbar = () => {
         <Menu.Item key="2" >
             <div className="flex items-center py-4 border-b border-gray-200">
                 {/* <Avatar size={40} icon={<UserOutlined />} /> */}
-                <span className="font-bold text-gray-800">Username</span>
+                <span className="font-bold text-gray-800">{username}</span>
             </div>
         </Menu.Item>
         <Menu.SubMenu key="sub1" title={`Choose Currency (${conversionName})`}>

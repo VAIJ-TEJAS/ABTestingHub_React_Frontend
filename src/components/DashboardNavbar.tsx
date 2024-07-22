@@ -1,7 +1,7 @@
-import { Avatar, Button, Dropdown, Menu } from "antd"
+import { Button, Dropdown, Menu } from "antd"
 import Logo from "../assets/images/logo.png"
 import { useLocation} from "react-router-dom";
-import { CheckOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { CheckOutlined, SettingOutlined } from "@ant-design/icons";
 import { Context } from "../context/context.provider";
 import { confirmation } from "./Confirmation";
 import { useState } from "react";
@@ -12,7 +12,7 @@ import { SideDrawer } from "./SideDrawer";
 
 export const DashboardNavbar = () => {
 
-    const { user, signOutUser, onCurrencyChange, rates, conversionName } = Context()
+    const { username, signOutUser, onCurrencyChange, rates, conversionName } = Context()
 
     const location = useLocation();
     const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -49,8 +49,8 @@ export const DashboardNavbar = () => {
         <Menu>
             <Menu.Item key="2" >
                 <div className="flex items-center p-4 border-b border-gray-200">
-                    <Avatar size={40} icon={<UserOutlined />} src={user?.avatar} />
-                    <span className="ml-4 font-bold text-gray-800">{user?.username || 'Username'}</span>
+                    {/* <Avatar size={40} icon={<UserOutlined />} src={user?.avatar} /> */}
+                    <span className="ml-4 font-bold text-gray-800">{username || ''}</span>
                 </div>
             </Menu.Item>
             <Menu.SubMenu key="sub1" title={`Choose Currency (${conversionName})`}>
