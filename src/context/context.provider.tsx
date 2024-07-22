@@ -15,6 +15,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [rates, setRates] = useState({});
   const [conversionNum, setConversionNum] = useState(0.0);
   const [conversionName, setConversionName] = useState<string | null>(null);
+  const [conversionSymbol, setConversionSymbol] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(localStorage.getItem('ab_testing_hub_username') ?? "");
   
   useEffect(() => {
@@ -47,6 +48,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
     const parts = value.split(',');
     setConversionNum(parseFloat(parts[1]));
     setConversionName(parts[0]);
+    setConversionSymbol(parts[2]);
     console.log(parts[0]);
     console.log(parseFloat(parts[1]));
   };
@@ -74,6 +76,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
     onCurrencyChange,
     conversionNum,
     conversionName,
+    conversionSymbol,
     userAuthenticated,
     setUserAuthenticated,
     signInUser,

@@ -2,11 +2,13 @@
     "data": {
       "INR": {
         "code": "INR",
-        "value": 79.2334
+        "value": 79.2334,
+        "symbol": "₹"
       },
       "USD": {
         "code": "USD",
-        "value": 1.0
+        "value": 1.0,
+        "symbol": "$"
       }
     }
   }

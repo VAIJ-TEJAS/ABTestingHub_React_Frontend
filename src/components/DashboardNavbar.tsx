@@ -37,7 +37,7 @@ export const DashboardNavbar = () => {
     };
 
     const currencyMenuItems = Object.keys(rates).map((key) => {
-        const value = `${rates[key].code},${rates[key].value}`;
+        const value = `${rates[key].code},${rates[key].value},${rates[key].symbol}`;
         return (
           <Menu.Item key={value} onClick={() => onCurrencyChange(value)}>
             {rates[key].code} {value.split(',')[0] === conversionName && <CheckOutlined />}

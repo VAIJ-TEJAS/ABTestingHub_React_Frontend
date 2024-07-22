@@ -28,6 +28,7 @@ import axios from "axios";
 import { ITest } from "../types/test.types";
 import { confirmation } from "../components/Confirmation";
 import { Option } from "antd/es/mentions";
+import { Context } from "../context/context.provider";
 
 const getTagColor = (status: string) => {
   switch (status) {
@@ -56,6 +57,9 @@ const getStatusLabel = (status: string) => {
 };
 
 export const Dashboard = () => {
+
+  const { conversionSymbol } = Context()
+
   const [totalHypotheses, setTotalHypotheses] = useState<number>(0);
   const [inProgress, setInProgress] = useState<number>(0);
   const [concluded, setConcluded] = useState<number>(0);
@@ -421,7 +425,7 @@ export const Dashboard = () => {
             icon={<DollarCircleOutlined className="text-white text-3xl" />}
             bgColor="bg-green-600"
             title="Total Incremental Revenue"
-            prefix="₹"
+            prefix={conversionSymbol}
           />
         </div>
       </div>

@@ -42,7 +42,7 @@ export const ProportionalMetricTesting: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const { userAuthenticated, rates, conversionName, conversionNum } = Context();
+  const { userAuthenticated, rates, conversionSymbol, conversionNum } = Context();
   console.log(rates)
 
   const [isAuthVisible, setIsAuthVisible] = useState(false);
@@ -1182,7 +1182,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       name="revenue_per_conversion"
                       label={
                         <div className="flex w-full lg:w-60 justify-between ">
-                          <div>{`Revenue per Conversion (${conversionName})`}</div>
+                          <div>{`Revenue per Conversion (${conversionSymbol})`}</div>
                           <div>
                             <Tooltip
                               overlayInnerStyle={{ width: "600px" }}
@@ -1324,7 +1324,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                 </div>
                 <div>
                   <div className="text-sm font-medium">
-                    Control Revenue ({conversionName})
+                    Control Revenue
                     <Tooltip
                       className="text-primary px-2"
                       title="Revenue will only be calculated if you enter both revenue per conversion and expected uplift."
@@ -1333,6 +1333,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                     </Tooltip>
                   </div>
                   <div className="text-4xl">
+                    {conversionSymbol}
                     <CountUp
                       start={0}
                       end={numericalResults?.control_revenue*conversionNum ?? 0}
@@ -1384,7 +1385,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                 </div>
                 <div>
                   <div className="text-sm font-medium">
-                    Test Revenue ({conversionName})
+                    Test Revenue
                     <Tooltip
                       className="text-primary px-2"
                       title="Revenue will only be calculated if you enter both revenue per conversion and expected uplift."
@@ -1393,6 +1394,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                     </Tooltip>
                   </div>
                   <div className="text-4xl">
+                    {conversionSymbol}
                     <CountUp
                       start={0}
                       end={numericalResults?.test_revenue*conversionNum}
