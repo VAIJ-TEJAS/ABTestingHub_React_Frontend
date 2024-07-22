@@ -23,6 +23,7 @@ export const Auth: React.FC<AuthProps> = ({
   onSignin,
 }) => {
   const {
+    setUser,
     signInUser,
     hideAuthModal,
     authModalOpen,
@@ -138,7 +139,12 @@ export const Auth: React.FC<AuthProps> = ({
         }
       );
 
-      signInUser(response.data.token);
+      const { token, user } = response.data;
+      signInUser(token);
+
+      // Extract user information
+      const { name, picture } = user;
+      setUser({ name, picture });
 
       if (onSignin) onSignin(response);
 

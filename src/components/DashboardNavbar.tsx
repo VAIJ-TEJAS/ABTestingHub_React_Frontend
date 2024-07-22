@@ -12,7 +12,7 @@ import { SideDrawer } from "./SideDrawer";
 
 export const DashboardNavbar = () => {
 
-    const { signOutUser, onCurrencyChange, rates, conversionName } = Context()
+    const { user, signOutUser, onCurrencyChange, rates, conversionName } = Context()
 
     const location = useLocation();
     const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -49,8 +49,8 @@ export const DashboardNavbar = () => {
         <Menu>
             <Menu.Item key="2" >
                 <div className="flex items-center p-4 border-b border-gray-200">
-                    <Avatar size={40} icon={<UserOutlined />} />
-                    <span className="ml-4 font-bold text-gray-800">Username</span>
+                    <Avatar size={40} icon={<UserOutlined />} src={user?.avatar} />
+                    <span className="ml-4 font-bold text-gray-800">{user?.username || 'Username'}</span>
                 </div>
             </Menu.Item>
             <Menu.SubMenu key="sub1" title={`Choose Currency (${conversionName})`}>

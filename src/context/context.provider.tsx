@@ -15,6 +15,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [rates, setRates] = useState({});
   const [conversionNum, setConversionNum] = useState(0.0);
   const [conversionName, setConversionName] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const fetchRates = async () => {
@@ -80,7 +81,9 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
     showAuthModal,
     hideAuthModal,
     authModalOpen,
-    setAuthModalOpen
+    setAuthModalOpen,
+    user,
+    setUser
   };
 
   return (
