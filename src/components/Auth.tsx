@@ -139,6 +139,8 @@ export const Auth: React.FC<AuthProps> = ({
         }
       );
 
+      console.log(response.data);
+
       const { token, user } = response.data;
       signInUser(token);
 
