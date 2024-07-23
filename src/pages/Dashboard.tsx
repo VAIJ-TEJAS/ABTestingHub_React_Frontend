@@ -58,7 +58,7 @@ const getStatusLabel = (status: string) => {
 
 export const Dashboard = () => {
 
-  const { conversionSymbol, conversionNum } = Context()
+  const { conversionSymbol } = Context()
 
   const [totalHypotheses, setTotalHypotheses] = useState<number>(0);
   const [inProgress, setInProgress] = useState<number>(0);
@@ -388,7 +388,7 @@ export const Dashboard = () => {
           test?.days_required +
           " days"
         : "N/A",
-    revenueImpact: test?.revenue_impact ? " ₹ " + Math.round(test.revenue_impact) : "N/A",
+    revenueImpact: test?.revenue_impact ? " "+ conversionSymbol + " " + Math.round(test.revenue_impact) : "N/A",
     abTestResults:
       test?.max_uplift
         ? (test?.statistically_significant ? "Significant" : "Insignificant") +
@@ -421,7 +421,7 @@ export const Dashboard = () => {
             title="Results"
           />
           <StatisticCard
-            amount={totalIncrementalRevenue*conversionNum}
+            amount={totalIncrementalRevenue}
             icon={<DollarCircleOutlined className="text-white text-3xl" />}
             bgColor="bg-green-600"
             title="Total Incremental Revenue"
