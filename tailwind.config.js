@@ -6,9 +6,12 @@ export default {
   ],
   theme: {
     extend: {
-      colors:{
-        "primary":"#1890FF"
-      }
+      colors: {
+        "primary": "#1890FF"
+      },
+      fontFamily: {
+        'sans': ['Montserrat', 'sans-serif'],
+      },
     },
   },
   safelist: [

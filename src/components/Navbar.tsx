@@ -58,8 +58,8 @@ export const Navbar = () => {
 
   const isArticlePage = location.pathname.includes("/article/");
   const navClass = isArticlePage
-    ? "relative px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary"
-    : "sticky top-0 px-4 py-2 flex justify-between items-center bg-blue-50 border-t border-primary shadow-md z-50";
+    ? "relative px-4 py-2 flex justify-between items-center border-t border-primary"
+    : "sticky top-0 px-4 py-2 flex justify-between items-center border-t border-primary shadow-md z-50";
 
   return (
     <>
@@ -83,7 +83,7 @@ export const Navbar = () => {
                 isActive("/home/") ? "text-primary" : ""
               }`}
             >
-              Home
+              HOME
             </a>
           </li>
 
@@ -92,7 +92,7 @@ export const Navbar = () => {
             onMouseEnter={() => setDropdownOpen(true)}
           >
             <button className="hover:text-primary transition-all duration-300 cursor-pointer">
-              MSS Calculator
+              TOOLS
             </button>
             {isDropdownOpen && (
               <ul
@@ -155,7 +155,7 @@ export const Navbar = () => {
                 navigate("/ab-testing/");
               }}
             >
-              A/B Testing
+              COMPANY
             </a>
           </li>
 
@@ -168,7 +168,7 @@ export const Navbar = () => {
                 navigate("/articles/");
               }}
             >
-              Articles
+              ARTICLES
             </a>
           </li>
         </ul>
@@ -204,12 +204,12 @@ export const Navbar = () => {
           
         ) : (
           <Button
-            type="primary"
-            className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
-            onClick={showAuthModal}
-          >
-            Login
-          </Button>
+          type="primary"
+          className="hidden lg:flex lg:ml-auto px-6 text-xl transition duration-200 items-center justify-center"
+          onClick={showAuthModal}
+        >
+          LOGIN
+        </Button>        
         )}
       </nav>
       <div className="navbar-menu relative z-50 hidden">
@@ -248,7 +248,7 @@ export const Navbar = () => {
                   className="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-primary rounded"
                   href="#"
                 >
-                  Home
+                  HOME
                 </a>
               </li>
               <li className="mb-1">
