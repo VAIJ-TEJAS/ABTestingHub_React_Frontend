@@ -63,7 +63,7 @@ export const SideDrawer = () => {
                 className="p-0"
             >
                 {/* Drawer Header */}
-                { userAuthenticated ?
+                { userAuthenticated &&
   
                   (<div className="flex items-center p-4 border-b border-gray-200">
                       <Avatar size={40} icon={<UserOutlined />} />
@@ -74,10 +74,7 @@ export const SideDrawer = () => {
                           onClick={closeDrawer}
                           className="ml-auto"
                       />
-                  </div>) :
-                  (
-                    <h1 className="text-2xl text-center py-4 font-bold text-primary">A/B Testing Hub</h1>
-                  )
+                  </div>) 
                 }
   
                 {/* Drawer Links */}

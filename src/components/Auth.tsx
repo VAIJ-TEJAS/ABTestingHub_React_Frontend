@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { Modal, Button, Form, message, Checkbox, Input } from "antd";
 import { Context } from "../context/context.provider";
-import { Container } from "@mui/material";
-import Logo from "../assets/images/logo.png";
+import IconText from "../assets/svgs/IconText.svg";
+import Mask from "../assets/images/Mask.png";
+import Google from "../assets/svgs/Google.svg"
 // import GoogleIcon from "../assets/svgs/google.svg";
 import { useState } from "react";
 import axios from "axios";
@@ -22,20 +23,12 @@ export const Auth: React.FC<AuthProps> = ({
   onSignup,
   onSignin,
 }) => {
-  const {
-    setUsername,
-    signInUser,
-    hideAuthModal,
-    authModalOpen,
-  } = Context();
+  const { setUsername, signInUser, hideAuthModal, authModalOpen } = Context();
   const [isTermsModalVisible, setIsTermsModalVisible] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [
-    isSignInView, 
-    setIsSignInView
-  ] = useState(true);
+  const [isSignInView, setIsSignInView] = useState(true);
   const [formSignup] = Form.useForm();
-  const [formSignin] = Form.useForm(); 
+  const [formSignin] = Form.useForm();
 
   // const navigate = useNavigate();
 
@@ -146,8 +139,8 @@ export const Auth: React.FC<AuthProps> = ({
 
       // Extract user information
       const { username } = user;
-      localStorage.setItem('ab_testing_hub_username', username);
-      setUsername(username)
+      localStorage.setItem("ab_testing_hub_username", username);
+      setUsername(username);
 
       if (onSignin) onSignin(response);
 
@@ -163,6 +156,11 @@ export const Auth: React.FC<AuthProps> = ({
     message.error("Google Sign-In was unsuccessful. Try again later.");
   };
 
+  const googleLogin = useGoogleLogin({
+    onSuccess: handleGoogleSuccess,
+    onError: handleGoogleFailure,
+  });
+
   return (
     <>
       <Modal
@@ -173,111 +171,107 @@ export const Auth: React.FC<AuthProps> = ({
         width={720}
       >
         {isSignInView ? (
-          <div className="flex flex-col justify-center items-center">
-            <Container>
-              <div className="relative w-full flex justify-center items-center">
-                <div className="absolute w-full h-full flex justify-center items-center">
-                  <div className="text-4xl text-primary font-bold">
-                    A/B Testing Hub
-                  </div>
-                </div>
-                <img src={Logo} className="opacity-20 w-60 " />
-              </div>
-            </Container>
+          <div className="flex border-2 border-secondary rounded-xl">
+            <div className="w-72 flex-shrink-0 relative flex justify-center items-center">
+              <img src={Mask} />
+              <img src={IconText} className="absolute w-36"></img>
+            </div>
             <Form
               layout="vertical"
-              className="flex flex-col w-72"
+              className="flex flex-col w-full justify-center p-8 font-sans"
               form={formSignin}
               onFinish={handleSignIn}
             >
+              <div className="text-xl pb-4">
+                Login to AB Testing Hub
+              </div>
               <Form.Item
-                label="Email"
+                label="EMAIL"
                 name="username"
                 rules={[
                   { required: true, message: "Please input your email!" },
                 ]}
               >
-                <Input />
+                <Input placeholder="Enter your email"/>
               </Form.Item>
               <Form.Item
-                label="Password"
+                label="PASSWORD"
                 name="password"
                 rules={[
                   { required: true, message: "Please input your password!" },
                 ]}
               >
-                <Input.Password />
+                <Input.Password placeholder="Enter your password"/>
               </Form.Item>
-              <Button type="primary" htmlType="submit">
-                Login
+              <Button type="primary" htmlType="submit" className="font-sans">
+                LOGIN
               </Button>
-              <div className="w-full flex items-center gap-3 text-zinc-500 py-3">
-                <hr className="flex-1" />
+              <div className="w-full flex justify-center gap-3 py-3 font-sans">
+            
                 OR
-                <hr className="flex-1" />
               </div>
               <div className="w-full flex justify-center">
-                <GoogleLogin
-                  onSuccess={handleGoogleSuccess}
-                  onError={handleGoogleFailure}
-                  useOneTap 
-                />
+                <Button
+                  className="custom-google-button border w-full border-secondary p-4 inline-flex justify-center items-center gap-2 font-sans"
+                  onClick={() => googleLogin()}
+                >
+                  <img src={Google} className="w-4"/>Continue with Google
+                </Button>
               </div>
               <Form.Item className="text-center my-3">
-                <Button type="link" onClick={toggleView}>
-                  Don't have an account? Sign Up
+                Don't have an account?
+                <Button type="link" onClick={toggleView} className="font-sans">
+                   Signup
                 </Button>
               </Form.Item>
             </Form>
           </div>
         ) : (
           <div>
-            <div className="flex flex-col justify-between items-center">
-            <Container>
-              <div className="relative w-full flex justify-center items-center">
-                <div className="absolute w-full h-full flex justify-center items-center">
-                  <div className="text-4xl text-primary font-bold">
-                    A/B Testing Hub
-                  </div>
-                </div>
-                <img src={Logo} className="opacity-20 w-60 " />
-              </div>
-            </Container>
+            <div className="flex border-2 border-secondary rounded-xl">
+            <div className="w-72 flex-shrink-0 relative flex justify-center items-center">
+              <img src={Mask} />
+              <img src={IconText} className="absolute w-36"></img>
+            </div>
               <Form
                 layout="vertical"
-                className="flex flex-col w-72"
+                className="flex flex-col w-full justify-center p-8 font-sans"
                 form={formSignup}
                 onFinish={handleSignUp}
               >
+                 <div className="text-xl pb-4">
+                Signup to AB Testing Hub
+              </div>
                 <Form.Item
-                  label="Email"
+                  label="EMAIL"
                   name="username"
                   rules={[
                     { required: true, message: "Please input your email!" },
                   ]}
                 >
-                  <Input />
+                  <Input placeholder="Enter your email"/>
                 </Form.Item>
                 <Form.Item
-                  label="Password"
+                  label="PASSWORD"
                   name="password"
                   rules={[
                     { required: true, message: "Please input your password!" },
                   ]}
                 >
-                  <Input.Password />
+                  <Input.Password placeholder="Enter your password"/>
                 </Form.Item>
                 <Form.Item name="agreement" valuePropName="checked">
                   <Checkbox
                     checked={agreedToTerms}
                     onChange={(e) => setAgreedToTerms(e.target.checked)}
+                    className="font-sans"
                   >
                     I agree to the{" "}
                     <Button
                       type="link"
                       href="#"
                       onClick={showTermsModal}
-                      className="px-0"
+                      className="px-0 font-sans"
                     >
                       Terms and Conditions
                     </Button>
@@ -287,24 +281,25 @@ export const Auth: React.FC<AuthProps> = ({
                   type="primary"
                   disabled={!agreedToTerms}
                   htmlType="submit"
+                  className="font-sans"
                 >
-                  Signup
+                  SIGNUP
                 </Button>
-                <div className="w-full flex items-center gap-3 text-zinc-500 py-3">
-                  <hr className="flex-1" />
+                <div className="w-full flex justify-center gap-3 text-zinc-500 py-3">
                   OR
-                  <hr className="flex-1" />
                 </div>
                 <div className="w-full flex justify-center">
-                  <GoogleLogin
-                    onSuccess={handleGoogleSuccess}
-                    onError={handleGoogleFailure}
-                    useOneTap 
-                  />
-                </div>
-                <Form.Item className="text-center my-3">
-                  <Button type="link" onClick={toggleView}>
-                    Already have an account? Sign In
+                <Button
+                  className="custom-google-button border w-full border-secondary p-4 inline-flex justify-center items-center gap-2 font-sans"
+                  onClick={() => googleLogin()}
+                >
+                  <img src={Google} className="w-4"/>Continue with Google
+                </Button>
+              </div>
+                <Form.Item className="text-center my-3 font-sans">
+                Already have an account?
+                  <Button type="link" onClick={toggleView} className="font-sans">
+                     Sign In
                   </Button>
                 </Form.Item>
               </Form>

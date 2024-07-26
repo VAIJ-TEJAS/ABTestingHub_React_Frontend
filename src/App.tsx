@@ -32,7 +32,7 @@ function App() {
     const isCreateTest = location.pathname.split('/')[1] === 'create-test';
 
     return (
-      <>
+      <div className="">
         {
           userAuthenticated && isDashboard || isCreateTest ? (
             <>
@@ -71,7 +71,7 @@ function App() {
           )}
         </Routes>
         {showFooter && <Footer />}
-      </>
+      </div>
     );
   };
 

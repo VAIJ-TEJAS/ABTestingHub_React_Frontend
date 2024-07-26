@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Container, Paper } from "@mui/material";
+import { Container } from "@mui/material";
 import { Button } from "antd";
-import HeroImage from "../assets/images/hero-image.webp";
-import ContinuousMetricLogo from "../assets/images/ContinuousMetric.webp";
-import ProportionalMetricLogo from "../assets/images/ProportionalMetric.webp";
-import ABTestingLogo from "../assets/images/ABTesting.webp";
+import HeroImage from "../assets/images/hero-image.png";
+import HeroBackground from "../assets/images/hero-background.png";
+import ContinuousMetricLogo from "../assets/images/ContinuousMetric.png";
+import ProportionalMetricLogo from "../assets/images/ProportionalMetric.png";
+import ABTestingLogo from "../assets/images/ABTesting.png";
 import { ArticleStripe } from "../articles/components/ArticleStripe";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -68,127 +69,142 @@ export const Home = () => {
       <div>
         {parse(``)}
       </div>
-      <div>
-        <Container className="relative flex flex-col lg:flex-row">
-          <div className="space-y-8 py-16 ">
-            <div className="text-4xl font-medium lg:text-left text-center lg:text-7xl sm:text-5xl">Stay curious.</div>
-            <div className="text-xl mx-auto w-3/4 text-center lg:mx-0 lg:text-left sm:w-1/2 sm:text-2xl">
-              Optimize Your Decisions: Uncover data-driven insights through
-              controlled A/B testing and elevate your business strategy.
+      <div style={{background: `url(${HeroBackground})`, backgroundSize:'cover'}} className="m-4 rounded-xl">
+      <div className="inset-0 bg-black bg-opacity-50 rounded-xl">
+        <Container >
+          <div className="flex flex-col justify-between lg:flex-row py-32">
+            <div className="space-y-8 text-white flex flex-col items-center lg:items-start">
+              <div className="text-3xl font-bold lg:text-left text-center lg:text-6xl sm:text-4xl">Unlock the Power of Experimentation</div>
+              <div className="text-xl mx-auto w-3/4 text-center lg:mx-0 lg:text-left sm:w-1/2 sm:text-2xl">
+                Transform Your Digital Strategy with AB Testing Hub
+              </div>
+              <div>
+                {userAuthenticated ? (
+                  <Button
+                    size="large"
+                    type="primary"
+                    className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
+                    onClick={() => {
+                      navigate("/dashboard");
+                    }}
+                  >
+                    DASHBOARD
+                  </Button>
+                ) : (
+                  <Button
+                    size="large"
+                    type="primary"
+                    className="px-6 transition duration-200"
+                    onClick={showAuthModal}
+                  >
+                    GET STARTED
+                  </Button>
+                )}
+              </div>
             </div>
-            <div>
-              {userAuthenticated ? (
-                <Button
-                  size="large"
-                  type="primary"
-                  className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
-                  onClick={() => {
-                    navigate("/dashboard");
-                  }}
-                >
-                  Dashboard
-                </Button>
-              ) : (
-                <Button
-                  size="large"
-                  type="primary"
-                  className="hidden lg:inline-block lg:ml-auto px-6 font-bold  transition duration-200"
-                  onClick={showAuthModal}
-                >
-                  Get Started
-                </Button>
-              )}
+            <div className="hidden lg:block flex-shrink-0">
+              <img
+                style={{objectFit:"cover"}}
+                src={HeroImage}
+                className="h-80 w-[520px] rounded-xl"
+                />
             </div>
           </div>
-
-          <img
-            src={HeroImage}
-            className="absolute right-1/2 translate-x-1/2 top-0 h-full -z-50 opacity-25 lg:opacity-100 lg:right-0 lg:translate-x-0"
-          />
         </Container>
+        </div>
       </div>
       {/* Tools  */}
       <div id="tools-we-offer">
         <Container>
           <div className="gap-8 py-16">
             <div className="space-y-4">
-              <div className="text-4xl font-medium py-8">Tools We Offer</div>
-              <div className="flex flex-wrap justify-center gap-8">
-                <div className=" border-primary border rounded-xl p-4">
-                  <div className="pb-4 text-primary text-3xl font-mono">
-                    MSS Tool
-                  </div>
-                  <div className="flex flex-wrap items-stretch justify-center gap-8">
-                    <Paper
+              <div className="text-4xl font-medium py-8">TOOLS WE OFFER</div>
+              <div className="flex justify-between gap-8">
+                <div className="rounded-xl">
+                    <div
+                      style={{boxShadow: "0px 15px 20px 0px #00000040 "}}
                       onClick={() => {
                         navigate("/continuous-metric-testing/");
                       }}
-                      className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group"
+                      className="bg-white w-80 space-y-2 cursor-pointer rounded-xl border-secondary border-2" 
                     >
-                      <div>
-                        <img src={ContinuousMetricLogo} className="rounded" />
+                      <div className="p-2">
+                        <img src={ContinuousMetricLogo} className="rounded-xl w-full h-60" style={{objectFit:'cover'}}/>
                       </div>
-                      <div className="">
-                        <div className="text-xl font-medium group-hover:text-primary duration-200">
+                      <div className="p-4">
+                        <div className="text-2xl text-secondary">
                           Continuous Metric Testing
                         </div>
-                        <div className="text-zinc-500">
+                        <div className="text-[#2E383F] pt-4">
                           Measures how much of something there is, taking any
                           value on a scale (e.g., how long users watch a video
                           on average).
                         </div>
                       </div>
-                    </Paper>
+                      <div className="px-4 pb-4">
+                        <Button className="flex items-center justify-center w-full text-lg text-primary border-2 border-primary p-6">
+                          EXPLORE
+                        </Button>
+                      </div>
+                    </div>
+                </div>
 
-                    <Paper
+                <div className="rounded-xl">        
+                    <div
+                      style={{boxShadow: "0px 15px 20px 0px #00000040 "}}
                       onClick={() => {
                         navigate("/proportional-metric-testing/");
                       }}
-                      className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group"
+                      className="bg-white w-80 space-y-2 cursor-pointer rounded-xl border-secondary border-2" 
                     >
-                      <div>
-                        <img src={ProportionalMetricLogo} className="rounded" />
+                      <div className="p-2">
+                        <img src={ProportionalMetricLogo} className="rounded-xl bg-cover w-full h-60" style={{objectFit:'cover'}}/>
                       </div>
-                      <div className="">
-                        <div className="text-xl font-medium group-hover:text-primary duration-200">
+                      <div className="p-4">
+                        <div className="text-2xl text-secondary">
                           Proportional metric Testing
                         </div>
-                        <div className="text-zinc-500">
+                        <div className="text-[#2E383F] pt-4">
                           Represents a fraction of a whole, expressed as a
                           percentage or ratio (e.g., what portion of website
                           visitors make a purchase).
                         </div>
                       </div>
-                    </Paper>
-                  </div>
+                      <div className="px-4 pb-4">
+                        <Button className="flex items-center justify-center w-full text-lg text-primary border-2 border-primary p-6">
+                          EXPLORE
+                        </Button>
+                      </div>
+                    </div>
                 </div>
 
-                <div className="border-red-600 border rounded-xl p-4">
-                  <div className="pb-4 text-red-600 text-3xl font-mono">
-                    A/B Testing Tool
-                  </div>
-                  <div className="flex gap-8">
-                    <Paper
+                <div className="rounded-xl">
+                    <div
+                      style={{boxShadow: "0px 15px 20px 0px #00000040 "}}
                       onClick={() => {
                         navigate("/ab-testing/");
                       }}
-                      className="w-80 shadow p-4 space-y-2 hover:shadow-2xl cursor-pointer group"
+                      className="bg-white w-80 space-y-2 cursor-pointer rounded-xl border-secondary border-2"
                     >
-                      <div>
-                        <img src={ABTestingLogo} className="rounded" />
+                      <div className="p-2">
+                        <img src={ABTestingLogo} className="rounded-xl bg-cover w-full h-60" style={{objectFit:'cover'}}/>
                       </div>
-                      <div className="">
-                        <div className="text-xl font-medium group-hover:text-primary duration-200">
+                      <div className="p-4">
+                        <div className="text-2xl text-secondary">
                           A/B testing Tool
                         </div>
-                        <div className="text-zinc-500">
+                        <div className="text-[#2E383F] pt-4">
                           An experiment that compares two variations of
                           something by randomly splitting users into groups and
                           measuring which performs better.
                         </div>
                       </div>
-                    </Paper>
-                  </div>
+                      <div className="px-4 pb-4">
+                        <Button className="flex items-center justify-center w-full text-lg text-primary border-2 border-primary p-6">
+                          EXPLORE
+                        </Button>
+                      </div>
+                    </div>
                 </div>
               </div>
             </div>

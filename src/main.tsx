@@ -21,7 +21,17 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         borderRadius: 3,
         colorPrimary: "#1890FF",
       },
+      components: {
+        Modal: {
+          padding: 0,
+          margin: 0
+        },
+        Input: {
+          colorBgContainer: "#D9D9D9"
+        }
+      }
     }}
+    
   >
     <GoogleOAuthProvider clientId={clientId}>
       <MyContextProvider>

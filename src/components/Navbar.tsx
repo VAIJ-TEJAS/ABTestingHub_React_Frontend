@@ -64,7 +64,7 @@ export const Navbar = () => {
     : "sticky top-0 px-4 py-2 shadow-xl z-50 bg-white flex justify-center";
 
   return (
-    <>
+    <div className="font-sans">
       <nav className={navClass} onMouseLeave={() => setDropdownOpen(false)}>
         <div className="flex justify-between items-center container">
 
@@ -142,25 +142,6 @@ export const Navbar = () => {
               </ul>
             )}
           </li>
-
-          {/* <li>
-            <a
-              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/proportional-metric-testing/') ? 'text-primary' : ''}`}
-              onClick={() => { navigate('/proportional-metric-testing/'); }}
-            >
-              Proportional Metric
-            </a>
-          </li>
-
-          <li>
-            <a
-              className={`hover:text-primary transition-all duration-300 cursor-pointer ${isActive('/continuous-metric-testing/') ? 'text-primary' : ''}`}
-              onClick={() => { navigate('/continuous-metric-testing/'); }}
-            >
-              Continuous Metric
-            </a>
-          </li> */}
-
           <li>
             <a
               className={`hover:text-primary transition-all duration-300 cursor-pointer ${
@@ -323,6 +304,6 @@ export const Navbar = () => {
           </div>
         </nav>
       </div>
-    </>
+    </div>
   );
 };
