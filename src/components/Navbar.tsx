@@ -60,7 +60,7 @@ export const Navbar = () => {
 
   const isArticlePage = location.pathname.includes("/article/");
   const navClass = isArticlePage
-    ? "relative px-4 py-2 bg-white"
+    ? "relative px-4 py-2 shadow-xl bg-white flex justify-center"
     : "sticky top-0 px-4 py-2 shadow-xl z-50 bg-white flex justify-center";
 
   return (

@@ -1,13 +1,6 @@
-import { Container, Paper } from "@mui/material";
-import {
-  // FaFacebookF,
-  // FaTwitter,
-  // FaLinkedinIn,
-  // FaRedditAlien,
-  FaRegCopy,
-  FaShare,
-} from "react-icons/fa";
-import CoverImage from "../../assets/images/cover.webp";
+import { Container } from "@mui/material";
+import YelloMaskImage from "../../assets/images/YellowMaskImage.png";
+import YelloMask from "../../assets/images/YellowMask.png";
 import { ArticleCard } from "../components/ArticleCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -15,9 +8,9 @@ import "../../css/scoped-styles.css";
 import { IArticle } from "../../types/article.types";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Link, useParams } from "react-router-dom";
-import ArticlesCategoryCard from "../components/ArticlesCategoryCard";
-import { toast } from "react-toastify";
-import { toastConfig } from "../../configs/toastConfig";
+import Share from "../../assets/svgs/Share.svg";
+import Calender from "../../assets/svgs/Calender.svg";
+import dayjs from 'dayjs';
 
 export const Article = () => {
   const { article_id } = useParams();
@@ -115,45 +108,41 @@ export const Article = () => {
 
   return (
     <>
-      <div className="relative">
-        <div className="sticky top-0 z-50 bg-white border-y border-zinc-500  py-2 flex justify-center">
+      <div className="">
+        {/* <div className="sticky top-0 z-50 bg-white border-y border-zinc-500  py-2 flex justify-center">
           <ArticlesCategoryCard />
-        </div>
+        </div> */}
 
-        {/* Top container with the image */}
-        <Container
-          style={{
-            backgroundImage: `url(${CoverImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            overflow: "hidden",
-          }}
-          className="bg-black relative z-10 rounded-b-md"
-        >
-          {/* Backdrop */}
-          <div
-            className=""
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              bottom: 0,
-              left: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-            }}
-          ></div>
-          {/* Text Content */}
-          <div className="text-white text-4xl font-medium h-[300px] w-[1200px] flex items-center z-10 relative">
-            {article?.title}
-          </div>
-        </Container>
-
-        {/* Bottom container that overlaps the top one */}
-        <Container className="-mt-16 relative z-20">
-          <Paper className="p-5 pb-8 flex">
-            <div className="flex-1 space-y-8">
-              <div className="w-full flex justify-between items-center flex-wrap">
-                <div className="flex space-x-2 items-center">
+        <Container className="z-20">
+          <div className="flex flex-col gap-16">
+            <Container
+              style={{
+                backgroundImage: `url(${YelloMaskImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                overflow: "hidden",
+              }}
+              className="bg-black relative z-10 rounded-2xl mt-16 p-4"
+            >
+              {/* Backdrop */}
+              <img
+                className="-z-10 h-full w-full"
+                src={YelloMask}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  left: 0,
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                }}
+              />
+              {/* Text Content */}
+              <div className="text-white text-4xl font-medium relative text-center p-8">
+                {article?.title}
+              </div>
+              <div className="flex justify-between items-center text-white">
+                <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-8">
                   <div className="flex gap-2">
                     <img
                       src={article?.author.picture ?? ""}
@@ -161,101 +150,68 @@ export const Article = () => {
                     />
                     <div>
                       <div className="font-semibold">
-                        {article?.author?.name ?? "author"}
+                        {article?.author?.name ?? "Author"}
                       </div>
-                      <div className="text-sm text-zinc-500">
-                        {article?.author.role ?? "role"}
+                      <div className="text-sm ">
+                        {article?.author.role ?? ""}
                       </div>
                     </div>
                   </div>
+                  <div className="flex gap-2 items-end">
+                    <img src={Calender} className="w-8" />
+                    <div>
+                        {dayjs(article?.published_date).format('MMM D, YYYY')}
+                    </div>
+                  </div>
                 </div>
-
-                <div className="flex items-center gap-4">
-                  {/* <a
-                    href="#"
-                    aria-label="Share on Facebook"
-                    className="text-blue-600 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300 transition-all"
-                  >
-                    <FaFacebookF size={24} />
-                  </a>
-                  <a
-                    href="#"
-                    aria-label="Share on Twitter"
-                    className="text-blue-400 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300 transition-all"
-                  >
-                    <FaTwitter size={24} />
-                  </a>
-                  <a
-                    href="#"
-                    aria-label="Share on LinkedIn"
-                    className="text-blue-700 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300 transition-all"
-                  >
-                    <FaLinkedinIn size={24} />
-                  </a>
-                  <a
-                    href="#"
-                    aria-label="Share on Reddit"
-                    className="text-orange-600 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300 transition-all"
-                  >
-                    <FaRedditAlien size={24} />
-                  </a> */}
-                  <button
-                    onClick={async () => {
-                      await navigator.clipboard.writeText(path);
-                      toast.success("Link copied", toastConfig);
-                    }}
-                    className="text-gray-600 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300"
-                  >
-                    <FaRegCopy size={24} />
-                  </button>
-                  <button
-                    onClick={() => {
+                <div className="cursor-pointer rounded-full" onClick={() => {
                       navigator.share({
                         url: path,
                         title: "A/B Testing article",
                       });
-                    }}
-                    className="text-gray-600 w-10 h-10 flex items-center justify-center rounded hover:bg-blue-100 hover:border hover:border-blue-300"
-                  >
-                    <FaShare size={24} />
-                  </button>
+                    }}>
+                  <img src={Share} className="w-8" />
                 </div>
               </div>
-              <div
-                dangerouslySetInnerHTML={createMarkup(content)}
-                className="no-tailwind"
-              />
-            </div>
-            <div className="w-64 space-y-3 pl-3 relative hidden md:block">
-              <div className="sticky top-16">
-                <h1 className="font-mono text-xs text-zinc-500">
-                  TABLE OF CONTENTS
-                </h1>
-                <div className="text-lg space-y-3 py-3">
+            </Container>
+
+            <div
+              className="border-2 border-secondary rounded-2xl p-8"
+              style={{ boxShadow: "0px 1px 35px 10px #00000040" }}
+            >
+              <div className="w-full space-y-3">
+                <div className="text-center text-2xl">TABLE OF CONTENTS</div>
+                <Container className="text-lg space-y-3 ">
                   {toc.map((heading, index) => {
                     return (
                       <div key={index}>
                         <div
                           className={`space-y-3 ${
-                            activeSection === heading.id ? "text-primary" : ""
+                            activeSection === heading.id
+                              ? "text-primary"
+                              : "text-secondary"
                           }`}
                           key={heading.id}
                         >
                           <div
-                            className="font-bold hover:text-primary hover:cursor-pointer"
+                            className="hover:text-primary hover:cursor-pointer"
                             onClick={() => scrollToSection(heading.id)}
                           >
                             {heading.text}
                           </div>
-                          <div className="border-b" />
                         </div>
                       </div>
                     );
                   })}
-                </div>
+                </Container>
               </div>
             </div>
-          </Paper>
+
+            <div
+              dangerouslySetInnerHTML={createMarkup(content)}
+              className="no-tailwind pb-8"
+            />
+          </div>
         </Container>
 
         {/* Related Articles */}
@@ -271,7 +227,7 @@ export const Article = () => {
                     <div className="text-primary group-hover:animate-ping">
                       <LeftOutlined />
                     </div>
-                    <div>Previous</div>
+                    <div className="text-primary">PREVIOUS</div>
                   </div>
                   <div className="text-2xl font-medium group-hover:text-primary duration-200">
                     {article.previous_article.title}
@@ -289,7 +245,7 @@ export const Article = () => {
                   className="flex flex-1 flex-col items-end space-y-1 group cursor-pointer"
                 >
                   <div className="text-xl flex items-start gap-1">
-                    <div>Next</div>
+                    <div className="text-primary">NEXT</div>
                     <div className="text-primary group-hover:animate-ping">
                       <RightOutlined />
                     </div>
