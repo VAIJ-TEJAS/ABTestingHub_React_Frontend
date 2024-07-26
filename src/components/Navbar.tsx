@@ -78,7 +78,7 @@ export const Navbar = () => {
         <SideDrawer />
 
         <ul className="hidden lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
-          <li className="hover:bg-blue-100 cursor-pointer p-2"  onClick={() => {
+          <li className="cursor-pointer p-2"  onClick={() => {
                 navigate("/home/");
               }}>
             <a
@@ -125,6 +125,18 @@ export const Navbar = () => {
                     onClick={() => navigate("/continuous-metric-testing/")}
                   >
                     Continuous Metric
+                  </a>
+                </li>
+                <li className="px-4 py-2 pb-4">
+                  <a
+                    className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                      isActive("/continuous-metric-testing/")
+                        ? "text-primary"
+                        : ""
+                    }`}
+                    onClick={() => navigate("/continuous-metric-testing/")}
+                  >
+                    A/B Testing
                   </a>
                 </li>
               </ul>
