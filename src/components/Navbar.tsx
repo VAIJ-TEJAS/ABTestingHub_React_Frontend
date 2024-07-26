@@ -145,10 +145,10 @@ export const Navbar = () => {
           <li>
             <a
               className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                isActive("/ab-testing/") ? "text-primary" : ""
+                isActive("/about-us/") ? "text-primary" : ""
               }`}
               onClick={() => {
-                navigate("/ab-testing/");
+                navigate("/about-us/");
               }}
             >
               COMPANY
