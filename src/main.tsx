@@ -28,7 +28,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         },
         Input: {
           colorBgContainer: "#D9D9D9"
-        }
+        },
+        InputNumber: {
+          colorBgContainer: "#D9D9D9"
+        },
       }
     }}
     

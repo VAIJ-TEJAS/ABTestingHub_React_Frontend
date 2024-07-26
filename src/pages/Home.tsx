@@ -55,6 +55,11 @@ export const Home = () => {
   }, []);
 
   useEffect(() => {
+    if (location.state?.showSignup) {
+      showAuthModal();
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+
     if (location.hash) {
       const id = location.hash.replace("#", "");
       const element = document.getElementById(id);
