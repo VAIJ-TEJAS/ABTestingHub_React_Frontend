@@ -61,7 +61,7 @@ export const Navbar = () => {
   const isArticlePage = location.pathname.includes("/article/");
   const navClass = isArticlePage
     ? "relative px-4 py-2 bg-white"
-    : "sticky top-0 px-4 py-2 shadow-2xl z-50 bg-white flex justify-center";
+    : "sticky top-0 px-4 py-2 shadow-xl z-50 bg-white flex justify-center";
 
   return (
     <>
@@ -99,7 +99,7 @@ export const Navbar = () => {
             </button>
             {isDropdownOpen && (
               <ul
-                className="absolute bg-white shadow-md rounded z-50 mt-5 w-52"
+                className="absolute bg-white shadow rounded z-50 mt-5 w-52 border-2 border-primary"
                 onMouseEnter={() => setDropdownOpen(true)}
                 onMouseLeave={() => setDropdownOpen(false)}
               >
@@ -115,7 +115,7 @@ export const Navbar = () => {
                     Proportional Metric
                   </a>
                 </li>
-                <li className="px-4 py-2 pb-4">
+                <li className="px-4 py-2">
                   <a
                     className={`hover:text-primary transition-all duration-300 cursor-pointer ${
                       isActive("/continuous-metric-testing/")
@@ -127,7 +127,7 @@ export const Navbar = () => {
                     Continuous Metric
                   </a>
                 </li>
-                <li className="px-4 py-2 pb-4">
+                <li className="px-4 py-2">
                   <a
                     className={`hover:text-primary transition-all duration-300 cursor-pointer ${
                       isActive("/continuous-metric-testing/")
