@@ -77,7 +77,7 @@ export const Navbar = () => {
 
         <SideDrawer />
 
-        <ul className="hidden lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
+        <ul className="hidden absolute left-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
           <li className="cursor-pointer p-2"  onClick={() => {
                 navigate("/home/");
               }}>
@@ -168,6 +168,7 @@ export const Navbar = () => {
             </a>
           </li>
         </ul>
+
         {userAuthenticated ? (
           <div className="hidden lg:block">
             <div className="flex space-x-2 ">

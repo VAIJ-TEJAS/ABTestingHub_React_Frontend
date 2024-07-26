@@ -6,6 +6,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ArticlesCategoryCard from "../components/ArticlesCategoryCard";
+import ArticleHome from "../../assets/images/ArticleHome.png";
+import DownArrow from "../../assets/svgs/DownArrow.svg"
 
 interface ArticalCardProps {
   id?: number;
@@ -59,6 +61,25 @@ export const ArticlesHome = () => {
 
   return (
     <>
+      <div
+        style={{ background: `url(${ArticleHome})` }}
+        className="flex justify-center"
+      >
+        <Container className="pt-16 pb-4">
+          <div className="flex flex-col gap-8 text-white text-center">
+            <div className="text-3xl lg:text-5xl">ARTICLES</div>
+            <div>
+              <div className="text-lg lg:text-2xl">
+                Dive into expertly crafted articles and stay ahead in the world
+                of AB testing. From foundational guides to advanced strategies,
+                our insights are designed to help you optimize and succeed.
+              </div>
+              <div className="py-4">Explore, Learn, Apply</div>
+            </div>
+            <div className="w-full justify-center inline-flex gap-2 items-center">See Our Latest Articles <img src={DownArrow} className="w-3 animate-bounce"/></div>
+          </div>
+        </Container>
+      </div>
       <Container>
         <div className="flex justify-between flex-wrap items-center my-8">
           <div className="text-6xl font-medium mb-4">Articles</div>

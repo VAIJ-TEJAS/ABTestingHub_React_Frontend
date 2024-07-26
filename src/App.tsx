@@ -17,6 +17,7 @@ import { TermsAndConditions } from "./pages/TermsAndConditions";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { AboutUs } from "./pages/AboutUs";
 import { CommunityAnalytics } from "./pages/CommunityAnalytics";
+import { Feedback } from "./pages/Feedback";
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
           <Route path="/" element={<Navigate to={"home"} />} />
           <Route path="/home" element={<Home />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/feedback" element={<Feedback />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/community-analytics" element={<CommunityAnalytics />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />

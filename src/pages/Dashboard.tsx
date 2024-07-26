@@ -30,6 +30,11 @@ import { confirmation } from "../components/Confirmation";
 import { Option } from "antd/es/mentions";
 import { Context } from "../context/context.provider";
 
+import TotalHypothesis from "../assets/svgs/TotalHypothesis.svg"
+import ResultSummary from "../assets/svgs/ResultSummary.svg"
+import InProgress from "../assets/svgs/InProgress.svg"
+import OverallRevenue from "../assets/svgs/OverallRevenue.svg"
+
 const getTagColor = (status: string) => {
   switch (status) {
     case "APPR":
@@ -404,27 +409,27 @@ export const Dashboard = () => {
         <div className="flex gap-4 p-4 justify-center flex-wrap">
           <StatisticCard
             amount={totalHypotheses}
-            icon={<SearchOutlined className="text-white text-3xl" />}
+            icon={TotalHypothesis}
             bgColor="bg-primary"
-            title="Total Hypothesis"
+            title="TOTAL HYPOTHESIS:"
           />
           <StatisticCard
             amount={inProgress}
-            icon={<RocketOutlined className="text-white text-3xl" />}
+            icon={InProgress}
             bgColor="bg-red-600"
-            title="In Progress"
+            title="IN PROGRESS:"
           />
           <StatisticCard
             amount={concluded}
-            icon={<CheckCircleOutlined className="text-white text-3xl" />}
+            icon={ResultSummary}
             bgColor="bg-yellow-500"
-            title="Results"
+            title="RESULT SUMMARY:"
           />
           <StatisticCard
             amount={totalIncrementalRevenue}
-            icon={<DollarCircleOutlined className="text-white text-3xl" />}
+            icon={OverallRevenue}
             bgColor="bg-green-600"
-            title="Total Incremental Revenue"
+            title="OVERALL REVENUE:"
             prefix={conversionSymbol}
           />
         </div>
