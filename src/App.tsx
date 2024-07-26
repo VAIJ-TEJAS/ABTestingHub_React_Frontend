@@ -15,6 +15,8 @@ import { Auth } from "./components/Auth";
 import { DashboardNavbar } from "./components/DashboardNavbar";
 import { TermsAndConditions } from "./pages/TermsAndConditions";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
+import { AboutUs } from "./pages/AboutUs";
+import { CommunityAnalytics } from "./pages/CommunityAnalytics";
 
 function App() {
 
@@ -46,7 +48,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to={"home"} />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/about-us" element={<AboutUs />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/community-analytics" element={<CommunityAnalytics />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/articles" element={<ArticlesHome />} />
           <Route path="/articles/:category_name" element={<Categories />} />

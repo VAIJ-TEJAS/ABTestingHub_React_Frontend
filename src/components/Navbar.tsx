@@ -130,11 +130,11 @@ export const Navbar = () => {
                 <li className="px-4 py-2">
                   <a
                     className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                      isActive("/continuous-metric-testing/")
+                      isActive("/ab-testing/")
                         ? "text-primary"
                         : ""
                     }`}
-                    onClick={() => navigate("/continuous-metric-testing/")}
+                    onClick={() => navigate("/ab-testing/")}
                   >
                     A/B Testing
                   </a>
