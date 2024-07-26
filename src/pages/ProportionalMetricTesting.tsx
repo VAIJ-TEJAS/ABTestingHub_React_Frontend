@@ -28,6 +28,7 @@ import { generateProjectName } from "../utils/hypothesis_title_generator";
 import { confirmation } from "../components/Confirmation";
 import { Context } from "../context/context.provider";
 import QuestionReview from "../components/QuestionReview";
+import Save from "../assets/svgs/Save.svg";
 
 const { Option } = Select;
 
@@ -42,8 +43,9 @@ export const ProportionalMetricTesting: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const { userAuthenticated, rates, conversionSymbol, conversionNum } = Context();
-  console.log(rates)
+  const { userAuthenticated, rates, conversionSymbol, conversionNum } =
+    Context();
+  console.log(rates);
 
   const [isAuthVisible, setIsAuthVisible] = useState(false);
   const [userTests, setUserTests] = useState<ITest[]>([]);
@@ -67,7 +69,6 @@ export const ProportionalMetricTesting: React.FC = () => {
   const [form] = Form.useForm();
   const [equalAllocation, setEqualAllocation] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
 
   const openAuthModal = () => {
     setIsAuthVisible(true);
@@ -97,8 +98,7 @@ export const ProportionalMetricTesting: React.FC = () => {
     // Initialize allocations based on the arms count
     const armsCount = form.getFieldValue("arms");
     setAllocations(createAllocations(armsCount, equalAllocation));
-    console.log(allocations)
-
+    console.log(allocations);
   }, [form]);
 
   useEffect(() => {
@@ -126,14 +126,14 @@ export const ProportionalMetricTesting: React.FC = () => {
   }, [testData, form]);
 
   useEffect(() => {
-    console.log(allocations)
+    console.log(allocations);
     const verifyTotalIs100 = (allocations: any) => {
       const total = allocations.reduce((sum: any, allocation: any) => {
         return sum + parseFloat(allocation.value);
       }, 0);
 
       if (total !== 100 && allocations.length) {
-        setError('The sum of the values must be 100!');
+        setError("The sum of the values must be 100!");
       } else {
         setError(null);
       }
@@ -156,7 +156,7 @@ export const ProportionalMetricTesting: React.FC = () => {
 
       setTestData(response.data);
       setEqualAllocation(response.data.equal_allocation);
-      if(response.data.allocations.toString() != "") {
+      if (response.data.allocations.toString() != "") {
         setAllocations(response.data.allocations);
       }
     } catch (error) {
@@ -241,11 +241,10 @@ export const ProportionalMetricTesting: React.FC = () => {
   };
 
   const handleEqualAllocationChange = (e: any) => {
-
     const equalAlloc = e.target.checked;
 
     setEqualAllocation(equalAlloc);
-    console.log(equalAllocation)
+    console.log(equalAllocation);
 
     form.setFieldsValue({ equal_allocation: equalAlloc });
     if (equalAlloc) {
@@ -339,13 +338,16 @@ export const ProportionalMetricTesting: React.FC = () => {
 
   const fetchUserTests = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/tests/`, {
-        headers: {
-          Authorization: `Token ${localStorage.getItem(
-            "abtestinghub-access-token"
-          )}`,
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/tests/`,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem(
+              "abtestinghub-access-token"
+            )}`,
+          },
+        }
+      );
       setUserTests(response.data);
       console.log(response.data);
       setIsTestsModalVisible(true);
@@ -485,7 +487,7 @@ export const ProportionalMetricTesting: React.FC = () => {
       </Modal>
       {testData && (
         <div className="container">
-          <Paper className="p-4 flex justify-between items-center relative">
+          <Paper className="p-4 flex justify-between items-center relative bg-white">
             <div className="font-medium">{testData?.name}</div>
             <Tooltip
               title={
@@ -542,9 +544,15 @@ export const ProportionalMetricTesting: React.FC = () => {
         </div>
       )}
 
-      <div className="container flex flex-col lg:flex-row gap-4">
-        <div className="flex flex-col gap-4">
-          <Paper className="p-4">
+      <div className="container flex flex-col lg:flex-row gap-4 lg:justify-center">
+        <>
+          <div
+            className="p-8 border-2 rounded-lg border-secondary bg-white"
+            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}
+          >
+            <div className="text-xl w-full lg:w-96 text-center pb-4">
+              PROPORTIONAL METRIC TESTING INPUTS
+            </div>
             <Form
               form={form}
               layout="vertical"
@@ -567,11 +575,11 @@ export const ProportionalMetricTesting: React.FC = () => {
               }}
             >
               <div className="flex gap-4">
-                <div className="w-full lg:w-60">
+                <div className="w-full lg:w-96">
                   <Form.Item
                     name="confidence_level"
                     label={
-                      <div className="flex w-full lg:w-60 justify-between ">
+                      <div className="flex w-full lg:w-96 justify-between ">
                         <div>{"Confidence Level | (1-\u03b1) %"}</div>
                         <div>
                           <Tooltip
@@ -602,7 +610,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                               </span>
                             }
                           >
-                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0" />
                           </Tooltip>
                         </div>
                       </div>
@@ -612,9 +620,64 @@ export const ProportionalMetricTesting: React.FC = () => {
                   </Form.Item>
 
                   <Form.Item
+                    name="power"
+                    label={
+                      <div className="flex w-full lg:w-96 justify-between ">
+                        <div>{"Statistical Power (1-\u03B2) %"}</div>
+                        <div>
+                          <Tooltip
+                            overlayInnerStyle={{ width: "600px" }}
+                            className="text-primary"
+                            title={
+                              <span>
+                                <strong>The Power of a Statistical Test</strong>
+                                <br />
+                                <br />
+                                Power is a critical concept in statistical
+                                testing, representing the probability of
+                                correctly rejecting a false null hypothesis. It
+                                is denoted as (1-β), where (β) is the
+                                probability of committing a Type II error.
+                                <br />
+                                <br />
+                                In practical terms, a statistical test with
+                                higher power is more likely to detect a true
+                                effect when it exists. Power depends on factors
+                                such as the chosen significance level (\u03B1),
+                                the effect size, and the sample size.
+                                <br />
+                                <br />
+                                Researchers aim for high power to ensure that
+                                their tests can reliably detect meaningful
+                                effects. A common goal is to achieve a power of
+                                at least 80% or 0.80, indicating an 80% chance
+                                of correctly rejecting a false null hypothesis.
+                                <br />
+                                <br />
+                                Understanding and maximizing power are crucial
+                                in designing experiments to ensure that they
+                                have sufficient sensitivity to detect the
+                                effects of interest.
+                              </span>
+                            }
+                          >
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0" />
+                          </Tooltip>
+                        </div>
+                      </div>
+                    }
+                  >
+                    <InputNumber
+                      min={80}
+                      max={99.99}
+                      style={{ width: "100%" }}
+                    />
+                  </Form.Item>
+
+                  <Form.Item
                     name="baseline_conversion_rate"
                     label={
-                      <div className="flex w-full lg:w-60 justify-between ">
+                      <div className="flex w-full lg:w-96 justify-between ">
                         <div>{"Baseline Conversion Rate (%)"}</div>
                         <div>
                           <Tooltip
@@ -670,7 +733,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                               </span>
                             }
                           >
-                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0" />
                           </Tooltip>
                         </div>
                       </div>
@@ -680,9 +743,64 @@ export const ProportionalMetricTesting: React.FC = () => {
                   </Form.Item>
 
                   <Form.Item
+                    name="mde"
+                    label={
+                      <div className="flex w-full lg:w-96 justify-between ">
+                        <div>{"Minimum Detectable Effect (%)"}</div>
+                        <div>
+                          <Tooltip
+                            overlayInnerStyle={{ width: "600px" }}
+                            className="text-primary"
+                            title={
+                              <span>
+                                <strong>Minimum Detectable Effect (MDE)</strong>
+                                <br />
+                                <br />
+                                The Minimum Detectable Effect (MDE) is a crucial
+                                concept in experimental design and statistical
+                                testing. It refers to the smallest effect size
+                                that a study is designed to detect with a
+                                specified level of power.
+                                <br />
+                                <br />
+                                In A/B testing and other experimental studies,
+                                researchers define the MDE based on the smallest
+                                meaningful difference they want to be able to
+                                detect. It represents the threshold below which
+                                the study may not have the statistical power to
+                                identify a significant effect.
+                                <br />
+                                <br />
+                                Researchers need to carefully consider and
+                                determine an appropriate MDE during the planning
+                                phase of an experiment. Choosing a reasonable
+                                and practical MDE ensures that the study is
+                                adequately powered to detect effects that are of
+                                practical significance.
+                                <br />
+                                <br />
+                                For example, if a researcher wants to detect a
+                                minimum change in conversion rate on a website,
+                                the MDE would be the smallest change in
+                                conversion rate that the study is designed to
+                                detect with a specified level of confidence and
+                                power.
+                              </span>
+                            }
+                          >
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0" />
+                          </Tooltip>
+                        </div>
+                      </div>
+                    }
+                  >
+                    <InputNumber min={0} max={20} style={{ width: "100%" }} />
+                  </Form.Item>
+
+                  <Form.Item
                     name="daily_interactions"
                     label={
-                      <div className="flex w-full lg:w-60 justify-between ">
+                      <div className="flex w-full lg:w-96 justify-between ">
                         <div>{"Daily Interactions"}</div>
                         <div>
                           <Tooltip
@@ -750,7 +868,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                               </span>
                             }
                           >
-                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0" />
                           </Tooltip>
                         </div>
                       </div>
@@ -759,284 +877,10 @@ export const ProportionalMetricTesting: React.FC = () => {
                     <InputNumber min={1} style={{ width: "100%" }} />
                   </Form.Item>
 
-                  <Form.Item name="absolute" valuePropName="checked">
-                    <Checkbox>
-                      Absolute
-                      <Tooltip
-                        overlayInnerStyle={{ width: "600px" }}
-                        className="text-primary px-2"
-                        title={
-                          <span className="no-tailwind">
-                            <strong>
-                              Absolute vs. Relative Minimum Detectable Effect
-                              (MDE)
-                            </strong>
-                            <br />
-                            <br />
-                            <em>Definition:</em>
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Absolute MDE</strong>: Represents the
-                                minimum change or difference in an absolute
-                                metric, such as a fixed amount of revenue,
-                                conversion rate, or engagement.
-                              </li>
-                              <li>
-                                <strong>Relative MDE</strong>: Represents the
-                                minimum change or difference in a metric
-                                relative to its baseline value, often expressed
-                                as a percentage.
-                              </li>
-                            </ul>
-                            <em>Example:</em> Suppose you're conducting an A/B
-                            test for an e-commerce website's conversion rate.
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Absolute MDE</strong>: Aiming to detect
-                                an absolute improvement of 2% in the conversion
-                                rate, regardless of the initial conversion rate
-                                value. For instance, from 10% to 12%.
-                              </li>
-                              <li>
-                                <strong>Relative MDE</strong>: Aiming to detect
-                                a relative improvement of 20% in the conversion
-                                rate. In this case, the improvement is defined
-                                relative to the baseline value. For instance,
-                                from 10% to 12% (a 20% increase).
-                              </li>
-                            </ul>
-                            <strong>Considerations:</strong>
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Use Case</strong>: The choice between
-                                absolute and relative MDE depends on the context
-                                and the metric's nature. Absolute MDE is often
-                                used when the focus is on a specific fixed
-                                improvement, while relative MDE provides
-                                flexibility for varying baseline values.
-                              </li>
-                              <li>
-                                <strong>Interpretability</strong>: Absolute MDE
-                                is straightforward to interpret, as it directly
-                                represents the desired change. Relative MDE is
-                                useful when the impact is more meaningful
-                                relative to the current state.
-                              </li>
-                            </ul>
-                            Understanding whether to use absolute or relative
-                            MDE is crucial in setting realistic goals and
-                            interpreting the significance of observed effects in
-                            an experiment.
-                          </span>
-                        }
-                      >
-                        <QuestionCircleOutlined/>
-                      </Tooltip>
-                    </Checkbox>
-                  </Form.Item>
-
-                  <Form.Item name="two_tailed_test" valuePropName="checked">
-                    <Checkbox>
-                      Two-tail Test
-                      <Tooltip
-                        overlayInnerStyle={{ width: "600px" }}
-                        className="text-primary px-2"
-                        title={
-                          <span className="no-tailwind">
-                            <strong>Tail of a Test</strong>
-                            <br />
-                            <br />
-                            <em>Definition:</em> The "tail" of a statistical
-                            test refers to the region(s) in the probability
-                            distribution under the null hypothesis where extreme
-                            values are considered evidence against the null
-                            hypothesis. Statistical tests are classified as
-                            one-tailed or two-tailed based on the number of
-                            tails considered.
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>One-Tailed Test</strong>: Focuses on
-                                extreme values in one direction (either the
-                                upper or lower tail) of the distribution. It is
-                                used when the hypothesis specifies a directional
-                                change.
-                              </li>
-                              <li>
-                                <strong>Two-Tailed Test</strong>: Considers
-                                extreme values in both directions of the
-                                distribution. It is used when the hypothesis
-                                does not specify a directional change, and
-                                interest lies in deviations from the null
-                                hypothesis in either direction.
-                              </li>
-                            </ul>
-                            <em>Example:</em> Suppose you're conducting a
-                            hypothesis test to determine if a new drug has a
-                            different effect than a placebo.
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>One-Tailed Test</strong>: If the
-                                hypothesis predicts that the new drug increases
-                                the observed effect, a one-tailed test focuses
-                                on extreme values in the upper tail of the
-                                distribution.
-                              </li>
-                              <li>
-                                <strong>Two-Tailed Test</strong>: If the
-                                hypothesis is agnostic about the direction of
-                                the effect (increase or decrease), a two-tailed
-                                test considers extreme values in both the upper
-                                and lower tails of the distribution.
-                              </li>
-                            </ul>
-                            <strong>Considerations:</strong>
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Directional Hypotheses</strong>: Use a
-                                one-tailed test when the research hypothesis
-                                specifies a clear direction of the effect.
-                              </li>
-                              <li>
-                                <strong>Non-Directional Hypotheses</strong>: Use
-                                a two-tailed test when the research hypothesis
-                                is non-directional, and you want to detect
-                                deviations from the null hypothesis in either
-                                direction.
-                              </li>
-                            </ul>
-                            Understanding the tail of a test is crucial for
-                            selecting the appropriate statistical test and
-                            interpreting the results in the context of the
-                            research question.
-                          </span>
-                        }
-                      >
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </Checkbox>
-                  </Form.Item>
-                </div>
-                <div className="w-full lg:w-60">
-                  <Form.Item
-                    name="power"
-                    label={
-                      <div className="flex w-full lg:w-60 justify-between ">
-                        <div>{"Statistical Power (1-\u03B2) %"}</div>
-                        <div>
-                          <Tooltip
-                            overlayInnerStyle={{ width: "600px" }}
-                            className="text-primary"
-                            title={
-                              <span>
-                                <strong>The Power of a Statistical Test</strong>
-                                <br />
-                                <br />
-                                Power is a critical concept in statistical
-                                testing, representing the probability of
-                                correctly rejecting a false null hypothesis. It
-                                is denoted as (1-β), where (β) is the
-                                probability of committing a Type II error.
-                                <br />
-                                <br />
-                                In practical terms, a statistical test with
-                                higher power is more likely to detect a true
-                                effect when it exists. Power depends on factors
-                                such as the chosen significance level (\u03B1),
-                                the effect size, and the sample size.
-                                <br />
-                                <br />
-                                Researchers aim for high power to ensure that
-                                their tests can reliably detect meaningful
-                                effects. A common goal is to achieve a power of
-                                at least 80% or 0.80, indicating an 80% chance
-                                of correctly rejecting a false null hypothesis.
-                                <br />
-                                <br />
-                                Understanding and maximizing power are crucial
-                                in designing experiments to ensure that they
-                                have sufficient sensitivity to detect the
-                                effects of interest.
-                              </span>
-                            }
-                          >
-                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
-                          </Tooltip>
-                        </div>
-                      </div>
-                    }
-                  >
-                    <InputNumber
-                      min={80}
-                      max={99.99}
-                      style={{ width: "100%" }}
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    name="mde"
-                    label={
-                      <div className="flex w-full lg:w-60 justify-between ">
-                        <div>{"Minimum Detectable Effect (%)"}</div>
-                        <div>
-                          <Tooltip
-                            overlayInnerStyle={{ width: "600px" }}
-                            className="text-primary"
-                            title={
-                              <span>
-                                <strong>Minimum Detectable Effect (MDE)</strong>
-                                <br />
-                                <br />
-                                The Minimum Detectable Effect (MDE) is a crucial
-                                concept in experimental design and statistical
-                                testing. It refers to the smallest effect size
-                                that a study is designed to detect with a
-                                specified level of power.
-                                <br />
-                                <br />
-                                In A/B testing and other experimental studies,
-                                researchers define the MDE based on the smallest
-                                meaningful difference they want to be able to
-                                detect. It represents the threshold below which
-                                the study may not have the statistical power to
-                                identify a significant effect.
-                                <br />
-                                <br />
-                                Researchers need to carefully consider and
-                                determine an appropriate MDE during the planning
-                                phase of an experiment. Choosing a reasonable
-                                and practical MDE ensures that the study is
-                                adequately powered to detect effects that are of
-                                practical significance.
-                                <br />
-                                <br />
-                                For example, if a researcher wants to detect a
-                                minimum change in conversion rate on a website,
-                                the MDE would be the smallest change in
-                                conversion rate that the study is designed to
-                                detect with a specified level of confidence and
-                                power.
-                              </span>
-                            }
-                          >
-                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
-                          </Tooltip>
-                        </div>
-                      </div>
-                    }
-                  >
-                    <InputNumber min={0} max={20} style={{ width: "100%" }} />
-                  </Form.Item>
-
                   <Form.Item
                     name="arms"
                     label={
-                      <div className="flex w-full lg:w-60 justify-between ">
+                      <div className="flex w-full lg:w-96 justify-between ">
                         <div>{"Arms"}</div>
                         <div>
                           <Tooltip
@@ -1104,7 +948,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                               </span>
                             }
                           >
-                            <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
+                            <QuestionCircleOutlined className="mx-2 lg:mx-0" />
                           </Tooltip>
                         </div>
                       </div>
@@ -1119,6 +963,173 @@ export const ProportionalMetricTesting: React.FC = () => {
                       }}
                     />
                   </Form.Item>
+
+                  <div className="flex">
+                    <Form.Item name="absolute" valuePropName="checked">
+                      <Checkbox>
+                        Absolute
+                        <Tooltip
+                          overlayInnerStyle={{ width: "600px" }}
+                          className="text-primary px-2"
+                          title={
+                            <span className="no-tailwind">
+                              <strong>
+                                Absolute vs. Relative Minimum Detectable Effect
+                                (MDE)
+                              </strong>
+                              <br />
+                              <br />
+                              <em>Definition:</em>
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Absolute MDE</strong>: Represents the
+                                  minimum change or difference in an absolute
+                                  metric, such as a fixed amount of revenue,
+                                  conversion rate, or engagement.
+                                </li>
+                                <li>
+                                  <strong>Relative MDE</strong>: Represents the
+                                  minimum change or difference in a metric
+                                  relative to its baseline value, often
+                                  expressed as a percentage.
+                                </li>
+                              </ul>
+                              <em>Example:</em> Suppose you're conducting an A/B
+                              test for an e-commerce website's conversion rate.
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Absolute MDE</strong>: Aiming to
+                                  detect an absolute improvement of 2% in the
+                                  conversion rate, regardless of the initial
+                                  conversion rate value. For instance, from 10%
+                                  to 12%.
+                                </li>
+                                <li>
+                                  <strong>Relative MDE</strong>: Aiming to
+                                  detect a relative improvement of 20% in the
+                                  conversion rate. In this case, the improvement
+                                  is defined relative to the baseline value. For
+                                  instance, from 10% to 12% (a 20% increase).
+                                </li>
+                              </ul>
+                              <strong>Considerations:</strong>
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Use Case</strong>: The choice between
+                                  absolute and relative MDE depends on the
+                                  context and the metric's nature. Absolute MDE
+                                  is often used when the focus is on a specific
+                                  fixed improvement, while relative MDE provides
+                                  flexibility for varying baseline values.
+                                </li>
+                                <li>
+                                  <strong>Interpretability</strong>: Absolute
+                                  MDE is straightforward to interpret, as it
+                                  directly represents the desired change.
+                                  Relative MDE is useful when the impact is more
+                                  meaningful relative to the current state.
+                                </li>
+                              </ul>
+                              Understanding whether to use absolute or relative
+                              MDE is crucial in setting realistic goals and
+                              interpreting the significance of observed effects
+                              in an experiment.
+                            </span>
+                          }
+                        >
+                          <QuestionCircleOutlined />
+                        </Tooltip>
+                      </Checkbox>
+                    </Form.Item>
+
+                    <Form.Item name="two_tailed_test" valuePropName="checked">
+                      <Checkbox>
+                        Two-tail Test
+                        <Tooltip
+                          overlayInnerStyle={{ width: "600px" }}
+                          className="text-primary px-2"
+                          title={
+                            <span className="no-tailwind">
+                              <strong>Tail of a Test</strong>
+                              <br />
+                              <br />
+                              <em>Definition:</em> The "tail" of a statistical
+                              test refers to the region(s) in the probability
+                              distribution under the null hypothesis where
+                              extreme values are considered evidence against the
+                              null hypothesis. Statistical tests are classified
+                              as one-tailed or two-tailed based on the number of
+                              tails considered.
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>One-Tailed Test</strong>: Focuses on
+                                  extreme values in one direction (either the
+                                  upper or lower tail) of the distribution. It
+                                  is used when the hypothesis specifies a
+                                  directional change.
+                                </li>
+                                <li>
+                                  <strong>Two-Tailed Test</strong>: Considers
+                                  extreme values in both directions of the
+                                  distribution. It is used when the hypothesis
+                                  does not specify a directional change, and
+                                  interest lies in deviations from the null
+                                  hypothesis in either direction.
+                                </li>
+                              </ul>
+                              <em>Example:</em> Suppose you're conducting a
+                              hypothesis test to determine if a new drug has a
+                              different effect than a placebo.
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>One-Tailed Test</strong>: If the
+                                  hypothesis predicts that the new drug
+                                  increases the observed effect, a one-tailed
+                                  test focuses on extreme values in the upper
+                                  tail of the distribution.
+                                </li>
+                                <li>
+                                  <strong>Two-Tailed Test</strong>: If the
+                                  hypothesis is agnostic about the direction of
+                                  the effect (increase or decrease), a
+                                  two-tailed test considers extreme values in
+                                  both the upper and lower tails of the
+                                  distribution.
+                                </li>
+                              </ul>
+                              <strong>Considerations:</strong>
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Directional Hypotheses</strong>: Use a
+                                  one-tailed test when the research hypothesis
+                                  specifies a clear direction of the effect.
+                                </li>
+                                <li>
+                                  <strong>Non-Directional Hypotheses</strong>:
+                                  Use a two-tailed test when the research
+                                  hypothesis is non-directional, and you want to
+                                  detect deviations from the null hypothesis in
+                                  either direction.
+                                </li>
+                              </ul>
+                              Understanding the tail of a test is crucial for
+                              selecting the appropriate statistical test and
+                              interpreting the results in the context of the
+                              research question.
+                            </span>
+                          }
+                        >
+                          <QuestionCircleOutlined />
+                        </Tooltip>
+                      </Checkbox>
+                    </Form.Item>
+                  </div>
 
                   <Form.Item name="equal_allocation" valuePropName="checked">
                     <Checkbox
@@ -1139,7 +1150,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <Form.Item
                         key={allocation.id}
                         label={
-                          <div className="flex w-full lg:w-60 justify-between ">
+                          <div className="flex w-full lg:w-96 justify-between ">
                             <div>
                               {`% Allocation to Test Arm #${allocation.id}`}
                             </div>
@@ -1166,135 +1177,166 @@ export const ProportionalMetricTesting: React.FC = () => {
                       </Form.Item>
                     ))}
                   {error && (
-                      <Form.Item wrapperCol={{ offset: 8, span: 16 }} className="m-0">
-                        <div style={{ color: 'red' }} className="m-0">{error}</div>
-                      </Form.Item>
+                    <Form.Item
+                      wrapperCol={{ offset: 8, span: 16 }}
+                      className="m-0"
+                    >
+                      <div style={{ color: "red" }} className="m-0">
+                        {error}
+                      </div>
+                    </Form.Item>
                   )}
                 </div>
               </div>
+
               <div>
-                <div className="text-2xl font-medium py-4">
+                <div className="text-xl py-4 ">
                   Revenue Calculations (Optional)
                 </div>
                 <div className="flex gap-4">
-                  <div className="w-full lg:w-60">
-                    <Form.Item
-                      name="revenue_per_conversion"
-                      label={
-                        <div className="flex w-full lg:w-60 justify-between ">
-                          <div>{`Revenue per Conversion (${conversionSymbol})`}</div>
-                          <div>
-                            <Tooltip
-                              overlayInnerStyle={{ width: "600px" }}
-                              className="text-primary"
-                              title={
-                                <span>
-                                  <strong>Revenue per Conversion</strong>
-                                  <br />
-                                  <br />
-                                  <em>Definition</em>: Revenue per Conversion is
-                                  a financial metric that calculates the average
-                                  revenue generated for each successful
-                                  conversion or transaction on a website or
-                                  e-commerce portal. It is computed by dividing
-                                  the total revenue by the number of completed
-                                  conversions.
-                                  <br />
-                                  <br />
-                                  <em>Example</em>: If an e-commerce portal
-                                  generates 100 Dollars in total revenue from
-                                  2000 completed transactions, Then revenue per
-                                  conversion is $0.05.
-                                </span>
-                              }
-                            >
-                              <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
-                            </Tooltip>
+                  <div className="w-full lg:w-96">
+                    <div className="flex gap-4">
+                      <Form.Item
+                        name="revenue_per_conversion"
+                        label={
+                          <div className="flex w-full lg:w-28 justify-between ">
+                            <div>{`Revenue per Conversion (${conversionSymbol})`}</div>
+                            <div>
+                              <Tooltip
+                                overlayInnerStyle={{ width: "600px" }}
+                                className="text-primary"
+                                title={
+                                  <span>
+                                    <strong>Revenue per Conversion</strong>
+                                    <br />
+                                    <br />
+                                    <em>Definition</em>: Revenue per Conversion
+                                    is a financial metric that calculates the
+                                    average revenue generated for each
+                                    successful conversion or transaction on a
+                                    website or e-commerce portal. It is computed
+                                    by dividing the total revenue by the number
+                                    of completed conversions.
+                                    <br />
+                                    <br />
+                                    <em>Example</em>: If an e-commerce portal
+                                    generates 100 Dollars in total revenue from
+                                    2000 completed transactions, Then revenue
+                                    per conversion is $0.05.
+                                  </span>
+                                }
+                              >
+                                <QuestionCircleOutlined className="mx-2 lg:mx-0" />
+                              </Tooltip>
+                            </div>
                           </div>
-                        </div>
-                      }
-                    >
-                      <InputNumber min={0.01} style={{ width: "100%" }} />
-                    </Form.Item>
-                  </div>
+                        }
+                      >
+                        <InputNumber min={0.01} style={{ width: "100%" }} />
+                      </Form.Item>
 
-                  <div className="w-full lg:w-60">
-                    <Form.Item
-                      name="expected_uplift"
-                      label={
-                        <div className="flex w-full lg:w-60 justify-between ">
-                          <div>{"Expected Uplift in Test Arm (%)"}</div>
-                          <div>
-                            <Tooltip
-                              overlayInnerStyle={{ width: "600px" }}
-                              className="text-primary"
-                              title={
-                                <span>
-                                  <strong>Expected Uplift in Test Arms:</strong>
-                                  <br />
-                                  <br />
-                                  This is the value of uplift (absolute/relative) that the experimenter predicts to see in the test arms. This value can be a guess which can be updated later once real data comes in. This value is used to compute the revenue estimates during the experiment period.
-                                </span>
-                              }
-                            >
-                              <QuestionCircleOutlined className="mx-2 lg:mx-0"/>
-                            </Tooltip>
+                      <Form.Item
+                        name="expected_uplift"
+                        label={
+                          <div className="flex w-full lg:w-28 justify-between ">
+                            <div>{"Expected Uplift in Test Arm (%)"}</div>
+                            <div>
+                              <Tooltip
+                                overlayInnerStyle={{ width: "600px" }}
+                                className="text-primary"
+                                title={
+                                  <span>
+                                    <strong>
+                                      Expected Uplift in Test Arms:
+                                    </strong>
+                                    <br />
+                                    <br />
+                                    This is the value of uplift
+                                    (absolute/relative) that the experimenter
+                                    predicts to see in the test arms. This value
+                                    can be a guess which can be updated later
+                                    once real data comes in. This value is used
+                                    to compute the revenue estimates during the
+                                    experiment period.
+                                  </span>
+                                }
+                              >
+                                <QuestionCircleOutlined className="mx-2 lg:mx-0" />
+                              </Tooltip>
+                            </div>
                           </div>
-                        </div>
-                      }
-                    >
-                      <InputNumber
-                        min={0}
-                        max={100}
-                        style={{ width: "100%" }}
-                      />
-                    </Form.Item>
+                        }
+                      >
+                        <InputNumber
+                          min={0}
+                          max={100}
+                          style={{ width: "100%" }}
+                        />
+                      </Form.Item>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="flex w-full justify-between">
-                <Form.Item>
+              <div className="flex gap-4 w-full  justify-between">
+                <Form.Item className="w-full">
                   <Button
+                    size="large"
                     type="primary"
                     htmlType="submit"
                     onClick={handleCalculateClick}
                     disabled={!!error}
+                    className="w-full"
                   >
-                    Calculate
+                    CALCULATE
                   </Button>
                 </Form.Item>
-                <>
-                  <Button
-                    type="primary"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      saveResults(testData);
-                    }}
-                    disabled={isNotCalculatedSaved === CalculationStatus.IDLE}
-                  >
-                    Save
-                  </Button>
-                </>
+                <Button
+                  size="large"
+                  className="bg-secondary"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    saveResults(testData);
+                  }}
+                  disabled={isNotCalculatedSaved === CalculationStatus.IDLE}
+                  icon={
+                    <img
+                      src={Save}
+                      className="flex justify-center items-center w-6"
+                    />
+                  }
+                />
               </div>
             </Form>
-          </Paper>
-        </div>
+          </div>
+        </>
 
-        <div className="flex-1 flex flex-col gap-4">
-          <Paper className="p-4">
-            <div className="flex">
-              <div className="flex-1 space-y-4">
+        <>
+          <div
+            className="p-8 border-2 rounded-lg border-secondary bg-white"
+            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}
+          >
+            <div className="text-xl text-center pb-4 w-full lg:w-96">
+              PROPORTIONAL METRIC TESTING OUTPUTS
+            </div>
+            <div className="flex justify-between w-full lg:w-96">
+              <div className="space-y-4">
                 <div>
                   <div className="text-sm font-medium">
                     Total Sample Size
                     <Tooltip
                       className="text-primary px-2"
-                      title={`The necessary sample size for conducting a test at a ${testDataCopy?.power ?? 90}% power, aiming to detect a ${testDataCopy?.mde ?? 3}% difference with ${testDataCopy?.confidence_level ?? 90}% confidence`}
+                      title={`The necessary sample size for conducting a test at a ${
+                        testDataCopy?.power ?? 90
+                      }% power, aiming to detect a ${
+                        testDataCopy?.mde ?? 3
+                      }% difference with ${
+                        testDataCopy?.confidence_level ?? 90
+                      }% confidence`}
                     >
                       <QuestionCircleOutlined />
                     </Tooltip>
                   </div>
-                  <div className="text-4xl">
+                  <div className="text-4xl text-primary">
                     <CountUp
                       start={0}
                       end={numericalResults?.total_sample_size ?? 0}
@@ -1308,12 +1350,16 @@ export const ProportionalMetricTesting: React.FC = () => {
                     Days Required
                     <Tooltip
                       className="text-primary px-2"
-                      title={`Total number of days required to get ${(numericalResults?.total_sample_size ?? 0).toLocaleString()} samples if ${testDataCopy?.daily_interactions ?? 100} daily visitors are allocated to the A/B test.`}
+                      title={`Total number of days required to get ${(
+                        numericalResults?.total_sample_size ?? 0
+                      ).toLocaleString()} samples if ${
+                        testDataCopy?.daily_interactions ?? 100
+                      } daily visitors are allocated to the A/B test.`}
                     >
                       <QuestionCircleOutlined />
                     </Tooltip>
                   </div>
-                  <div className="text-4xl">
+                  <div className="text-4xl text-primary">
                     <CountUp
                       start={0}
                       end={numericalResults?.days_required ?? 0}
@@ -1332,11 +1378,13 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip>
                   </div>
-                  <div className="text-4xl">
+                  <div className="text-4xl text-primary">
                     {conversionSymbol}
                     <CountUp
                       start={0}
-                      end={numericalResults?.control_revenue*conversionNum ?? 0}
+                      end={
+                        numericalResults?.control_revenue * conversionNum ?? 0
+                      }
                       duration={0.5}
                       separator=","
                       // prefix={conversionName}
@@ -1344,7 +1392,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex-1 space-y-4">
+              <div className="space-y-4">
                 <div>
                   <div className="text-sm font-medium">
                     Samples Per Arm
@@ -1355,7 +1403,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip>
                   </div>
-                  <div className="text-4xl">
+                  <div className="text-4xl text-primary">
                     <CountUp
                       start={0}
                       end={numericalResults?.sample_size_per_arm ?? 0}
@@ -1369,12 +1417,16 @@ export const ProportionalMetricTesting: React.FC = () => {
                     Weeks Required
                     <Tooltip
                       className="text-primary px-2"
-                      title={`Total number of weeks required to get ${(numericalResults?.total_sample_size ?? 0).toLocaleString()} samples if ${testDataCopy?.daily_interactions ?? 100} daily visitors are allocated to the A/B test.`}
+                      title={`Total number of weeks required to get ${(
+                        numericalResults?.total_sample_size ?? 0
+                      ).toLocaleString()} samples if ${
+                        testDataCopy?.daily_interactions ?? 100
+                      } daily visitors are allocated to the A/B test.`}
                     >
                       <QuestionCircleOutlined />
                     </Tooltip>
                   </div>
-                  <div className="text-4xl">
+                  <div className="text-4xl text-primary">
                     <CountUp
                       start={0}
                       end={numericalResults?.weeks_required ?? 0}
@@ -1393,11 +1445,11 @@ export const ProportionalMetricTesting: React.FC = () => {
                       <QuestionCircleOutlined />
                     </Tooltip>
                   </div>
-                  <div className="text-4xl">
+                  <div className="text-4xl text-primary">
                     {conversionSymbol}
                     <CountUp
                       start={0}
-                      end={numericalResults?.test_revenue*conversionNum}
+                      end={numericalResults?.test_revenue * conversionNum}
                       duration={0.5}
                       separator=","
                     />
@@ -1434,69 +1486,76 @@ export const ProportionalMetricTesting: React.FC = () => {
                 </div>
               </div>
             </div>
-          </Paper>
-          
-          {figures.length > 0 && (
-            <div>
-              <Form.Item label="Select Figure">
-                <Select
-                  onChange={(value) => setSelectedFigIndex(value)}
-                  defaultValue={0}
-                >
-                  {figures.map((fig, index) => (
-                    <Option key={index} value={index}>
-                      {fig.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Paper className="flex w-full justify-center items-center">
-                <PlotGraph
-                  data={figures[selectedFigIndex].data}
-                  layout={figures[selectedFigIndex].layout}
-                />
-              </Paper>
-            </div>
-          )}
-          {numericalResults && (
-            <>
-              <Paper className="p-4 space-y-4 border-primary border">
-                <div>
-                  <div className="text-lg font-medium">
-                    Confidence Level vs. Sample Size:
-                  </div>
-                  <div className="text-sm">
-                    As the Confidence Level increases, there is a corresponding
-                    increase in the Sample Size. The graph shows how the
-                    required sample size for the experiment changes as you
-                    adjust the confidence level.
-                  </div>
+
+            {figures.length > 0 && (
+              <div className="pt-4 w-full lg:w-96">
+                <Form.Item label="Select Figure">
+                  <Select
+                    onChange={(value) => setSelectedFigIndex(value)}
+                    defaultValue={0}
+                  >
+                    {figures.map((fig, index) => (
+                      <Option key={index} value={index}>
+                        {fig.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <div className="flex justify-center items-center">
+                  <PlotGraph
+                    data={figures[selectedFigIndex].data}
+                    layout={figures[selectedFigIndex].layout}
+                  />
                 </div>
-                <div>
-                  <div className="text-lg font-medium">
-                    Power vs. Sample Size:
-                  </div>
-                  <div className="text-sm">
-                    As the Power increases, there is a corresponding increase in
-                    the Sample Size. The graph shows how the required sample
-                    size for the experiment changes as you adjust the power.
-                  </div>
+              </div>
+            )}
+            {numericalResults && (
+              <div className="w-full lg:w-96">
+                <div className="space-y-4">
+                  {selectedFigIndex === 0 && (
+                    <div>
+                      <div className="text-lg font-medium">
+                        Confidence Level vs. Sample Size:
+                      </div>
+                      <div className="text-sm">
+                        As the Confidence Level increases, there is a
+                        corresponding increase in the Sample Size. The graph
+                        shows how the required sample size for the experiment
+                        changes as you adjust the confidence level.
+                      </div>
+                    </div>
+                  )}
+                  {selectedFigIndex === 1 && (
+                    <div>
+                      <div className="text-lg font-medium">
+                        Power vs. Sample Size:
+                      </div>
+                      <div className="text-sm">
+                        As the Power increases, there is a corresponding
+                        increase in the Sample Size. The graph shows how the
+                        required sample size for the experiment changes as you
+                        adjust the power.
+                      </div>
+                    </div>
+                  )}
+                  {selectedFigIndex === 2 && (
+                    <div>
+                      <div className="text-lg font-medium">
+                        MDE vs. Sample Size:
+                      </div>
+                      <div className="text-sm">
+                        As the Minimum Detectable Effect (MDE) decreases, there
+                        is a corresponding increase in the Sample Size. The
+                        graph shows how the required sample size for the
+                        experiment changes as you adjust the MDE.
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div>
-                  <div className="text-lg font-medium">
-                    MDE vs. Sample Size:
-                  </div>
-                  <div className="text-sm">
-                    As the Minimum Detectable Effect (MDE) decreases, there is a
-                    corresponding increase in the Sample Size. The graph shows
-                    how the required sample size for the experiment changes as
-                    you adjust the MDE.
-                  </div>
-                </div>
-              </Paper>
-            </>
-          )}
-        </div>
+              </div>
+            )}
+          </div>
+        </>
       </div>
     </div>
   );

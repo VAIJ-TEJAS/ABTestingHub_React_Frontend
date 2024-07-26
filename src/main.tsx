@@ -19,7 +19,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     theme={{
       token: {
         borderRadius: 3,
-        colorPrimary: "#1890FF",
+        colorPrimary: "#F9A828",
+        fontFamily:"sans"
       },
       components: {
         Modal: {
@@ -31,6 +32,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         },
         InputNumber: {
           colorBgContainer: "#D9D9D9"
+        },
+        Checkbox:{
+          colorPrimary: "#F9A828"
         },
       }
     }}

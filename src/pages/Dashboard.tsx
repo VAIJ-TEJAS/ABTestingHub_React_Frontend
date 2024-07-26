@@ -13,10 +13,6 @@ import {
 } from "antd";
 import {
   PlusOutlined,
-  SearchOutlined,
-  RocketOutlined,
-  DollarCircleOutlined,
-  CheckCircleOutlined,
   EditOutlined,
   DeleteOutlined,
   EllipsisOutlined,
