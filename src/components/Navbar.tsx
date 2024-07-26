@@ -1,6 +1,5 @@
 import { Button, Dropdown, Menu } from "antd";
 import { Context } from "../context/context.provider";
-import Logo from "../assets/images/logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { CheckOutlined, SettingOutlined } from "@ant-design/icons";
 import { confirmation } from "./Confirmation";
