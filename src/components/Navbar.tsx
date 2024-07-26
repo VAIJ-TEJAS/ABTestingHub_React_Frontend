@@ -7,6 +7,9 @@ import { confirmation } from "./Confirmation";
 import { useState } from "react";
 import { SideDrawer } from "./SideDrawer";
 
+import IconText from "../assets/svgs/IconText.svg"
+import DropDownIcon from "../assets/svgs/Dropdown.svg"
+
 
 export const Navbar = () => {
   const { username, userAuthenticated, showAuthModal, signOutUser, conversionName, onCurrencyChange, rates } = Context();
@@ -58,23 +61,24 @@ export const Navbar = () => {
 
   const isArticlePage = location.pathname.includes("/article/");
   const navClass = isArticlePage
-    ? "relative px-4 py-2 flex justify-between items-center border-t border-primary"
-    : "sticky top-0 px-4 py-2 flex justify-between items-center border-t border-primary shadow-md z-50";
+    ? "relative px-4 py-2 bg-white"
+    : "sticky top-0 px-4 py-2 shadow-2xl z-50 bg-white flex justify-center";
 
   return (
     <>
       <nav className={navClass} onMouseLeave={() => setDropdownOpen(false)}>
+        <div className="flex justify-between items-center container">
+
         <a
           className="text-3xl font-bold leading-none flex items-center gap-4"
           href="/"
         >
-          <img src={Logo} className="w-12" />
-          <div className="text-primary">A/B Testing Hub</div>
+          <img src={IconText} className="w-20"/>
         </a>
 
         <SideDrawer />
 
-        <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
+        <ul className="hidden lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
           <li className="hover:bg-blue-100 cursor-pointer p-2"  onClick={() => {
                 navigate("/home/");
               }}>
@@ -91,8 +95,8 @@ export const Navbar = () => {
             className="relative"
             onMouseEnter={() => setDropdownOpen(true)}
           >
-            <button className="hover:text-primary transition-all duration-300 cursor-pointer">
-              TOOLS
+            <button className="inline-flex gap-2 hover:text-primary transition-all duration-300 cursor-pointer items-center">
+              TOOLS <img src={DropDownIcon}></img>
             </button>
             {isDropdownOpen && (
               <ul
@@ -205,12 +209,14 @@ export const Navbar = () => {
         ) : (
           <Button
           type="primary"
-          className="hidden lg:flex lg:ml-auto px-6 text-xl transition duration-200 items-center justify-center"
+          className="hidden lg:flex  px-6 text-lg transition duration-200 items-center justify-center"
           onClick={showAuthModal}
         >
           LOGIN
         </Button>        
         )}
+        
+        </div>
       </nav>
       <div className="navbar-menu relative z-50 hidden">
         <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25" />
