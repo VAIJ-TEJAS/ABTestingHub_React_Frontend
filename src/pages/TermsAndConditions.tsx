@@ -1,18 +1,18 @@
 // import styled from "../css/TermsAndConditions.css";
 import { Container } from "@mui/material";
-
+import Mail from "../assets/svgs/Mail.svg"
 
 export const TermsAndConditions = () => {
   return (
-    <>
+    <div className="py-8">
       <Container className="no-tailwind">
-        <h1>Terms and Conditions</h1>
-        <p>Last updated: April 28, 2024</p>
+        <h1 className="text-primary">Terms and Conditions</h1>
+        <p className="text-secondary">Last updated: April 28, 2024</p>
         <p>
           Please read these terms and conditions carefully before using Our
           Service.
         </p>
-        <h2>Interpretation and Definitions</h2>
+        <h2 className="text-primary">Interpretation and Definitions</h2>
         <h3>Interpretation</h3>
         <p>
           The words of which the initial letter is capitalized have meanings
@@ -66,6 +66,7 @@ export const TermsAndConditions = () => {
               <a
                 href="https://www.freeprivacypolicy.com/free-terms-and-conditions-generator/"
                 target="_blank"
+                className="text-secondary"
               >
                 Free Terms and Conditions Generator
               </a>
@@ -88,6 +89,7 @@ export const TermsAndConditions = () => {
                 href="https://abtestinghub.com/"
                 rel="external nofollow noopener"
                 target="_blank"
+                className="text-secondary"
               >
                 https://abtestinghub.com/
               </a>
@@ -101,7 +103,7 @@ export const TermsAndConditions = () => {
             </p>
           </li>
         </ul>
-        <h2>Acknowledgment</h2>
+        <h2 className="text-primary">Acknowledgment</h2>
         <p>
           These are the Terms and Conditions governing the use of this Service
           and the agreement that operates between You and the Company. These
@@ -132,7 +134,7 @@ export const TermsAndConditions = () => {
           rights and how the law protects You. Please read Our Privacy Policy
           carefully before using Our Service.
         </p>
-        <h2>Links to Other Websites</h2>
+        <h2 className="text-primary">Links to Other Websites</h2>
         <p>
           Our Service may contain links to third-party web sites or services
           that are not owned or controlled by the Company.
@@ -150,7 +152,7 @@ export const TermsAndConditions = () => {
           We strongly advise You to read the terms and conditions and privacy
           policies of any third-party web sites or services that You visit.
         </p>
-        <h2>Termination</h2>
+        <h2 className="text-primary">Termination</h2>
         <p>
           We may terminate or suspend Your access immediately, without prior
           notice or liability, for any reason whatsoever, including without
@@ -160,7 +162,7 @@ export const TermsAndConditions = () => {
           Upon termination, Your right to use the Service will cease
           immediately.
         </p>
-        <h2>Limitation of Liability</h2>
+        <h2 className="text-primary">Limitation of Liability</h2>
         <p>
           Notwithstanding any damages that You might incur, the entire liability
           of the Company and any of its suppliers under any provision of this
@@ -188,7 +190,7 @@ export const TermsAndConditions = () => {
           states, each party's liability will be limited to the greatest extent
           permitted by law.
         </p>
-        <h2>&quot;AS IS&quot; and &quot;AS AVAILABLE&quot; Disclaimer</h2>
+        <h2 className="text-primary">&quot;AS IS&quot; and &quot;AS AVAILABLE&quot; Disclaimer</h2>
         <p>
           The Service is provided to You &quot;AS IS&quot; and &quot;AS
           AVAILABLE&quot; and with all faults and defects without warranty of
@@ -228,25 +230,25 @@ export const TermsAndConditions = () => {
           set forth in this section shall be applied to the greatest extent
           enforceable under applicable law.
         </p>
-        <h2>Governing Law</h2>
+        <h2 className="text-primary">Governing Law</h2>
         <p>
           The laws of the Country, excluding its conflicts of law rules, shall
           govern this Terms and Your use of the Service. Your use of the
           Application may also be subject to other local, state, national, or
           international laws.
         </p>
-        <h2>Disputes Resolution</h2>
+        <h2 className="text-primary">Disputes Resolution</h2>
         <p>
           If You have any concern or dispute about the Service, You agree to
           first try to resolve the dispute informally by contacting the Company.
         </p>
-        <h2>For European Union (EU) Users</h2>
+        <h2 className="text-primary">For European Union (EU) Users</h2>
         <p>
           If You are a European Union consumer, you will benefit from any
           mandatory provisions of the law of the country in which You are
           resident.
         </p>
-        <h2>United States Legal Compliance</h2>
+        <h2 className="text-primary">United States Legal Compliance</h2>
         <p>
           You represent and warrant that (i) You are not located in a country
           that is subject to the United States government embargo, or that has
@@ -254,7 +256,7 @@ export const TermsAndConditions = () => {
           supporting&quot; country, and (ii) You are not listed on any United
           States government list of prohibited or restricted parties.
         </p>
-        <h2>Severability and Waiver</h2>
+        <h2 className="text-primary">Severability and Waiver</h2>
         <h3>Severability</h3>
         <p>
           If any provision of these Terms is held to be unenforceable or
@@ -271,13 +273,13 @@ export const TermsAndConditions = () => {
           performance at any time thereafter nor shall the waiver of a breach
           constitute a waiver of any subsequent breach.
         </p>
-        <h2>Translation Interpretation</h2>
+        <h2 className="text-primary">Translation Interpretation</h2>
         <p>
           These Terms and Conditions may have been translated if We have made
           them available to You on our Service. You agree that the original
           English text shall prevail in the case of a dispute.
         </p>
-        <h2>Changes to These Terms and Conditions</h2>
+        <h2 className="text-primary">Changes to These Terms and Conditions</h2>
         <p>
           We reserve the right, at Our sole discretion, to modify or replace
           these Terms at any time. If a revision is material We will make
@@ -291,15 +293,15 @@ export const TermsAndConditions = () => {
           do not agree to the new terms, in whole or in part, please stop using
           the website and the Service.
         </p>
-        <h2>Contact Us</h2>
+        <h2 className="text-primary">Contact Us</h2>
         <p>
           If you have any questions about these Terms and Conditions, You can
           contact us:
         </p>
-        <ul>
-          <li>By email: abtestinghub@gmail.com</li>
-        </ul>
+        <div className="inline-flex items-center gap-2 text-secondary">
+          <img src={Mail} className="w-6"/>abtestinghub@gmail.com
+        </div>
       </Container>
-    </>
+    </div>
   );
 };
