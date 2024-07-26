@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 import { Modal, Button, Form, message, Checkbox, Input } from "antd";
 import { Context } from "../context/context.provider";
 import IconText from "../assets/svgs/IconText.svg";
