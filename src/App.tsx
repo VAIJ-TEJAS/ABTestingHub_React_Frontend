@@ -18,6 +18,8 @@ import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { AboutUs } from "./pages/AboutUs";
 import { CommunityAnalytics } from "./pages/CommunityAnalytics";
 import { Feedback } from "./pages/Feedback";
+import { Latest } from "./articles/pages/ArticlesLatest";
+import { MostPopular } from "./articles/pages/ArticlesMostPopular";
 
 function App() {
 
@@ -55,6 +57,8 @@ function App() {
           <Route path="/community-analytics" element={<CommunityAnalytics />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/articles" element={<ArticlesHome />} />
+          <Route path="/articles-latest" element={<Latest />} />
+          <Route path="/articles-most-popular" element={<MostPopular />} />
           <Route path="/articles/:category_name" element={<Categories />} />
           <Route path="/article/:article_id" element={<Article />} />
           <Route path="/ab-testing/" element={<ABTesting />} />

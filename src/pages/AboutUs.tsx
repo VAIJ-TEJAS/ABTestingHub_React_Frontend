@@ -28,7 +28,7 @@ export const AboutUs = () => {
           innovation and growth.
         </p>
 
-        <div className="text-primary text-3xl pt-6">Our Story</div>
+        {/* <div className="text-primary text-3xl pt-6">Our Story</div>
         <p>
           AB Testing Hub was founded in January 2024 with a vision to bridge the
           gap between data science and business decision-making. Our founder,
@@ -37,10 +37,10 @@ export const AboutUs = () => {
           developed a suite of tools that are not only powerful but also easy to
           use, ensuring that everyone, from startups to large enterprises, can
           benefit from AB testing.
-        </p>
+        </p> */}
 
-        <div className="text-primary text-3xl pt-6">Our Team</div>
-        <div>TEAM CONTENT</div>
+        {/* <div className="text-primary text-3xl pt-6">Our Team</div>
+        <div>TEAM CONTENT</div> */}
 
         <div className="text-primary text-3xl pt-8">What We Do</div>
         <div className="py-6">

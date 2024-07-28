@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Container } from "@mui/material";
 import { ArticleCard } from "../components/ArticleCard";
-import { MostPopularArticleCard } from "../components/MostPopularArticleCard";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import ArticlesCategoryCard from "../components/ArticlesCategoryCard";
+import { useNavigate } from "react-router-dom";
 import ArticleHome from "../../assets/images/ArticleHome.png";
-import DownArrow from "../../assets/svgs/DownArrow.svg"
+import DownArrow from "../../assets/svgs/DownArrow.svg";
+import { Select } from "antd";
 
-interface ArticalCardProps {
+const { Option } = Select;
+
+interface ArticleCardProps {
   id?: number;
   title?: string;
   short_description?: string;
@@ -32,32 +33,69 @@ interface ArticalCardProps {
   };
 }
 
-interface ArticalsDataProps {
-  articles: ArticalCardProps[];
-  popularArticles: ArticalCardProps[];
-  featuredArticle: ArticalCardProps;
+interface ArticlesDataProps {
+  articles: ArticleCardProps[];
+  popularArticles: ArticleCardProps[];
+  featuredArticle: ArticleCardProps;
 }
 
 export const ArticlesHome = () => {
-  const [articlesData, setArticlesData] = useState<ArticalsDataProps>({
+  const navigate = useNavigate();
+
+  const [articleCategories, setArticleCategories] = useState<
+    { id: string; name: string }[]
+  >([]);
+
+  const [articlesData, setArticlesData] = useState<ArticlesDataProps>({
     articles: [],
     featuredArticle: {},
     popularArticles: [],
   });
 
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [filteredArticles, setFilteredArticles] = useState<ArticleCardProps[]>([]);
+
   useEffect(() => {
     axios
+      .get(`${import.meta.env.VITE_BASE_URL}/categories/`)
+      .then((categories) => {
+        setArticleCategories(categories.data);
+      });
+
+    axios
       .get(`${import.meta.env.VITE_BASE_URL}/articles-card/`)
-      .then((articles) => {
+      .then((response) => {
+        const sortedArticles = response.data.sort(
+          (a: ArticleCardProps, b: ArticleCardProps) => {
+            const dateA = new Date(a.published_date ?? 0).getTime();
+            const dateB = new Date(b.published_date ?? 0).getTime();
+            return dateB - dateA;
+          }
+        );
+        const popularArticles = sortedArticles.filter(
+          (article: ArticleCardProps) => article.popular_article
+        );
+
         setArticlesData({
-          articles: articles.data,
-          featuredArticle: articles.data[0],
-          popularArticles: articles.data.filter(
-            (article: any) => article.popular_article
-          ),
+          articles: sortedArticles,
+          featuredArticle: sortedArticles[0],
+          popularArticles: popularArticles,
         });
       });
   }, []);
+
+  useEffect(() => {
+    setFilteredArticles(
+      articlesData.articles.filter(
+        (article) =>
+          selectedCategories.includes(article.category?.name ?? "")
+      )
+    );
+  }, [selectedCategories, articlesData.articles]);
+
+  const handleCategoryChange = (value: any) => {
+    setSelectedCategories(value);
+  };
 
   return (
     <>
@@ -76,93 +114,93 @@ export const ArticlesHome = () => {
               </div>
               <div className="py-4">Explore, Learn, Apply</div>
             </div>
-            <div className="w-full justify-center inline-flex gap-2 items-center">See Our Latest Articles <img src={DownArrow} className="w-3 animate-bounce"/></div>
+            <div className="w-full justify-center inline-flex gap-2 items-center">
+              See Our Latest Articles{" "}
+              <img src={DownArrow} className="w-3 animate-bounce" />
+            </div>
           </div>
         </Container>
       </div>
-      <Container>
-        <div className="flex justify-between flex-wrap items-center my-8">
-          <div className="text-6xl font-medium mb-4">Articles</div>
-          <ArticlesCategoryCard />
-        </div>
-
-        <div className="flex gap-16 flex-col lg:flex-row">
-          {articlesData.featuredArticle ? (
-            <div className="flex-1 group">
-              <Link
-                to={`/article/${articlesData.featuredArticle.id}`}
-                className="space-y-3 group-hover:cursor-pointer"
+      <Container className="py-16">
+        <div className="space-y-4 p-5">
+          <div className="text-4xl ">Search By Tags</div>
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <Select
+                mode="multiple"
+                style={{ width: "100%" }}
+                placeholder="Select categories"
+                onChange={handleCategoryChange}
+                size="large"
+                className="border border-black rounded"
               >
-                <div
-                  style={{
-                    backgroundImage: `url(${articlesData.featuredArticle?.cover_image?.image})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    overflow: "hidden",
-                  }}
-                  className="h-96 group-hover:rounded-xl group-hover:border group-hover:border-primary transition-all duration-200"
-                >
-                  IMG
-                </div>
-                <div className="text-5xl font-medium group-hover:text-primary transition-colors duration-200">
-                  {articlesData.featuredArticle?.title}
-                </div>
-                <div className="text-zinc-500">
-                  {articlesData.featuredArticle?.short_description}
-                </div>
-                <div className="py-3">
-                  <div className="flex space-x-2 items-center">
-                    <div className="flex gap-2">
-                      <img
-                        src={articlesData.featuredArticle.author?.picture}
-                        className="h-10 w-10 object-cover rounded-full"
-                      />
-                      <div>
-                        <div className="font-semibold">
-                          {articlesData.featuredArticle.author?.name}
-                        </div>
-                        <div className="text-sm text-zinc-500">
-                          {articlesData.featuredArticle.author?.role}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
+                {articleCategories.map((category) => (
+                  <Option key={category.id} value={category.name}>
+                    {category.name}
+                  </Option>
+                ))}
+              </Select>
             </div>
-          ) : (
-            <p className="w-96">No article featured</p>
-          )}
-
-          {articlesData.popularArticles && (
-            <div className="space-y-4">
-              <div className="text-4xl font-medium text-center">
-                Most Popular
-              </div>
-              <div className="space-y-3 flex flex-wrap lg:flex-nowrap lg:flex-col items-center justify-center">
-                {articlesData.popularArticles.length > 0 ? (
-                  articlesData.popularArticles?.map((props) => {
-                    return <MostPopularArticleCard key={props.id} {...props} />;
-                  })
-                ) : (
-                  <p className="text-center">no articles found</p>
-                )}
-              </div>
-            </div>
-          )}
+          </div>
         </div>
 
-        <hr className="my-8" />
-        {articlesData.articles ? (
-          <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-8">
-            {articlesData.articles.map((props) => {
-              return <ArticleCard key={props.id} {...props} />;
-            })}
+        <div className="space-y-4 my-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-8">
+            {filteredArticles.length > 0 && (
+              filteredArticles.map((props) => <ArticleCard key={props.id} {...props} />)
+            )}
           </div>
-        ) : (
-          <p className="text-center">no articles found</p>
+        </div>
+
+        {articlesData.articles && (
+          <div className="space-y-4 my-8">
+            <div className="flex w-full justify-between items-end">
+              <div className="text-4xl p-5">Latest Articles</div>
+              <button
+                className="text-xl p-5 text-primary hover:text-secondary"
+                onClick={() => {
+                  navigate("/articles-latest/");
+                }}
+              >
+                Read More
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-8">
+              {articlesData.articles.slice(0, 3).length > 0 ? (
+                articlesData.articles.slice(0, 3).map((props) => {
+                  return <ArticleCard key={props.id} {...props} />;
+                })
+              ) : (
+                <p className="text-center">No articles found</p>
+              )}
+            </div>
+          </div>
         )}
-        <hr className="my-8" />
+
+        {articlesData.popularArticles && (
+          <div className="space-y-4 my-8">
+            <div className="flex w-full justify-between items-end">
+              <div className="text-4xl p-5">Popular Articles</div>
+              <button
+                className="text-xl p-5 text-primary hover:text-secondary"
+                onClick={() => {
+                  navigate("/articles-most-popular/");
+                }}
+              >
+                Read More
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-8">
+              {articlesData.popularArticles.slice(0, 3).length > 0 ? (
+                articlesData.popularArticles.slice(0, 3).map((props) => {
+                  return <ArticleCard key={props.id} {...props} />;
+                })
+              ) : (
+                <p className="text-center">No articles found</p>
+              )}
+            </div>
+          </div>
+        )}
       </Container>
     </>
   );

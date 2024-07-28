@@ -557,7 +557,8 @@ export const ABTesting: React.FC = () => {
       )}
       <div className="container flex flex-col lg:flex-row gap-4">
         <div className="flex flex-col gap-4">
-          <Paper className="p-4">
+          <div className="p-4 border-2 border-secondary rounded-lg bg-white"
+            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}>
             <Form
               form={form}
               layout="vertical"
@@ -570,7 +571,7 @@ export const ABTesting: React.FC = () => {
               }}
             >
               <div className="flex gap-4">
-                <div className="w-full lg:w-60">
+                <div className="w-full lg:w-64">
                   <Form.Item
                     name="confidence_level"
                     rules={[
@@ -580,7 +581,7 @@ export const ABTesting: React.FC = () => {
                       },
                     ]}
                     label={
-                      <div className="flex w-full lg:w-60 justify-between ">
+                      <div className="flex w-full lg:w-64 justify-between ">
                         <div>{"Confidence Level | (1-\u03b1) %"}</div>
                         <div>
                           <Tooltip
@@ -711,7 +712,7 @@ export const ABTesting: React.FC = () => {
                     </Radio.Group>
                   </Form.Item>
                 </div>
-                <div className="w-full lg:w-60">
+                <div className="w-full lg:w-64">
                   <Form.Item
                     name="arms"
                     rules={[
@@ -721,7 +722,7 @@ export const ABTesting: React.FC = () => {
                       },
                     ]}
                     label={
-                      <div className="flex w-full lg:w-60 justify-between ">
+                      <div className="flex w-full lg:w-64 justify-between ">
                         <div>{"Arms"}</div>
                         <div>
                           <Tooltip
@@ -811,7 +812,7 @@ export const ABTesting: React.FC = () => {
                   return (
                     <div key={index} className="flex gap-4">
                       <Form.Item
-                        className="w-full lg:w-60"
+                        className="w-full lg:w-64"
                         label={`Visitors Group ${String.fromCharCode(
                           65 + index
                         )}`}
@@ -839,7 +840,7 @@ export const ABTesting: React.FC = () => {
                         />
                       </Form.Item>
                       <Form.Item
-                        className="w-full lg:w-60"
+                        className="w-full lg:w-64"
                         label={`Conversions Group ${String.fromCharCode(
                           65 + index
                         )}`}
@@ -894,26 +895,26 @@ export const ABTesting: React.FC = () => {
                 </>
               </div>
             </Form>
-          </Paper>
+          </div>
           {/* {numericalResults && <QuestionReview />} */}
         </div>
         <div className="flex-1 flex flex-col gap-4">
-          <Paper className="p-4">
+          <div className="p-4 border-2 border-secondary rounded-lg bg-white"
+            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}>
             <Table
               columns={columns}
               dataSource={tableData}
               pagination={false}
             />
-          </Paper>
-          {numericalResults?.arms == 2 && (
+             {numericalResults?.arms == 2 && (
             <div>
-              <Paper className="flex w-full justify-center items-center">
+              <div className="flex w-full justify-center items-center">
                 <PlotGraph data={figure.data} layout={figure.layout} />
-              </Paper>
+              </div>
             </div>
           )}
           {numericalResults && (
-            <Paper className="p-4 space-y-4 border-primary border">
+            <div className="p-4 space-y-4">
               <div className="text-lg font-medium text-zinc-500">
                 Conclusion
               </div>
@@ -949,8 +950,9 @@ export const ABTesting: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </Paper>
+            </div>
           )}
+          </div>
         </div>
       </div>
     </div>

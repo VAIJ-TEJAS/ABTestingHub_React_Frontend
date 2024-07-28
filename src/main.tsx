@@ -33,8 +33,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         InputNumber: {
           colorBgContainer: "#D9D9D9"
         },
-        Checkbox:{
-          colorPrimary: "#F9A828"
+        Checkbox: {
+          colorPrimary:"#F9A828"
         },
       }
     }}

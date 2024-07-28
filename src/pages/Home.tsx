@@ -6,16 +6,14 @@ import HeroBackground from "../assets/images/hero-background.png";
 import ContinuousMetricLogo from "../assets/images/ContinuousMetric.png";
 import ProportionalMetricLogo from "../assets/images/ProportionalMetric.png";
 import ABTestingLogo from "../assets/images/ABTesting.png";
-import { ArticleStripe } from "../articles/components/ArticleStripe";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Context } from "../context/context.provider";
-import { MostPopularArticleCard } from "../articles/components/MostPopularArticleCard";
-import ArticlesCategoryCard from "../articles/components/ArticlesCategoryCard";
 import { useLocation, useNavigate } from "react-router-dom";
 import parse from 'html-react-parser';
+import { ArticleCard } from "../articles/components/ArticleCard";
 
-interface ArticalCardProps {
+interface ArticleCardProps {
   id?: number;
   title?: string;
   short_description?: string;
@@ -38,20 +36,33 @@ interface ArticalCardProps {
   };
 }
 
+interface ArticlesDataProps {
+  articles: ArticleCardProps[];
+}
+
 export const Home = () => {
   const { showAuthModal, userAuthenticated } = Context();
   const navigate = useNavigate();
   const location = useLocation();
-  const [articlesData, setArticlesData] = useState<ArticalCardProps[]>([]);
+
+  const [articlesData, setArticlesData] = useState<ArticlesDataProps>({
+    articles: [],
+  });
 
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_BASE_URL}/articles-card/`)
-      .then((articles) => {
-        setArticlesData(
-          articles.data.filter((article: any) => article.popular_article)
+      .then((response) => {
+        const sortedArticles = response.data.sort(
+          (a: ArticleCardProps, b: ArticleCardProps) => {
+            const dateA = new Date(a.published_date ?? 0).getTime();
+            const dateB = new Date(b.published_date ?? 0).getTime();
+            return dateB - dateA;
+          }
         );
+        setArticlesData({ articles: sortedArticles });
       });
+
   }, []);
 
   useEffect(() => {
@@ -216,48 +227,34 @@ export const Home = () => {
           </div>
         </Container>
       </div>
-      {/* Most Popular Articles  */}
-      <div>
-        <Container>
-          <div className="space-y-8 py-16">
-            {articlesData.length !== 0 && (
-              <div className="space-y-4">
-                <div className="text-4xl font-medium py-8">Most Popular</div>
+      
+      <Container className="pb-16">
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-3">
-                  {articlesData.map((props) => {
-                    return <MostPopularArticleCard key={props.id} {...props} />;
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
-        </Container>
-      </div>
-      {/* All Articles  */}
-      <div>
-        <Container>
-          <div className="space-y-8 py-16">
-            <div className="flex gap-8 lg:flex-row lg:flex-nowrap flex-wrap-reverse">
-              {articlesData.length !== 0 && (
-                <div className="space-y-8 w-full p-4">
-                  {articlesData.map((props) => {
-                    return <ArticleStripe key={props.id} {...props} />;
-                  })}
-                </div>
-              )}
-              {articlesData.length !== 0 && (
-                <div className="lg:w-80 flex-shrink-0 p-4 space-y-4 items-center justify-start flex flex-col w-full">
-                  <div className="font-medium">
-                    Discover our articles in various categories
-                  </div>
-                  <ArticlesCategoryCard extraStyle="lg:flex-wrap gap-4" />
-                </div>
-              )}
+      {articlesData.articles && (
+        <div className="space-y-4 my-8">
+            <div className="flex w-full justify-between items-end pb-8">
+              <div className="text-4xl">OUR ARTICLES</div>
+              <button
+                className="text-xl text-primary hover:text-secondary"
+                onClick={() => {
+                  navigate("/articles/");
+                }}
+              >
+                Read More
+              </button>
+            </div>
+            <div className="flex flex-wrap justify-between">
+              {articlesData.articles.slice(0, 3).length > 0 ? (
+                articlesData.articles.slice(0, 3).map((props) => {
+                  return <ArticleCard key={props.id} {...props} />;
+                })
+                ) : (
+                  <p className="text-center">No articles found</p>
+                  )}
             </div>
           </div>
+        )}
         </Container>
-      </div>
     </>
   );
 };

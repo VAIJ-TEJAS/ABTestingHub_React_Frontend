@@ -174,7 +174,7 @@ export const Navbar = () => {
             <div className="flex space-x-2 ">
               <Button
                 type="primary"
-                className="hidden lg:inline-block lg:ml-3 px-6 text-white font-bold transition duration-200"
+                className="hidden lg:inline-block lg:ml-3 px-6 text-white transition duration-200"
                 onClick={() => {
                   navigate("/dashboard/");
                 }}
