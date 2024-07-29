@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import CountUp from "react-countup";
 import PlotGraph from "../components/PlotGraph";
-import { Fab, Paper } from "@mui/material";
+import { Fab } from "@mui/material";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import {
   ArrowDownOutlined,

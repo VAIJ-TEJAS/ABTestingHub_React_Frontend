@@ -13,7 +13,7 @@ import {
 } from "antd";
 import axios from "axios";
 import PlotGraph from "../components/PlotGraph";
-import { Fab, Paper } from "@mui/material";
+import { Fab } from "@mui/material";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Context } from "../context/context.provider";
