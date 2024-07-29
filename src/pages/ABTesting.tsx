@@ -498,8 +498,8 @@ export const ABTesting: React.FC = () => {
         </div>
       </Modal>
       {testData && (
-        <div className="container">
-          <Paper className="p-4 flex justify-between items-center relative">
+        <div className="container border-2 border-secondary rounded-lg bg-white" style={{ boxShadow: "0px 10px 35px 0px #00000040" }}>
+          <div className="p-4 flex justify-between items-center relative">
             <div className="font-medium">{testData?.name}</div>
             <Tooltip
               title={
@@ -552,7 +552,7 @@ export const ABTesting: React.FC = () => {
                 />
               </div>
             </Tooltip>
-          </Paper>
+          </div>
         </div>
       )}
       <div className="container flex flex-col lg:flex-row gap-4">
