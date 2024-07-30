@@ -1,17 +1,22 @@
-import { Button, Dropdown, Menu } from "antd";
+import { Button } from "antd";
 import { Context } from "../context/context.provider";
 import { useNavigate, useLocation } from "react-router-dom";
-import { CheckOutlined, SettingOutlined } from "@ant-design/icons";
-import { confirmation } from "./Confirmation";
 import { useState } from "react";
 import { SideDrawer } from "./SideDrawer";
 
-import IconText from "../assets/svgs/IconText.svg"
-import DropDownIcon from "../assets/svgs/Dropdown.svg"
-
+import IconText from "../assets/svgs/IconText.svg";
+import DropDownIcon from "../assets/svgs/Dropdown.svg";
 
 export const Navbar = () => {
-  const { username, userAuthenticated, showAuthModal, signOutUser, conversionName, onCurrencyChange, rates } = Context();
+  const {
+    // username,
+    userAuthenticated,
+    showAuthModal,
+    // signOutUser,
+    // conversionName,
+    // onCurrencyChange,
+    // rates,
+  } = Context();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,43 +25,41 @@ export const Navbar = () => {
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
-  const handleLogoutClick = () => {
-    confirmation('Are you sure you want to logout?').then(isConfirmed => {
-        if (isConfirmed) {
-            signOutUser(); // Call your sign out function here
-        }
-    });
-  };
+  // const handleLogoutClick = () => {
+  //   confirmation("Are you sure you want to logout?").then((isConfirmed) => {
+  //     if (isConfirmed) {
+  //       signOutUser(); // Call your sign out function here
+  //     }
+  //   });
+  // };
 
-  const currencyMenuItems = Object.keys(rates).map((key) => {
-    const value = `${rates[key].code},${rates[key].value},${rates[key].symbol}`;
-    return (
-      <Menu.Item key={value} onClick={() => onCurrencyChange(value)}>
-        {rates[key].code} {value.split(',')[0] === conversionName && <CheckOutlined />}
-      </Menu.Item>
-    );
-  });
+  // const currencyMenuItems = Object.keys(rates).map((key) => {
+  //   const value = `${rates[key].code},${rates[key].value},${rates[key].symbol}`;
+  //   return (
+  //     <Menu.Item key={value} onClick={() => onCurrencyChange(value)}>
+  //       {rates[key].code}{" "}
+  //       {value.split(",")[0] === conversionName && <CheckOutlined />}
+  //     </Menu.Item>
+  //   );
+  // });
 
-  const menu = (
-    <Menu>
-        <Menu.Item key="2" >
-            <div className="flex items-center py-4 border-b border-gray-200">
-                {/* <Avatar size={40} icon={<UserOutlined />} /> */}
-                <span className="font-bold text-gray-800">{username}</span>
-            </div>
-        </Menu.Item>
-        <Menu.SubMenu key="sub1" title={`Choose Currency (${conversionName})`}>
-            <div className="max-h-48 overflow-y-auto">
-                {currencyMenuItems}
-            </div>
-        </Menu.SubMenu>
-        <Menu.Divider />
-        <Menu.Item key="1" onClick={handleLogoutClick}>
-            <span className="text-red-600">Logout</span>
-        </Menu.Item>
-    </Menu>
-);
-  
+  // const menu = (
+  //   <Menu>
+  //     <Menu.Item key="2">
+  //       <div className="flex items-center py-4 border-b border-gray-200">
+  //         {/* <Avatar size={40} icon={<UserOutlined />} /> */}
+  //         <span className="font-bold text-gray-800">{username}</span>
+  //       </div>
+  //     </Menu.Item>
+  //     <Menu.SubMenu key="sub1" title={`Choose Currency (${conversionName})`}>
+  //       <div className="max-h-48 overflow-y-auto">{currencyMenuItems}</div>
+  //     </Menu.SubMenu>
+  //     <Menu.Divider />
+  //     <Menu.Item key="1" onClick={handleLogoutClick}>
+  //       <span className="text-red-600">Logout</span>
+  //     </Menu.Item>
+  //   </Menu>
+  // );
 
   const isArticlePage = location.pathname.includes("/article/");
   const navClass = isArticlePage
@@ -67,148 +70,137 @@ export const Navbar = () => {
     <div className="font-sans">
       <nav className={navClass} onMouseLeave={() => setDropdownOpen(false)}>
         <div className="flex justify-between items-center container">
-
-        <a
-          className="text-3xl font-bold leading-none flex items-center gap-4"
-          href="/"
-        >
-          <img src={IconText} className="w-20"/>
-        </a>
-
-        <SideDrawer />
-
-        <ul className="hidden absolute left-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
-          <li className="cursor-pointer p-2"  onClick={() => {
-                navigate("/home/");
-              }}>
-            <a
-              className={`hover:text-primary  transition-all duration-300  ${
-                isActive("/home/") ? "text-primary" : ""
-              }`}
-            >
-              HOME
-            </a>
-          </li>
-
-          <li
-            className="relative"
-            onMouseEnter={() => setDropdownOpen(true)}
+          <a
+            className="text-3xl font-bold leading-none flex items-center gap-4"
+            href="/"
           >
-            <button className="inline-flex gap-2 hover:text-primary transition-all duration-300 cursor-pointer items-center">
-              TOOLS <img src={DropDownIcon}></img>
-            </button>
-            {isDropdownOpen && (
-              <ul
-                className="absolute bg-white shadow rounded z-50 mt-5 w-52 border-2 border-primary"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
+            <img src={IconText} className="w-20" />
+          </a>
+
+          <SideDrawer />
+
+          <ul className="hidden absolute left-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
+            <li
+              className="cursor-pointer p-2"
+              onClick={() => {
+                navigate("/home/");
+              }}
+            >
+              <a
+                className={`hover:text-primary  transition-all duration-300  ${
+                  isActive("/home/") ? "text-primary" : ""
+                }`}
               >
-                <li className="px-4 py-2">
-                  <a
-                    className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                      isActive("/proportional-metric-testing/")
-                        ? "text-primary"
-                        : ""
-                    }`}
-                    onClick={() => navigate("/proportional-metric-testing/")}
-                  >
-                    Proportional Metric
-                  </a>
-                </li>
-                <li className="px-4 py-2">
-                  <a
-                    className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                      isActive("/continuous-metric-testing/")
-                        ? "text-primary"
-                        : ""
-                    }`}
-                    onClick={() => navigate("/continuous-metric-testing/")}
-                  >
-                    Continuous Metric
-                  </a>
-                </li>
-                <li className="px-4 py-2">
-                  <a
-                    className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                      isActive("/ab-testing/")
-                        ? "text-primary"
-                        : ""
-                    }`}
-                    onClick={() => navigate("/ab-testing/")}
-                  >
-                    A/B Testing
-                  </a>
-                </li>
-              </ul>
-            )}
-          </li>
-          <li>
-            <a
-              className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                isActive("/about-us/") ? "text-primary" : ""
-              }`}
-              onClick={() => {
-                navigate("/about-us/");
-              }}
-            >
-              COMPANY
-            </a>
-          </li>
+                HOME
+              </a>
+            </li>
 
-          <li>
-            <a
-              className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                isActive("/articles/") ? "text-primary" : ""
-              }`}
-              onClick={() => {
-                navigate("/articles/");
-              }}
-            >
-              ARTICLES
-            </a>
-          </li>
-        </ul>
-
-        {userAuthenticated ? (
-          <div className="hidden lg:block">
-            <div className="flex space-x-2 ">
-              <Button
-                type="primary"
-                className="hidden lg:inline-block lg:ml-3 px-6 text-white transition duration-200"
+            <li className="relative" onMouseEnter={() => setDropdownOpen(true)}>
+              <button className="inline-flex gap-2 hover:text-primary transition-all duration-300 cursor-pointer items-center">
+                TOOLS <img src={DropDownIcon}></img>
+              </button>
+              {isDropdownOpen && (
+                <ul
+                  className="absolute bg-white shadow rounded z-50 mt-5 w-52 border-2 border-primary"
+                  onMouseEnter={() => setDropdownOpen(true)}
+                  onMouseLeave={() => setDropdownOpen(false)}
+                >
+                  <li className="px-4 py-2">
+                    <a
+                      className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                        isActive("/proportional-metric-testing/")
+                          ? "text-primary"
+                          : ""
+                      }`}
+                      onClick={() => navigate("/proportional-metric-testing/")}
+                    >
+                      Proportional Metric
+                    </a>
+                  </li>
+                  <li className="px-4 py-2">
+                    <a
+                      className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                        isActive("/continuous-metric-testing/")
+                          ? "text-primary"
+                          : ""
+                      }`}
+                      onClick={() => navigate("/continuous-metric-testing/")}
+                    >
+                      Continuous Metric
+                    </a>
+                  </li>
+                  <li className="px-4 py-2">
+                    <a
+                      className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                        isActive("/ab-testing/") ? "text-primary" : ""
+                      }`}
+                      onClick={() => navigate("/ab-testing/")}
+                    >
+                      A/B Testing
+                    </a>
+                  </li>
+                </ul>
+              )}
+            </li>
+            <li>
+              <a
+                className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                  isActive("/about-us/") ? "text-primary" : ""
+                }`}
                 onClick={() => {
-                  navigate("/dashboard/");
+                  navigate("/about-us/");
                 }}
               >
-                Dashboard
-              </Button>
-              <div className="space-x-2">
-              {/* <Button
-                  className="hidden lg:inline-block lg:ml-auto font-bold transition duration-200"
-                  icon={isDarkMode ? <SunOutlined /> : <MoonOutlined />}
-                  onClick={toggleTheme}
-              /> */}
-                <Dropdown overlay={menu} trigger={['click']}>
-                  <Button
+                COMPANY
+              </a>
+            </li>
+
+            <li>
+              <a
+                className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                  isActive("/articles/") ? "text-primary" : ""
+                }`}
+                onClick={() => {
+                  navigate("/articles/");
+                }}
+              >
+                ARTICLES
+              </a>
+            </li>
+          </ul>
+
+          {userAuthenticated ? (
+            <div className="hidden lg:block">
+              <div className="flex space-x-2 ">
+                <Button
+                  type="primary"
+                  className="hidden lg:inline-block lg:ml-3 px-6 text-white transition duration-200"
+                  onClick={() => {
+                    navigate("/dashboard/");
+                  }}
+                >
+                  DASHBOARD
+                </Button>
+                {/* <div className="space-x-2">
+                  <Dropdown overlay={menu} trigger={["click"]}>
+                    <Button
                       type="primary"
                       className="hidden lg:inline-block lg:ml-auto font-bold  transition duration-200"
                       icon={<SettingOutlined />}
-                  />
-                </Dropdown>
+                    />
+                  </Dropdown>
+                </div> */}
               </div>
             </div>
-          </div>
-
-          
-        ) : (
-          <Button
-          type="primary"
-          className="hidden lg:flex  px-6 text-lg transition duration-200 items-center justify-center"
-          onClick={showAuthModal}
-        >
-          LOGIN
-        </Button>        
-        )}
-        
+          ) : (
+            <Button
+              type="primary"
+              className="hidden lg:flex  px-6 text-lg transition duration-200 items-center justify-center"
+              onClick={showAuthModal}
+            >
+              LOGIN
+            </Button>
+          )}
         </div>
       </nav>
       <div className="navbar-menu relative z-50 hidden">

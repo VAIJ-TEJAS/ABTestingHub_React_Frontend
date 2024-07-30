@@ -26,10 +26,11 @@ import { confirmation } from "../components/Confirmation";
 import { Option } from "antd/es/mentions";
 import { Context } from "../context/context.provider";
 
-import TotalHypothesis from "../assets/svgs/TotalHypothesis.svg"
-import ResultSummary from "../assets/svgs/ResultSummary.svg"
-import InProgress from "../assets/svgs/InProgress.svg"
-import OverallRevenue from "../assets/svgs/OverallRevenue.svg"
+import TotalHypothesis from "../assets/svgs/TotalHypothesis.svg";
+import ResultSummary from "../assets/svgs/ResultSummary.svg";
+import InProgress from "../assets/svgs/InProgress.svg";
+import OverallRevenue from "../assets/svgs/OverallRevenue.svg";
+import { CreateTest } from "../components/CreateTest";
 
 const getTagColor = (status: string) => {
   switch (status) {
@@ -58,8 +59,7 @@ const getStatusLabel = (status: string) => {
 };
 
 export const Dashboard = () => {
-
-  const { conversionSymbol } = Context()
+  const { conversionSymbol } = Context();
 
   const [totalHypotheses, setTotalHypotheses] = useState<number>(0);
   const [inProgress, setInProgress] = useState<number>(0);
@@ -70,7 +70,19 @@ export const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [testsData, setTestsData] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [openCreateEditTestModal, setOpenCreateEditTestModal] =
+    useState<boolean>(false);
+  const [testToEdit, setTestToEdit] = useState<number | null>(null);
   const navigate = useNavigate();
+
+  const onOpenCreateEditTestModal = () => {
+    setOpenCreateEditTestModal(true);
+  };
+
+  const closeCreateEditTestModal = () => {
+    setTestToEdit(null);
+    setOpenCreateEditTestModal(false);
+  };
 
   const paginationConfig = {
     pageSize: 8,
@@ -78,12 +90,15 @@ export const Dashboard = () => {
 
   const fetchAllTestsData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/tests/`, {
-        headers: {
-          Authorization:
-            "Token " + localStorage.getItem("abtestinghub-access-token"),
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/tests/`,
+        {
+          headers: {
+            Authorization:
+              "Token " + localStorage.getItem("abtestinghub-access-token"),
+          },
+        }
+      );
 
       const tests = response.data;
       setTestsData(tests);
@@ -143,23 +158,21 @@ export const Dashboard = () => {
     fetchAllTestsData();
   }, []);
 
-  const handleEditTest = (testId: number) => {
-    // Navigate to create test page with testId as state
-    navigate("/create-test", { state: { testId } });
-  };
-
   const handleDeleteTest = async (testId: number) => {
     const isConfirmed = await confirmation(
       "Are you sure you want to delete this test?"
     );
     if (isConfirmed) {
       try {
-        await axios.delete(`${import.meta.env.VITE_BASE_URL}/tests/${testId}/`, {
-          headers: {
-            Authorization:
-              "Token " + localStorage.getItem("abtestinghub-access-token"),
-          },
-        });
+        await axios.delete(
+          `${import.meta.env.VITE_BASE_URL}/tests/${testId}/`,
+          {
+            headers: {
+              Authorization:
+                "Token " + localStorage.getItem("abtestinghub-access-token"),
+            },
+          }
+        );
 
         fetchTestsData();
         message.success("Test deleted successfully");
@@ -174,7 +187,10 @@ export const Dashboard = () => {
       <Menu.Item
         key="edit"
         icon={<EditOutlined />}
-        onClick={() => handleEditTest(record.id)}
+        onClick={() => {
+          setTestToEdit(record.id);
+          onOpenCreateEditTestModal();
+        }}
       >
         Edit
       </Menu.Item>
@@ -389,18 +405,24 @@ export const Dashboard = () => {
           test?.days_required +
           " days"
         : "N/A",
-    revenueImpact: test?.revenue_impact ? " "+ conversionSymbol + " " + Math.round(test.revenue_impact) : "N/A",
-    abTestResults:
-      test?.max_uplift
-        ? (test?.statistically_significant ? "Significant" : "Insignificant") +
-          " | " +
-          test?.max_uplift
-        : "N/A",
+    revenueImpact: test?.revenue_impact
+      ? " " + conversionSymbol + " " + Math.round(test.revenue_impact)
+      : "N/A",
+    abTestResults: test?.max_uplift
+      ? (test?.statistically_significant ? "Significant" : "Insignificant") +
+        " | " +
+        test?.max_uplift
+      : "N/A",
     proportional_metric: test.proportional_metric,
   }));
 
   return (
     <div className="flex flex-col justify-center items-center p-4">
+      <CreateTest
+        isVisible={openCreateEditTestModal}
+        onClose={closeCreateEditTestModal}
+        test_id={testToEdit}
+      />
       <div className="flex-grow-0 container">
         <div className="flex gap-4 p-4 justify-center flex-wrap">
           <StatisticCard
@@ -444,11 +466,9 @@ export const Dashboard = () => {
             <Button
               type="primary"
               icon={<PlusOutlined />}
-              onClick={() => {
-                navigate("/create-test");
-              }}
+              onClick={onOpenCreateEditTestModal}
             >
-              New Hypothesis
+              NEW HYPOTHESIS
             </Button>
             {/* <Button icon={<FileExcelOutlined />}>Export</Button> */}
           </Space>

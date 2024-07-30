@@ -8,6 +8,7 @@ import Google from "../assets/svgs/Google.svg"
 // import GoogleIcon from "../assets/svgs/google.svg";
 import { useState } from "react";
 import axios from "axios";
+import { CloseSharp } from "@mui/icons-material";
 // import { useNavigate } from "react-router-dom";
 
 interface AuthProps {
@@ -169,9 +170,15 @@ export const Auth: React.FC<AuthProps> = ({
         closeIcon={null}
         footer={null}
         width={720}
+        styles={{
+          content:{
+            padding: "0px 0px",
+            borderRadius:"16px"
+          }
+        }}
       >
         {isSignInView ? (
-          <div className="flex border-2 border-secondary rounded-xl">
+          <div className="flex border-4 border-secondary rounded-xl">
             <div className="w-72 flex-shrink-0 relative flex justify-center items-center">
               <img src={Mask} />
               <img src={IconText} className="absolute w-36"></img>
@@ -182,8 +189,8 @@ export const Auth: React.FC<AuthProps> = ({
               form={formSignin}
               onFinish={handleSignIn}
             >
-              <div className="text-xl pb-4">
-                Login to AB Testing Hub
+              <div className="text-xl pb-4 inline-flex items-center justify-between">
+                Login to AB Testing Hub <CloseSharp className="hover:text-primary hover:cursor-pointer" onClick={handleClose}/>
               </div>
               <Form.Item
                 label="EMAIL"
@@ -228,7 +235,7 @@ export const Auth: React.FC<AuthProps> = ({
           </div>
         ) : (
           <div>
-            <div className="flex border-2 border-secondary rounded-xl">
+            <div className="flex border-4 border-secondary rounded-xl">
             <div className="w-72 flex-shrink-0 relative flex justify-center items-center">
               <img src={Mask} />
               <img src={IconText} className="absolute w-36"></img>
@@ -239,8 +246,8 @@ export const Auth: React.FC<AuthProps> = ({
                 form={formSignup}
                 onFinish={handleSignUp}
               >
-                 <div className="text-xl pb-4">
-                Signup to AB Testing Hub
+                 <div className="text-xl pb-4 inline-flex items-center justify-between">
+                Signup to AB Testing Hub <CloseSharp className="hover:text-primary hover:cursor-pointer" onClick={handleClose}/>
               </div>
                 <Form.Item
                   label="EMAIL"

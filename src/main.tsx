@@ -36,6 +36,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         Checkbox: {
           colorPrimary:"#F9A828"
         },
+        Segmented:{
+          itemSelectedBg: "#F9A828",
+          colorText:"#FFFFFF"
+        }
       }
     }}
     

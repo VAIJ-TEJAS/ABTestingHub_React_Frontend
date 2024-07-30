@@ -1,6 +1,7 @@
 import { Form, Input, Button, Modal } from "antd";
 import { useState } from "react";
 import ThumbsUp from "../assets/svgs/ThumbsUp.svg"
+import { CloseSharp } from "@mui/icons-material";
 
 export const Feedback = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -71,13 +72,22 @@ export const Feedback = () => {
             onCancel={handleCancel}
             closeIcon={false}
             footer={null}
+            styles={{
+              content:{
+                padding: "0px 0px",
+                borderRadius:"16px"
+              }
+            }}
         >
-          <div className="flex flex-col justify-center items-center gap-4 font-sans text-center border-2 border-secondary p-12 rounded-xl">
+          <div className="flex flex-col justify-center items-center gap-4 font-sans text-center border-4 border-secondary p-4 rounded-xl">
+          <div className="text-xl pb-4 inline-flex w-full justify-end">
+                <CloseSharp className="hover:text-primary hover:cursor-pointer" onClick={handleCancel}/>
+              </div>
             <img src={ThumbsUp} className="animate-bounce"/>
             <div className="text-2xl">
                 Thank You for Your Feedback!
             </div>
-            <div className="">
+            <div className="pb-4">
                 We appreciate your input and are committed to improving our services to better meet your needs.
             </div>
           </div>

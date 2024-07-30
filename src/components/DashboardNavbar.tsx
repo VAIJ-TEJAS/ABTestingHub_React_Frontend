@@ -4,22 +4,33 @@ import DropDownIcon from "../assets/svgs/Dropdown.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CheckOutlined, SettingOutlined } from "@ant-design/icons";
 import { Context } from "../context/context.provider";
-import { confirmation } from "./Confirmation";
 import { useState } from "react";
 import { SideDrawer } from "./SideDrawer";
-// import { signOut } from "firebase/auth";
-// import { auth } from "../../firebaseConfig";
+import { Logout } from "./Logout";
+import UserIcon from "../assets/svgs/User.svg";
+import FeedbackDropdownIcon from "../assets/svgs/FeedbackDropdown.svg";
+import LogoutIcon from "../assets/svgs/Logout.svg";
+import RupeeIcon from "../assets/svgs/Rupee.svg";
+import DollarIcon from "../assets/svgs/Dollar.svg";
 
 export const DashboardNavbar = () => {
-  const { username, signOutUser, onCurrencyChange, rates, conversionName } =
-    Context();
+  const { username, onCurrencyChange, rates, conversionName } = Context();
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const isActive = (pathname: string) =>
     location.pathname.split("/")[1] === pathname.split("/")[1];
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+
+  const onOpenLogoutModal = () => {
+    setLogoutModalVisible(true);
+  };
+
+  const onCloseLogoutModal = () => {
+    setLogoutModalVisible(false);
+  };
 
   // const [isDarkMode, setIsDarkMode] = useState(false);
   // const toggleTheme = () => {
@@ -32,11 +43,7 @@ export const DashboardNavbar = () => {
     : "sticky top-0 px-4 py-2 shadow-xl z-50 bg-white flex justify-center";
 
   const handleLogoutClick = () => {
-    confirmation("Are you sure you want to logout?").then((isConfirmed) => {
-      if (isConfirmed) {
-        signOutUser(); // Call your sign out function here
-      }
-    });
+    onOpenLogoutModal();
   };
 
   const currencyMenuItems = Object.keys(rates).map((key) => {
@@ -50,147 +57,164 @@ export const DashboardNavbar = () => {
   });
 
   const menu = (
-    <Menu>
-      <Menu.Item key="2">
-        <div className="flex items-center p-4 border-b border-gray-200">
-          {/* <Avatar size={40} icon={<UserOutlined />} src={user?.avatar} /> */}
-          <span className="ml-4 font-bold text-gray-800">{username || ""}</span>
+    <Menu className="border-2 border-primary">
+      <Menu.Item key="1">
+        <div className="flex items-center">
+          <img src={UserIcon} />
+          <span className="ml-2 text-gray-800">{username || "Username"}</span>
         </div>
       </Menu.Item>
-      <Menu.SubMenu key="sub1" title={`Choose Currency (${conversionName})`}>
-        <div className="max-h-48 overflow-y-auto">{currencyMenuItems}</div>
-      </Menu.SubMenu>
-      <Menu.Divider />
-      <Menu.Item key="1" onClick={handleLogoutClick}>
-        <span className="text-red-600">Logout</span>
+      <Menu.Divider className="border border-primary" />
+      <div className="flex items-center">
+         <img src={conversionName === "INR" ? RupeeIcon : DollarIcon} className="ml-3"/>
+        <Menu.SubMenu key="2" title={conversionName === "INR" ? `Rupees` : 'Dollars'}>
+          <div className="max-h-48 overflow-y-auto">{currencyMenuItems}</div>
+        </Menu.SubMenu>
+      </div>
+      <Menu.Divider className="border border-primary" />
+      <Menu.Item
+        key="3"
+        onClick={() => {
+          navigate("/feedback");
+        }}
+      >
+         <div className="flex items-center">
+         <img src={FeedbackDropdownIcon} />
+          <span className="ml-2">Feedback</span>
+         </div>
+      </Menu.Item>
+      <Menu.Divider className="border border-primary" />
+      <Menu.Item key="4" onClick={handleLogoutClick}>
+      <div className="flex items-center">
+      <img src={LogoutIcon} />
+        <span className="text-red-600 ml-2">Logout</span>
+        </div>
       </Menu.Item>
     </Menu>
   );
 
   return (
     <>
+      <Logout isVisible={logoutModalVisible} onClose={onCloseLogoutModal} />
       <nav className={navClass}>
-      <div className="flex justify-between items-center container">
-
-        <a
-          className="text-3xl font-bold leading-none flex items-center gap-4"
-          href="/"
-        >
-          <img src={IconText} className="w-20" />
-        </a>
-        <SideDrawer />
-
-        <ul className="hidden absolute left-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
-          <li className="cursor-pointer p-2"  onClick={() => {
-                navigate("/home/");
-              }}>
-            <a
-              className={`hover:text-primary  transition-all duration-300  ${
-                isActive("/home/") ? "text-primary" : ""
-              }`}
-            >
-              HOME
-            </a>
-          </li>
-
-          <li
-            className="relative"
-            onMouseEnter={() => setDropdownOpen(true)}
+        <div className="flex justify-between items-center container">
+          <a
+            className="text-3xl font-bold leading-none flex items-center gap-4"
+            href="/"
           >
-            <button className="inline-flex gap-2 hover:text-primary transition-all duration-300 cursor-pointer items-center">
-              TOOLS <img src={DropDownIcon}></img>
-            </button>
-            {isDropdownOpen && (
-              <ul
-                className="absolute bg-white shadow rounded z-50 mt-5 w-52 border-2 border-primary"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
+            <img src={IconText} className="w-20" />
+          </a>
+          <SideDrawer />
+
+          <ul className="hidden absolute left-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-12 font-medium">
+            <li
+              className="cursor-pointer p-2"
+              onClick={() => {
+                navigate("/home/");
+              }}
+            >
+              <a
+                className={`hover:text-primary  transition-all duration-300  ${
+                  isActive("/home/") ? "text-primary" : ""
+                }`}
               >
-                <li className="px-4 py-2">
-                  <a
-                    className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                      isActive("/proportional-metric-testing/")
-                        ? "text-primary"
-                        : ""
-                    }`}
-                    onClick={() => navigate("/proportional-metric-testing/")}
-                  >
-                    Proportional Metric
-                  </a>
-                </li>
-                <li className="px-4 py-2">
-                  <a
-                    className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                      isActive("/continuous-metric-testing/")
-                        ? "text-primary"
-                        : ""
-                    }`}
-                    onClick={() => navigate("/continuous-metric-testing/")}
-                  >
-                    Continuous Metric
-                  </a>
-                </li>
-                <li className="px-4 py-2">
-                  <a
-                    className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                      isActive("/ab-testing/")
-                        ? "text-primary"
-                        : ""
-                    }`}
-                    onClick={() => navigate("/ab-testing/")}
-                  >
-                    A/B Testing
-                  </a>
-                </li>
-              </ul>
-            )}
-          </li>
-          <li>
-            <a
-              className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                isActive("/about-us/") ? "text-primary" : ""
-              }`}
-              onClick={() => {
-                navigate("/about-us/");
-              }}
-            >
-              COMPANY
-            </a>
-          </li>
+                HOME
+              </a>
+            </li>
 
-          <li>
-            <a
-              className={`hover:text-primary transition-all duration-300 cursor-pointer ${
-                isActive("/articles/") ? "text-primary" : ""
-              }`}
-              onClick={() => {
-                navigate("/articles/");
-              }}
-            >
-              ARTICLES
-            </a>
-          </li>
-        </ul>
+            <li className="relative" onMouseEnter={() => setDropdownOpen(true)}>
+              <button className="inline-flex gap-2 hover:text-primary transition-all duration-300 cursor-pointer items-center">
+                TOOLS <img src={DropDownIcon}></img>
+              </button>
+              {isDropdownOpen && (
+                <ul
+                  className="absolute bg-white shadow rounded z-50 mt-5 w-52 border-2 border-primary"
+                  onMouseEnter={() => setDropdownOpen(true)}
+                  onMouseLeave={() => setDropdownOpen(false)}
+                >
+                  <li className="px-4 py-2">
+                    <a
+                      className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                        isActive("/proportional-metric-testing/")
+                          ? "text-primary"
+                          : ""
+                      }`}
+                      onClick={() => navigate("/proportional-metric-testing/")}
+                    >
+                      Proportional Metric
+                    </a>
+                  </li>
+                  <li className="px-4 py-2">
+                    <a
+                      className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                        isActive("/continuous-metric-testing/")
+                          ? "text-primary"
+                          : ""
+                      }`}
+                      onClick={() => navigate("/continuous-metric-testing/")}
+                    >
+                      Continuous Metric
+                    </a>
+                  </li>
+                  <li className="px-4 py-2">
+                    <a
+                      className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                        isActive("/ab-testing/") ? "text-primary" : ""
+                      }`}
+                      onClick={() => navigate("/ab-testing/")}
+                    >
+                      A/B Testing
+                    </a>
+                  </li>
+                </ul>
+              )}
+            </li>
+            <li>
+              <a
+                className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                  isActive("/about-us/") ? "text-primary" : ""
+                }`}
+                onClick={() => {
+                  navigate("/about-us/");
+                }}
+              >
+                COMPANY
+              </a>
+            </li>
 
-        <div className="space-x-2 hidden lg:block">
-          {/* <Button
+            <li>
+              <a
+                className={`hover:text-primary transition-all duration-300 cursor-pointer ${
+                  isActive("/articles/") ? "text-primary" : ""
+                }`}
+                onClick={() => {
+                  navigate("/articles/");
+                }}
+              >
+                ARTICLES
+              </a>
+            </li>
+          </ul>
+
+          <div className="space-x-2 hidden lg:block">
+            {/* <Button
                         className="hidden lg:inline-block lg:ml-auto font-bold transition duration-200"
                         icon={isDarkMode ? <SunOutlined /> : <MoonOutlined />}
                         onClick={toggleTheme}
                     /> */}
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-            visible={dropdownVisible}
-            onVisibleChange={(flag) => setDropdownVisible(flag)}
-          >
-            <Button
-              type="primary"
-              className="hidden lg:inline-block lg:ml-auto font-bold  transition duration-200"
-              icon={<SettingOutlined />}
-            />
-          </Dropdown>
-        </div>
+            <Dropdown
+              overlay={menu}
+              trigger={["click"]}
+              visible={dropdownVisible}
+              onVisibleChange={(flag) => setDropdownVisible(flag)}
+            >
+              <Button
+                type="primary"
+                className="hidden lg:inline-block lg:ml-auto font-bold  transition duration-200"
+                icon={<SettingOutlined />}
+              />
+            </Dropdown>
+          </div>
         </div>
       </nav>
       <div className="navbar-menu relative z-50 hidden">

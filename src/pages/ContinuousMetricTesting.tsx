@@ -28,6 +28,7 @@ import { confirmation } from "../components/Confirmation";
 import { generateProjectName } from "../utils/hypothesis_title_generator";
 import { Auth } from "../components/Auth";
 import QuestionReview from "../components/QuestionReview";
+import SaveIcon from "../assets/svgs/Save.svg"
 
 const { Option } = Select;
 
@@ -1289,28 +1290,30 @@ export const ContinuousMetricTesting: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex w-full justify-between">
-                <Form.Item>
+              <div className="flex gap-4 w-full justify-between">
+                <Form.Item  className="w-full">
                   <Button
+                    size="large"
+                     className="w-full"
                     type="primary"
                     htmlType="submit"
                     onClick={handleCalculateClick}
                     disabled={!!error}
                   >
-                    Calculate
+                    CALCULATE
                   </Button>
                 </Form.Item>
                 <>
                   <Button
-                    type="primary"
+                    className="bg-secondary"
+                    size="large"
                     onClick={(event) => {
                       event.preventDefault();
                       saveResults(testData);
                     }}
                     disabled={isNotCalculatedSaved === CalculationStatus.IDLE}
-                  >
-                    Save
-                  </Button>
+                    icon={<img src={SaveIcon} className="w-6"/>}
+                  />
                 </>
               </div>
             </Form>

@@ -7,7 +7,6 @@ import { Footer } from "./components/Footer";
 import { Home } from "./pages/Home";
 import { Context } from "./context/context.provider";
 import { ABTesting } from "./pages/ABTesting";
-import { CreateTest } from "./pages/CreateTest";
 import { Dashboard } from "./pages/Dashboard";
 import { ContinuousMetricTesting } from "./pages/ContinuousMetricTesting";
 import { ProportionalMetricTesting } from "./pages/ProportionalMetricTesting";
@@ -66,12 +65,10 @@ function App() {
           <Route path="/proportional-metric-testing" element={<ProportionalMetricTesting />} />
           {userAuthenticated ? (
             <>
-              <Route path="/create-test" element={<CreateTest />} />
               <Route path="/dashboard" element={<Dashboard />} />
             </>
           ) : (
             <>
-              <Route path="/create-test" element={<Navigate to={"/home"} />} />
               <Route path="/dashboard" element={<Navigate to={"/home"} />} />
             </>
           )}

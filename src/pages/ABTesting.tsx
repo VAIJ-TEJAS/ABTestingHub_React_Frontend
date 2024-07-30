@@ -5,11 +5,11 @@ import {
   InputNumber,
   Button,
   Tooltip,
-  Radio,
   Table,
   message,
   Modal,
   List,
+  Segmented,
 } from "antd";
 import axios from "axios";
 import PlotGraph from "../components/PlotGraph";
@@ -23,10 +23,11 @@ import { confirmation } from "../components/Confirmation";
 import { generateProjectName } from "../utils/hypothesis_title_generator";
 import { Auth } from "../components/Auth";
 import QuestionReview from "../components/QuestionReview";
+import SaveIcon from "../assets/svgs/Save.svg";
 
 interface ArmData {
   id: number;
-  value: number | null;  
+  value: number | null;
 }
 
 export const ABTesting: React.FC = () => {
@@ -151,7 +152,7 @@ export const ABTesting: React.FC = () => {
     for (let i = 1; i <= armsCount; i++) {
       visitorsInput.data.push({
         id: i,
-        value: values[`visitors_arm_${i}`], 
+        value: values[`visitors_arm_${i}`],
       });
       conversionsInput.data.push({
         id: i,
@@ -498,7 +499,10 @@ export const ABTesting: React.FC = () => {
         </div>
       </Modal>
       {testData && (
-        <div className="container border-2 border-secondary rounded-lg bg-white" style={{ boxShadow: "0px 10px 35px 0px #00000040" }}>
+        <div
+          className="container border-2 border-secondary rounded-lg bg-white"
+          style={{ boxShadow: "0px 10px 35px 0px #00000040" }}
+        >
           <div className="p-4 flex justify-between items-center relative">
             <div className="font-medium">{testData?.name}</div>
             <Tooltip
@@ -557,8 +561,10 @@ export const ABTesting: React.FC = () => {
       )}
       <div className="container flex flex-col lg:flex-row gap-4">
         <div className="flex flex-col gap-4">
-          <div className="p-4 border-2 border-secondary rounded-lg bg-white"
-            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}>
+          <div
+            className="p-4 border-2 border-secondary rounded-lg bg-white"
+            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}
+          >
             <Form
               form={form}
               layout="vertical"
@@ -620,96 +626,100 @@ export const ABTesting: React.FC = () => {
                   >
                     <InputNumber min={90} max={100} style={{ width: "100%" }} />
                   </Form.Item>
-                  <Form.Item 
-                    name="tail_type" 
+                  <Form.Item
+                    name="tail_type"
                     label={
                       <span>
                         Tail Type of Hypothesis&nbsp;
                         <Tooltip
-                        className="text-primary px-2"
-                        overlayInnerStyle={{ width: "600px" }}
-                        title={
-                          <span className="no-tailwind">
-                            <strong>Tail of a Test</strong>
-                            <br />
-                            <br />
-                            <em>Definition:</em> The "tail" of a statistical
-                            test refers to the region(s) in the probability
-                            distribution under the null hypothesis where extreme
-                            values are considered evidence against the null
-                            hypothesis. Statistical tests are classified as
-                            one-tailed or two-tailed based on the number of
-                            tails considered.
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>One-Tailed Test</strong>: Focuses on
-                                extreme values in one direction (either the
-                                upper or lower tail) of the distribution. It is
-                                used when the hypothesis specifies a directional
-                                change.
-                              </li>
-                              <li>
-                                <strong>Two-Tailed Test</strong>: Considers
-                                extreme values in both directions of the
-                                distribution. It is used when the hypothesis
-                                does not specify a directional change, and
-                                interest lies in deviations from the null
-                                hypothesis in either direction.
-                              </li>
-                            </ul>
-                            <em>Example:</em> Suppose you're conducting a
-                            hypothesis test to determine if a new drug has a
-                            different effect than a placebo.
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>One-Tailed Test</strong>: If the
-                                hypothesis predicts that the new drug increases
-                                the observed effect, a one-tailed test focuses
-                                on extreme values in the upper tail of the
-                                distribution.
-                              </li>
-                              <li>
-                                <strong>Two-Tailed Test</strong>: If the
-                                hypothesis is agnostic about the direction of
-                                the effect (increase or decrease), a two-tailed
-                                test considers extreme values in both the upper
-                                and lower tails of the distribution.
-                              </li>
-                            </ul>
-                            <strong>Considerations:</strong>
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Directional Hypotheses</strong>: Use a
-                                one-tailed test when the research hypothesis
-                                specifies a clear direction of the effect.
-                              </li>
-                              <li>
-                                <strong>Non-Directional Hypotheses</strong>: Use
-                                a two-tailed test when the research hypothesis
-                                is non-directional, and you want to detect
-                                deviations from the null hypothesis in either
-                                direction.
-                              </li>
-                            </ul>
-                            Understanding the tail of a test is crucial for
-                            selecting the appropriate statistical test and
-                            interpreting the results in the context of the
-                            research question.
-                          </span>
-                        }
-                      >
-                        <QuestionCircleOutlined />
+                          className="text-primary px-2"
+                          overlayInnerStyle={{ width: "600px" }}
+                          title={
+                            <span className="no-tailwind">
+                              <strong>Tail of a Test</strong>
+                              <br />
+                              <br />
+                              <em>Definition:</em> The "tail" of a statistical
+                              test refers to the region(s) in the probability
+                              distribution under the null hypothesis where
+                              extreme values are considered evidence against the
+                              null hypothesis. Statistical tests are classified
+                              as one-tailed or two-tailed based on the number of
+                              tails considered.
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>One-Tailed Test</strong>: Focuses on
+                                  extreme values in one direction (either the
+                                  upper or lower tail) of the distribution. It
+                                  is used when the hypothesis specifies a
+                                  directional change.
+                                </li>
+                                <li>
+                                  <strong>Two-Tailed Test</strong>: Considers
+                                  extreme values in both directions of the
+                                  distribution. It is used when the hypothesis
+                                  does not specify a directional change, and
+                                  interest lies in deviations from the null
+                                  hypothesis in either direction.
+                                </li>
+                              </ul>
+                              <em>Example:</em> Suppose you're conducting a
+                              hypothesis test to determine if a new drug has a
+                              different effect than a placebo.
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>One-Tailed Test</strong>: If the
+                                  hypothesis predicts that the new drug
+                                  increases the observed effect, a one-tailed
+                                  test focuses on extreme values in the upper
+                                  tail of the distribution.
+                                </li>
+                                <li>
+                                  <strong>Two-Tailed Test</strong>: If the
+                                  hypothesis is agnostic about the direction of
+                                  the effect (increase or decrease), a
+                                  two-tailed test considers extreme values in
+                                  both the upper and lower tails of the
+                                  distribution.
+                                </li>
+                              </ul>
+                              <strong>Considerations:</strong>
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Directional Hypotheses</strong>: Use a
+                                  one-tailed test when the research hypothesis
+                                  specifies a clear direction of the effect.
+                                </li>
+                                <li>
+                                  <strong>Non-Directional Hypotheses</strong>:
+                                  Use a two-tailed test when the research
+                                  hypothesis is non-directional, and you want to
+                                  detect deviations from the null hypothesis in
+                                  either direction.
+                                </li>
+                              </ul>
+                              Understanding the tail of a test is crucial for
+                              selecting the appropriate statistical test and
+                              interpreting the results in the context of the
+                              research question.
+                            </span>
+                          }
+                        >
+                          <QuestionCircleOutlined />
                         </Tooltip>
                       </span>
                     }
                   >
-                    <Radio.Group>
-                      <Radio value={true}>two-tailed</Radio>
-                      <Radio value={false}>one-tailed</Radio>
-                    </Radio.Group>
+                    <Segmented
+                      block
+                      options={[
+                        { label: "TWO-TAILED", value: true },
+                        { label: "ONE-TAILED", value: false },
+                      ]}
+                    />
                   </Form.Item>
                 </div>
                 <div className="w-full lg:w-64">
@@ -871,27 +881,29 @@ export const ABTesting: React.FC = () => {
                   );
                 })}
               </div>
-              <div className="flex w-full justify-between">
-                <Form.Item>
+              <div className="flex gap-4 w-full justify-between">
+                <Form.Item className="w-full">
                   <Button
+                    size="large"
+                    className="w-full"
                     type="primary"
                     htmlType="submit"
                     onClick={handleCalculateClick}
                   >
-                    Calculate
+                    CALCULATE
                   </Button>
                 </Form.Item>
                 <>
                   <Button
-                    type="primary"
+                    className="bg-secondary"
+                    size="large"
                     onClick={(event) => {
                       event.preventDefault();
                       saveResults(testData);
                     }}
                     disabled={isNotCalculatedSaved === CalculationStatus.IDLE}
-                  >
-                    Save
-                  </Button>
+                    icon={<img src={SaveIcon} className="w-6" />}
+                  />
                 </>
               </div>
             </Form>
@@ -899,59 +911,64 @@ export const ABTesting: React.FC = () => {
           {/* {numericalResults && <QuestionReview />} */}
         </div>
         <div className="flex-1 flex flex-col gap-4">
-          <div className="p-4 border-2 border-secondary rounded-lg bg-white"
-            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}>
+          <div
+            className="p-4 border-2 border-secondary rounded-lg bg-white"
+            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}
+          >
             <Table
               columns={columns}
               dataSource={tableData}
               pagination={false}
             />
-             {numericalResults?.arms == 2 && (
-            <div>
-              <div className="flex w-full justify-center items-center">
-                <PlotGraph data={figure.data} layout={figure.layout} />
+            {numericalResults?.arms == 2 && (
+              <div>
+                <div className="flex w-full justify-center items-center">
+                  <PlotGraph data={figure.data} layout={figure.layout} />
+                </div>
               </div>
-            </div>
-          )}
-          {numericalResults && (
-            <div className="p-4 space-y-4">
-              <div className="text-lg font-medium text-zinc-500">
-                Conclusion
-              </div>
-              <div className="text-sm">
-                {numericalResults.conclusion.map((item: any, index: number) => (
-                  <div key={index} className={item.className}>
-                    {item.text !== "" ? (
-                      <>
-                        {item.text === "The test results are statistically" ? (
-                          <div className="font-bold">
-                            The test results are statistically
-                            <span className="text-3xl">
-                              {statisticallySignificant ? (
-                                <span className="text-green-600">
-                                  &nbsp;Significant
+            )}
+            {numericalResults && (
+              <div className="p-4 space-y-4">
+                <div className="text-lg font-medium text-zinc-500">
+                  Conclusion
+                </div>
+                <div className="text-sm">
+                  {numericalResults.conclusion.map(
+                    (item: any, index: number) => (
+                      <div key={index} className={item.className}>
+                        {item.text !== "" ? (
+                          <>
+                            {item.text ===
+                            "The test results are statistically" ? (
+                              <div className="font-bold">
+                                The test results are statistically
+                                <span className="text-3xl">
+                                  {statisticallySignificant ? (
+                                    <span className="text-green-600">
+                                      &nbsp;Significant
+                                    </span>
+                                  ) : (
+                                    <span className="text-red-600">
+                                      &nbsp;Insignificant
+                                    </span>
+                                  )}
                                 </span>
-                              ) : (
-                                <span className="text-red-600">
-                                  &nbsp;Insignificant
-                                </span>
-                              )}
-                            </span>
-                          </div>
+                              </div>
+                            ) : (
+                              <>{item.text}</>
+                            )}
+                          </>
                         ) : (
-                          <>{item.text}</>
+                          <>
+                            <br />
+                          </>
                         )}
-                      </>
-                    ) : (
-                      <>
-                        <br />
-                      </>
-                    )}
-                  </div>
-                ))}
+                      </div>
+                    )
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
           </div>
         </div>
       </div>

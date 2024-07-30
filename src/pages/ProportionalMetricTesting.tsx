@@ -28,6 +28,7 @@ import { generateProjectName } from "../utils/hypothesis_title_generator";
 import { confirmation } from "../components/Confirmation";
 import { Context } from "../context/context.provider";
 import QuestionReview from "../components/QuestionReview";
+import SaveIcon from "../assets/svgs/Save.svg"
 
 const { Option } = Select;
 
@@ -1267,28 +1268,30 @@ export const ProportionalMetricTesting: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex w-full justify-between">
-                <Form.Item>
+              <div className="flex gap-4 w-full justify-between">
+                <Form.Item   className="w-full">
                   <Button
+                    className="w-full"
+                    size="large"
                     type="primary"
                     htmlType="submit"
                     onClick={handleCalculateClick}
                     disabled={!!error}
                   >
-                    Calculate
+                    CALCULATE
                   </Button>
                 </Form.Item>
                 <>
                   <Button
-                    type="primary"
-                    onClick={(event) => {
+                    className="bg-secondary"
+                     size="large"
+                     onClick={(event) => {
                       event.preventDefault();
                       saveResults(testData);
                     }}
                     disabled={isNotCalculatedSaved === CalculationStatus.IDLE}
-                  >
-                    Save
-                  </Button>
+                    icon={<img src={SaveIcon} className="w-6"/>}
+                  />
                 </>
               </div>
             </Form>
