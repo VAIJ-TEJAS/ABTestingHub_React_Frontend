@@ -24,6 +24,7 @@ import { generateProjectName } from "../utils/hypothesis_title_generator";
 import { Auth } from "../components/Auth";
 import QuestionReview from "../components/QuestionReview";
 import SaveIcon from "../assets/svgs/Save.svg";
+import { CloseSharp } from "@mui/icons-material";
 
 interface ArmData {
   id: number;
@@ -468,34 +469,52 @@ export const ABTesting: React.FC = () => {
         onSignin={handleSignInAndFetchTests}
       />
       <Modal
-        title="Select a Test"
         open={isTestsModalVisible}
         onOk={() => setIsTestsModalVisible(false)}
         onCancel={() => setIsTestsModalVisible(false)}
         footer={null}
+        closeIcon={false}
+        styles={{
+          content: {
+            padding: "0px 0px",
+            borderRadius: "16px",
+          },
+        }}
       >
-        <List
-          dataSource={userTests}
-          renderItem={(test) => (
-            <List.Item
-              className={selectedTestId === test.id ? "bg-blue-100" : ""}
-              actions={[
-                <Button type="link" onClick={() => setSelectedTestId(test.id)}>
-                  Select
-                </Button>,
-              ]}
-            >
-              {test.name}
-            </List.Item>
-          )}
-        />
-        <div className="flex w-full justify-between">
-          <Button type="primary" onClick={createNewTestForUser}>
-            Create New Test
-          </Button>
-          <Button onClick={overrideExistingTest} disabled={!selectedTestId}>
-            Override Selected Test
-          </Button>
+        <div className="border-4 border-secondary rounded-xl p-8">
+          <div className="w-full text-xl pb-4 inline-flex items-center justify-between">
+            SAVE TEST{" "}
+            <CloseSharp
+              className="hover:text-primary hover:cursor-pointer"
+              onClick={() => setIsTestsModalVisible(false)}
+            />
+          </div>
+          <List
+            dataSource={userTests}
+            renderItem={(test) => (
+              <List.Item
+                className={selectedTestId === test.id ? "bg-blue-100" : ""}
+                actions={[
+                  <Button
+                    type="link"
+                    onClick={() => setSelectedTestId(test.id)}
+                  >
+                    Select
+                  </Button>,
+                ]}
+              >
+                {test.name}
+              </List.Item>
+            )}
+          />
+          <div className="flex w-full justify-between">
+            <Button type="primary" onClick={createNewTestForUser}>
+              Create New Test
+            </Button>
+            <Button onClick={overrideExistingTest} disabled={!selectedTestId}>
+              Override Selected Test
+            </Button>
+          </div>
         </div>
       </Modal>
       {testData && (

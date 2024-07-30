@@ -28,7 +28,8 @@ import { generateProjectName } from "../utils/hypothesis_title_generator";
 import { confirmation } from "../components/Confirmation";
 import { Context } from "../context/context.provider";
 import QuestionReview from "../components/QuestionReview";
-import SaveIcon from "../assets/svgs/Save.svg"
+import SaveIcon from "../assets/svgs/Save.svg";
+import { CloseSharp } from "@mui/icons-material";
 
 const { Option } = Select;
 
@@ -455,38 +456,60 @@ export const ProportionalMetricTesting: React.FC = () => {
         onSignin={handleSignInAndFetchTests}
       />
       <Modal
-        title="Select a Test"
         open={isTestsModalVisible}
+        closeIcon={false}
         onOk={() => setIsTestsModalVisible(false)}
         onCancel={() => setIsTestsModalVisible(false)}
         footer={null}
+        styles={{
+          content: {
+            padding: "0px 0px",
+            borderRadius: "16px",
+          },
+        }}
       >
-        <List
-          dataSource={userTests}
-          renderItem={(test) => (
-            <List.Item
-              className={selectedTestId === test.id ? "bg-blue-100" : ""}
-              actions={[
-                <Button type="link" onClick={() => setSelectedTestId(test.id)}>
-                  Select
-                </Button>,
-              ]}
-            >
-              {test.name}
-            </List.Item>
-          )}
-        />
-        <div className="flex w-full justify-between">
-          <Button type="primary" onClick={createNewTestForUser}>
-            Create New Test
-          </Button>
-          <Button onClick={overrideExistingTest} disabled={!selectedTestId}>
-            Override Selected Test
-          </Button>
+        {" "}
+        <div className="border-4 border-secondary rounded-xl p-8">
+          <div className="w-full text-xl pb-4 inline-flex items-center justify-between">
+            SAVE TEST{" "}
+            <CloseSharp
+              className="hover:text-primary hover:cursor-pointer"
+              onClick={() => setIsTestsModalVisible(false)}
+            />
+          </div>
+          <List
+            dataSource={userTests}
+            renderItem={(test) => (
+              <List.Item
+                className={selectedTestId === test.id ? "bg-blue-100" : ""}
+                actions={[
+                  <Button
+                    type="link"
+                    onClick={() => setSelectedTestId(test.id)}
+                  >
+                    Select
+                  </Button>,
+                ]}
+              >
+                {test.name}
+              </List.Item>
+            )}
+          />
+          <div className="flex w-full justify-between">
+            <Button type="primary" onClick={createNewTestForUser}>
+              Create New Test
+            </Button>
+            <Button onClick={overrideExistingTest} disabled={!selectedTestId}>
+              Override Selected Test
+            </Button>
+          </div>
         </div>
       </Modal>
       {testData && (
-        <div className="container border-2 border-secondary rounded-lg bg-white" style={{ boxShadow: "0px 10px 35px 0px #00000040" }}>
+        <div
+          className="container border-2 border-secondary rounded-lg bg-white"
+          style={{ boxShadow: "0px 10px 35px 0px #00000040" }}
+        >
           <div className="p-4 flex justify-between items-center relative">
             <div className="font-medium">{testData?.name}</div>
             <Tooltip
@@ -1269,7 +1292,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                 </div>
               </div>
               <div className="flex gap-4 w-full justify-between">
-                <Form.Item   className="w-full">
+                <Form.Item className="w-full">
                   <Button
                     className="w-full"
                     size="large"
@@ -1284,13 +1307,13 @@ export const ProportionalMetricTesting: React.FC = () => {
                 <>
                   <Button
                     className="bg-secondary"
-                     size="large"
-                     onClick={(event) => {
+                    size="large"
+                    onClick={(event) => {
                       event.preventDefault();
                       saveResults(testData);
                     }}
                     disabled={isNotCalculatedSaved === CalculationStatus.IDLE}
-                    icon={<img src={SaveIcon} className="w-6"/>}
+                    icon={<img src={SaveIcon} className="w-6" />}
                   />
                 </>
               </div>

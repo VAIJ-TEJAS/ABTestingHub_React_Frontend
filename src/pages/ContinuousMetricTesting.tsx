@@ -29,6 +29,7 @@ import { generateProjectName } from "../utils/hypothesis_title_generator";
 import { Auth } from "../components/Auth";
 import QuestionReview from "../components/QuestionReview";
 import SaveIcon from "../assets/svgs/Save.svg"
+import { CloseSharp } from "@mui/icons-material";
 
 const { Option } = Select;
 
@@ -453,12 +454,26 @@ export const ContinuousMetricTesting: React.FC = () => {
         onSignin={handleSignInAndFetchTests}
       />
       <Modal
-        title="Select a Test"
         open={isTestsModalVisible}
         onOk={() => setIsTestsModalVisible(false)}
         onCancel={() => setIsTestsModalVisible(false)}
         footer={null}
+        closeIcon={false}
+        styles={{
+          content: {
+            padding: "0px 0px",
+            borderRadius: "16px",
+          },
+        }}
       >
+        <div className="border-4 border-secondary rounded-xl p-8">
+          <div className="w-full text-xl pb-4 inline-flex items-center justify-between">
+            SAVE TEST{" "}
+            <CloseSharp
+              className="hover:text-primary hover:cursor-pointer"
+              onClick={() => setIsTestsModalVisible(false)}
+            />
+          </div>
         <List
           dataSource={userTests}
           renderItem={(test) => (
@@ -481,6 +496,7 @@ export const ContinuousMetricTesting: React.FC = () => {
           <Button onClick={overrideExistingTest} disabled={!selectedTestId}>
             Override Selected Test
           </Button>
+        </div>
         </div>
       </Modal>
       {testData && (
