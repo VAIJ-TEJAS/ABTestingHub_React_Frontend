@@ -1,14 +1,30 @@
-import { Form, Input, Button, Modal } from "antd";
+import { Form, Input, Button, Modal, message } from "antd";
 import { useState } from "react";
 import ThumbsUp from "../assets/svgs/ThumbsUp.svg"
 import { CloseSharp } from "@mui/icons-material";
+import axios from "axios";
 
 export const Feedback = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-    setIsModalVisible(true);
+  const onFinish = async (values: any) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/feedback/`,
+        values,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Success:", response.data);
+      message.success("Feedback submitted successfully");
+      setIsModalVisible(true);
+    } catch (error) {
+      console.error("Failed to submit feedback:", error);
+      message.error("Failed to submit feedback. Please try again.");
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
