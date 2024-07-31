@@ -91,7 +91,7 @@ export const Home = () => {
           <div className="flex flex-col justify-between lg:flex-row py-32">
             <div className="space-y-8 text-white flex flex-col items-center lg:items-start">
               <div className="text-3xl font-bold lg:text-left text-center lg:text-6xl sm:text-4xl">Unlock the Power of Experimentation</div>
-              <div className="text-xl mx-auto w-3/4 text-center lg:mx-0 lg:text-left sm:w-1/2 sm:text-2xl">
+              <div className="text-xl mx-auto w-3/4 text-center lg:mx-0 lg:text-left sm:w-2/3 sm:text-2xl">
                 Transform Your Digital Strategy with AB Testing Hub
               </div>
               <div>
@@ -99,7 +99,7 @@ export const Home = () => {
                   <Button
                     size="large"
                     type="primary"
-                    className="hidden lg:inline-block lg:ml-auto px-6 transition duration-200"
+                    className="hidden h-16 text-2xl lg:inline-block lg:ml-auto px-28 transition duration-200"
                     onClick={() => {
                       navigate("/dashboard");
                     }}

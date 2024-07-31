@@ -456,6 +456,7 @@ export const Dashboard = () => {
         <div className="flex justify-between flex-col-reverse sm:flex-row">
           <div className="w-full sm:w-60 border my-2 sm:my-0">
             <Input.Search
+              className="custom-search-input"
               placeholder="Search"
               value={searchTerm}
               onChange={handleSearchChange}

@@ -48,7 +48,7 @@ export const Footer = () => {
               <ul className="space-y-2 text-lg text-primary">
                 <li>
                   <a rel="noopener noreferrer" href="/articles">
-                    Out Articles
+                    Our Articles
                   </a>
                 </li>
                 <li>
