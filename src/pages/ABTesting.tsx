@@ -939,13 +939,13 @@ export const ABTesting: React.FC = () => {
               dataSource={tableData}
               pagination={false}
             />
-            {numericalResults?.arms == 2 && (
+            
               <div>
                 <div className="flex w-full justify-center items-center">
                   <PlotGraph data={figure.data} layout={figure.layout} />
                 </div>
               </div>
-            )}
+            
             {numericalResults && (
               <div className="p-4 space-y-4">
                 <div className="text-lg font-medium text-zinc-500">
