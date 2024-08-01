@@ -11,6 +11,7 @@ import {
   message,
   List,
   Modal,
+  Segmented,
 } from "antd";
 import axios from "axios";
 import CountUp from "react-countup";
@@ -441,7 +442,7 @@ export const ProportionalMetricTesting: React.FC = () => {
       <QuestionReview isVisible={isModalVisible} onClose={closeModal} />
       {figures.length > 0 && (
         <Fab
-          color="primary"
+          color="warning"
           aria-label="feedback"
           style={{ position: "fixed", bottom: 20, right: 20 }}
           onClick={showModal}
@@ -787,167 +788,191 @@ export const ProportionalMetricTesting: React.FC = () => {
                     <InputNumber min={1} style={{ width: "100%" }} />
                   </Form.Item>
 
-                  <Form.Item name="absolute" valuePropName="checked">
-                    <Checkbox>
-                      Absolute
-                      <Tooltip
-                        overlayInnerStyle={{ width: "600px" }}
-                        className="text-primary px-2"
-                        title={
-                          <span className="no-tailwind">
-                            <strong>
-                              Absolute vs. Relative Minimum Detectable Effect
-                              (MDE)
-                            </strong>
-                            <br />
-                            <br />
-                            <em>Definition:</em>
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Absolute MDE</strong>: Represents the
-                                minimum change or difference in an absolute
-                                metric, such as a fixed amount of revenue,
-                                conversion rate, or engagement.
-                              </li>
-                              <li>
-                                <strong>Relative MDE</strong>: Represents the
-                                minimum change or difference in a metric
-                                relative to its baseline value, often expressed
-                                as a percentage.
-                              </li>
-                            </ul>
-                            <em>Example:</em> Suppose you're conducting an A/B
-                            test for an e-commerce website's conversion rate.
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Absolute MDE</strong>: Aiming to detect
-                                an absolute improvement of 2% in the conversion
-                                rate, regardless of the initial conversion rate
-                                value. For instance, from 10% to 12%.
-                              </li>
-                              <li>
-                                <strong>Relative MDE</strong>: Aiming to detect
-                                a relative improvement of 20% in the conversion
-                                rate. In this case, the improvement is defined
-                                relative to the baseline value. For instance,
-                                from 10% to 12% (a 20% increase).
-                              </li>
-                            </ul>
-                            <strong>Considerations:</strong>
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Use Case</strong>: The choice between
-                                absolute and relative MDE depends on the context
-                                and the metric's nature. Absolute MDE is often
-                                used when the focus is on a specific fixed
-                                improvement, while relative MDE provides
-                                flexibility for varying baseline values.
-                              </li>
-                              <li>
-                                <strong>Interpretability</strong>: Absolute MDE
-                                is straightforward to interpret, as it directly
-                                represents the desired change. Relative MDE is
-                                useful when the impact is more meaningful
-                                relative to the current state.
-                              </li>
-                            </ul>
-                            Understanding whether to use absolute or relative
-                            MDE is crucial in setting realistic goals and
-                            interpreting the significance of observed effects in
-                            an experiment.
-                          </span>
-                        }
-                      >
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </Checkbox>
+                  <Form.Item
+                    name="absolute"
+                    label={
+                      <span>
+                        MDE Type&nbsp;
+                        <Tooltip
+                          overlayInnerStyle={{ width: "600px" }}
+                          className="text-primary px-2"
+                          title={
+                            <span className="no-tailwind">
+                              <strong>
+                                Absolute vs. Relative Minimum Detectable Effect
+                                (MDE)
+                              </strong>
+                              <br />
+                              <br />
+                              <em>Definition:</em>
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Absolute MDE</strong>: Represents the
+                                  minimum change or difference in an absolute
+                                  metric, such as a fixed amount of revenue,
+                                  conversion rate, or engagement.
+                                </li>
+                                <li>
+                                  <strong>Relative MDE</strong>: Represents the
+                                  minimum change or difference in a metric
+                                  relative to its baseline value, often
+                                  expressed as a percentage.
+                                </li>
+                              </ul>
+                              <em>Example:</em> Suppose you're conducting an A/B
+                              test for an e-commerce website's conversion rate.
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Absolute MDE</strong>: Aiming to
+                                  detect an absolute improvement of 2% in the
+                                  conversion rate, regardless of the initial
+                                  conversion rate value. For instance, from 10%
+                                  to 12%.
+                                </li>
+                                <li>
+                                  <strong>Relative MDE</strong>: Aiming to
+                                  detect a relative improvement of 20% in the
+                                  conversion rate. In this case, the improvement
+                                  is defined relative to the baseline value. For
+                                  instance, from 10% to 12% (a 20% increase).
+                                </li>
+                              </ul>
+                              <strong>Considerations:</strong>
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Use Case</strong>: The choice between
+                                  absolute and relative MDE depends on the
+                                  context and the metric's nature. Absolute MDE
+                                  is often used when the focus is on a specific
+                                  fixed improvement, while relative MDE provides
+                                  flexibility for varying baseline values.
+                                </li>
+                                <li>
+                                  <strong>Interpretability</strong>: Absolute
+                                  MDE is straightforward to interpret, as it
+                                  directly represents the desired change.
+                                  Relative MDE is useful when the impact is more
+                                  meaningful relative to the current state.
+                                </li>
+                              </ul>
+                              Understanding whether to use absolute or relative
+                              MDE is crucial in setting realistic goals and
+                              interpreting the significance of observed effects
+                              in an experiment.
+                            </span>
+                          }
+                        >
+                          <QuestionCircleOutlined />
+                        </Tooltip>
+                      </span>
+                    }
+                  >
+                    <Segmented
+                      block
+                      options={[
+                        { label: "ABSOLUTE", value: true },
+                        { label: "RELATIVE", value: false },
+                      ]}
+                    />
                   </Form.Item>
 
-                  <Form.Item name="two_tailed_test" valuePropName="checked">
-                    <Checkbox>
-                      Two-tail Test
-                      <Tooltip
-                        overlayInnerStyle={{ width: "600px" }}
-                        className="text-primary px-2"
-                        title={
-                          <span className="no-tailwind">
-                            <strong>Tail of a Test</strong>
-                            <br />
-                            <br />
-                            <em>Definition:</em> The "tail" of a statistical
-                            test refers to the region(s) in the probability
-                            distribution under the null hypothesis where extreme
-                            values are considered evidence against the null
-                            hypothesis. Statistical tests are classified as
-                            one-tailed or two-tailed based on the number of
-                            tails considered.
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>One-Tailed Test</strong>: Focuses on
-                                extreme values in one direction (either the
-                                upper or lower tail) of the distribution. It is
-                                used when the hypothesis specifies a directional
-                                change.
-                              </li>
-                              <li>
-                                <strong>Two-Tailed Test</strong>: Considers
-                                extreme values in both directions of the
-                                distribution. It is used when the hypothesis
-                                does not specify a directional change, and
-                                interest lies in deviations from the null
-                                hypothesis in either direction.
-                              </li>
-                            </ul>
-                            <em>Example:</em> Suppose you're conducting a
-                            hypothesis test to determine if a new drug has a
-                            different effect than a placebo.
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>One-Tailed Test</strong>: If the
-                                hypothesis predicts that the new drug increases
-                                the observed effect, a one-tailed test focuses
-                                on extreme values in the upper tail of the
-                                distribution.
-                              </li>
-                              <li>
-                                <strong>Two-Tailed Test</strong>: If the
-                                hypothesis is agnostic about the direction of
-                                the effect (increase or decrease), a two-tailed
-                                test considers extreme values in both the upper
-                                and lower tails of the distribution.
-                              </li>
-                            </ul>
-                            <strong>Considerations:</strong>
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Directional Hypotheses</strong>: Use a
-                                one-tailed test when the research hypothesis
-                                specifies a clear direction of the effect.
-                              </li>
-                              <li>
-                                <strong>Non-Directional Hypotheses</strong>: Use
-                                a two-tailed test when the research hypothesis
-                                is non-directional, and you want to detect
-                                deviations from the null hypothesis in either
-                                direction.
-                              </li>
-                            </ul>
-                            Understanding the tail of a test is crucial for
-                            selecting the appropriate statistical test and
-                            interpreting the results in the context of the
-                            research question.
-                          </span>
-                        }
-                      >
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </Checkbox>
+                  <Form.Item
+                    name="two_tailed_test"
+                    label={
+                      <span>
+                        Tail Type of Hypothesis&nbsp;
+                        <Tooltip
+                          overlayInnerStyle={{ width: "600px" }}
+                          className="text-primary px-2"
+                          title={
+                            <span className="no-tailwind">
+                              <strong>Tail of a Test</strong>
+                              <br />
+                              <br />
+                              <em>Definition:</em> The "tail" of a statistical
+                              test refers to the region(s) in the probability
+                              distribution under the null hypothesis where
+                              extreme values are considered evidence against the
+                              null hypothesis. Statistical tests are classified
+                              as one-tailed or two-tailed based on the number of
+                              tails considered.
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>One-Tailed Test</strong>: Focuses on
+                                  extreme values in one direction (either the
+                                  upper or lower tail) of the distribution. It
+                                  is used when the hypothesis specifies a
+                                  directional change.
+                                </li>
+                                <li>
+                                  <strong>Two-Tailed Test</strong>: Considers
+                                  extreme values in both directions of the
+                                  distribution. It is used when the hypothesis
+                                  does not specify a directional change, and
+                                  interest lies in deviations from the null
+                                  hypothesis in either direction.
+                                </li>
+                              </ul>
+                              <em>Example:</em> Suppose you're conducting a
+                              hypothesis test to determine if a new drug has a
+                              different effect than a placebo.
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>One-Tailed Test</strong>: If the
+                                  hypothesis predicts that the new drug
+                                  increases the observed effect, a one-tailed
+                                  test focuses on extreme values in the upper
+                                  tail of the distribution.
+                                </li>
+                                <li>
+                                  <strong>Two-Tailed Test</strong>: If the
+                                  hypothesis is agnostic about the direction of
+                                  the effect (increase or decrease), a
+                                  two-tailed test considers extreme values in
+                                  both the upper and lower tails of the
+                                  distribution.
+                                </li>
+                              </ul>
+                              <strong>Considerations:</strong>
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Directional Hypotheses</strong>: Use a
+                                  one-tailed test when the research hypothesis
+                                  specifies a clear direction of the effect.
+                                </li>
+                                <li>
+                                  <strong>Non-Directional Hypotheses</strong>:
+                                  Use a two-tailed test when the research
+                                  hypothesis is non-directional, and you want to
+                                  detect deviations from the null hypothesis in
+                                  either direction.
+                                </li>
+                              </ul>
+                              Understanding the tail of a test is crucial for
+                              selecting the appropriate statistical test and
+                              interpreting the results in the context of the
+                              research question.
+                            </span>
+                          }
+                        >
+                          <QuestionCircleOutlined />
+                        </Tooltip>
+                      </span>
+                    }
+                  >
+                    <Segmented
+                      block
+                      options={[
+                        { label: "TWO-TAILED", value: true },
+                        { label: "ONE-TAILED", value: false },
+                      ]}
+                    />
                   </Form.Item>
                 </div>
                 <div className="w-full lg:w-64">

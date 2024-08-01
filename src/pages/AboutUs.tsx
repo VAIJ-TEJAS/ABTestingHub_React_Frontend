@@ -117,12 +117,11 @@ export const AboutUs = () => {
                 </div>
                 <div className="p-4">
                   <div className="text-2xl text-secondary">
-                    A/B testing Tool
+                    A/B Testing Tool (Variant Testing)
                   </div>
                   <div className="text-[#2E383F] pt-4">
                     An experiment that compares two variations of something by
-                    randomly splitting users into groups and measuring which
-                    performs better.
+                    randomly splitting users into groups.
                   </div>
                 </div>
               </div>
@@ -150,7 +149,7 @@ export const AboutUs = () => {
                 </div>
                 <div className="p-4">
                   <div className="text-2xl text-secondary">
-                    Ease of Use
+                  Simple and Accessible Platform
                   </div>
                   <div className="text-[#2E383F] pt-4">
                   Our tools are intuitive and user-friendly, ensuring the accessibility to everyone.
@@ -202,7 +201,7 @@ export const AboutUs = () => {
                 </div>
                 <div className="p-4">
                   <div className="text-2xl text-secondary">
-                    Customer Feedback
+                  Customer Feedback and Support
                   </div>
                   <div className="text-[#2E383F] pt-4">
                   We Welcome every feedback from our Customers and we thrive to address their Queries.

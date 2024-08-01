@@ -67,7 +67,7 @@ export const Navbar = () => {
     : "sticky top-0 px-4 py-2 shadow-xl z-50 bg-white flex justify-center";
 
   return (
-    <div className="font-sans">
+    <div className="font-sans z-50">
       <nav className={navClass} onMouseLeave={() => setDropdownOpen(false)}>
         <div className="flex justify-between items-center container">
           <a

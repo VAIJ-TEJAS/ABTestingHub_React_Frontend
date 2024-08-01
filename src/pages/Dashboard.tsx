@@ -31,6 +31,7 @@ import ResultSummary from "../assets/svgs/ResultSummary.svg";
 import InProgress from "../assets/svgs/InProgress.svg";
 import OverallRevenue from "../assets/svgs/OverallRevenue.svg";
 import { CreateTest } from "../components/CreateTest";
+import { RevenueCard } from "../components/RevenueCard";
 
 const getTagColor = (status: string) => {
   switch (status) {
@@ -424,7 +425,7 @@ export const Dashboard = () => {
         test_id={testToEdit}
       />
       <div className="flex-grow-0 container">
-        <div className="flex gap-4 p-4 justify-center flex-wrap">
+        <div className="flex gap-4 justify-center flex-wrap">
           <StatisticCard
             amount={totalHypotheses}
             icon={TotalHypothesis}
@@ -443,7 +444,7 @@ export const Dashboard = () => {
             bgColor="bg-yellow-500"
             title="RESULT SUMMARY:"
           />
-          <StatisticCard
+          <RevenueCard
             amount={totalIncrementalRevenue}
             icon={OverallRevenue}
             bgColor="bg-green-600"
@@ -454,7 +455,7 @@ export const Dashboard = () => {
       </div>
       <div className="container my-8">
         <div className="flex justify-between flex-col-reverse sm:flex-row">
-          <div className="w-full sm:w-60 border my-2 sm:my-0">
+          <div className="w-full sm:w-64 border my-2 sm:my-0">
             <Input.Search
               className="custom-search-input"
               placeholder="Search"
@@ -489,6 +490,7 @@ export const Dashboard = () => {
         )}
         <Paper className="container flex-1 overflow-x-auto sm:overflow-x-visible">
           <Table
+            className="border-2 border-secondary"
             rowKey="id"
             rowSelection={rowSelection}
             columns={columns}

@@ -10,6 +10,7 @@ import {
   message,
   Modal,
   List,
+  Segmented,
 } from "antd";
 import axios from "axios";
 import CountUp from "react-countup";
@@ -28,7 +29,7 @@ import { confirmation } from "../components/Confirmation";
 import { generateProjectName } from "../utils/hypothesis_title_generator";
 import { Auth } from "../components/Auth";
 import QuestionReview from "../components/QuestionReview";
-import SaveIcon from "../assets/svgs/Save.svg"
+import SaveIcon from "../assets/svgs/Save.svg";
 import { CloseSharp } from "@mui/icons-material";
 
 const { Option } = Select;
@@ -125,14 +126,14 @@ export const ContinuousMetricTesting: React.FC = () => {
   }, [testData, form]);
 
   useEffect(() => {
-    console.log(allocations)
+    console.log(allocations);
     const verifyTotalIs100 = (allocations: any) => {
       const total = allocations.reduce((sum: any, allocation: any) => {
         return sum + parseFloat(allocation.value);
       }, 0);
 
       if (total !== 100 && allocations.length) {
-        setError('The sum of the values must be 100!');
+        setError("The sum of the values must be 100!");
       } else {
         setError(null);
       }
@@ -221,7 +222,6 @@ export const ContinuousMetricTesting: React.FC = () => {
           setIsNotCalculatedSaved(CalculationStatus.CALC);
 
         message.success("Calculations completed successfully");
-
       })
       .catch((error) => {
         console.error("There was an error!", error);
@@ -439,7 +439,7 @@ export const ContinuousMetricTesting: React.FC = () => {
       <QuestionReview isVisible={isModalVisible} onClose={closeModal} />
       {figures.length > 0 && (
         <Fab
-          color="primary"
+          color="warning"
           aria-label="feedback"
           style={{ position: "fixed", bottom: 20, right: 20 }}
           onClick={showModal}
@@ -474,33 +474,39 @@ export const ContinuousMetricTesting: React.FC = () => {
               onClick={() => setIsTestsModalVisible(false)}
             />
           </div>
-        <List
-          dataSource={userTests}
-          renderItem={(test) => (
-            <List.Item
-              className={selectedTestId === test.id ? "bg-blue-100" : ""}
-              actions={[
-                <Button type="link" onClick={() => setSelectedTestId(test.id)}>
-                  Select
-                </Button>,
-              ]}
-            >
-              {test.name}
-            </List.Item>
-          )}
-        />
-        <div className="flex w-full justify-between">
-          <Button type="primary" onClick={createNewTestForUser}>
-            Create New Test
-          </Button>
-          <Button onClick={overrideExistingTest} disabled={!selectedTestId}>
-            Override Selected Test
-          </Button>
-        </div>
+          <List
+            dataSource={userTests}
+            renderItem={(test) => (
+              <List.Item
+                className={selectedTestId === test.id ? "bg-blue-100" : ""}
+                actions={[
+                  <Button
+                    type="link"
+                    onClick={() => setSelectedTestId(test.id)}
+                  >
+                    Select
+                  </Button>,
+                ]}
+              >
+                {test.name}
+              </List.Item>
+            )}
+          />
+          <div className="flex w-full justify-between">
+            <Button type="primary" onClick={createNewTestForUser}>
+              Create New Test
+            </Button>
+            <Button onClick={overrideExistingTest} disabled={!selectedTestId}>
+              Override Selected Test
+            </Button>
+          </div>
         </div>
       </Modal>
       {testData && (
-        <div className="container border-2 border-secondary rounded-lg bg-white" style={{ boxShadow: "0px 10px 35px 0px #00000040" }}>
+        <div
+          className="container border-2 border-secondary rounded-lg bg-white"
+          style={{ boxShadow: "0px 10px 35px 0px #00000040" }}
+        >
           <div className="p-4 flex justify-between items-center relative">
             <div className="font-medium">{testData?.name}</div>
             <Tooltip
@@ -559,8 +565,10 @@ export const ContinuousMetricTesting: React.FC = () => {
       )}
       <div className="container flex flex-col lg:flex-row gap-4">
         <div className="flex flex-col gap-4">
-          <div className="p-4 border-2 border-secondary rounded-lg bg-white"
-            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}>
+          <div
+            className="p-4 border-2 border-secondary rounded-lg bg-white"
+            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}
+          >
             <Form
               form={form}
               layout="vertical"
@@ -641,26 +649,52 @@ export const ContinuousMetricTesting: React.FC = () => {
                                 <strong>Baseline KPI Average</strong>
                                 <br />
                                 <br />
-                                The baseline KPI (Key Performance Indicator) average is a pivotal metric in performance measurement and experimental design. It represents the initial or existing average value of a key metric before any changes or interventions are introduced.
+                                The baseline KPI (Key Performance Indicator)
+                                average is a pivotal metric in performance
+                                measurement and experimental design. It
+                                represents the initial or existing average value
+                                of a key metric before any changes or
+                                interventions are introduced.
                                 <br />
                                 <br />
-                                Understanding the baseline KPI average is essential for several reasons:
+                                Understanding the baseline KPI average is
+                                essential for several reasons:
                                 <br />
                                 <ul>
                                   <li>
-                                    <strong>Benchmarking</strong>: It provides a baseline against which changes in performance or the impact of interventions can be compared. The goal often involves improving or optimizing the KPI average from this starting point.
+                                    <strong>Benchmarking</strong>: It provides a
+                                    baseline against which changes in
+                                    performance or the impact of interventions
+                                    can be compared. The goal often involves
+                                    improving or optimizing the KPI average from
+                                    this starting point.
                                   </li>
                                   <li>
                                     <strong>Effect Size Calculation</strong>:
-                                    When determining the Minimum Detectable Effect (MDE), researchers commonly use the baseline KPI average as a reference. The MDE is the minimum change in the KPI average that the study aims to detect.
+                                    When determining the Minimum Detectable
+                                    Effect (MDE), researchers commonly use the
+                                    baseline KPI average as a reference. The MDE
+                                    is the minimum change in the KPI average
+                                    that the study aims to detect.
                                   </li>
                                   <li>
-                                    <strong>Power Calculation</strong>: Together with the effect size, the baseline KPI average contributes to calculating the required sample size and statistical power of the study.
+                                    <strong>Power Calculation</strong>: Together
+                                    with the effect size, the baseline KPI
+                                    average contributes to calculating the
+                                    required sample size and statistical power
+                                    of the study.
                                   </li>
                                 </ul>
-                                For example, if a marketing campaign has a baseline KPI average of 
-                                <em>50 per customer, and a researcher aims to detect a minimum</em>
-                                improvement, the baseline KPI average becomes a critical factor in experimental design and understanding the practical significance of the results.
+                                For example, if a marketing campaign has a
+                                baseline KPI average of
+                                <em>
+                                  50 per customer, and a researcher aims to
+                                  detect a minimum
+                                </em>
+                                improvement, the baseline KPI average becomes a
+                                critical factor in experimental design and
+                                understanding the practical significance of the
+                                results.
                               </span>
                             }
                           >
@@ -728,167 +762,191 @@ export const ContinuousMetricTesting: React.FC = () => {
                     <InputNumber min={0} max={20} style={{ width: "100%" }} />
                   </Form.Item>
 
-                  <Form.Item name="absolute" valuePropName="checked">
-                    <Checkbox>
-                      Absolute
-                      <Tooltip
-                        className="text-primary px-2"
-                        overlayInnerStyle={{ width: "600px" }}
-                        title={
-                          <span className="no-tailwind">
-                            <strong>
-                              Absolute vs. Relative Minimum Detectable Effect
-                              (MDE)
-                            </strong>
-                            <br />
-                            <br />
-                            <em>Definition:</em>
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Absolute MDE</strong>: Represents the
-                                minimum change or difference in an absolute
-                                metric, such as a fixed amount of revenue,
-                                conversion rate, or engagement.
-                              </li>
-                              <li>
-                                <strong>Relative MDE</strong>: Represents the
-                                minimum change or difference in a metric
-                                relative to its baseline value, often expressed
-                                as a percentage.
-                              </li>
-                            </ul>
-                            <em>Example:</em> Suppose you're conducting an A/B
-                            test for an e-commerce website's conversion rate.
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Absolute MDE</strong>: Aiming to detect
-                                an absolute improvement of 2% in the conversion
-                                rate, regardless of the initial conversion rate
-                                value. For instance, from 10% to 12%.
-                              </li>
-                              <li>
-                                <strong>Relative MDE</strong>: Aiming to detect
-                                a relative improvement of 20% in the conversion
-                                rate. In this case, the improvement is defined
-                                relative to the baseline value. For instance,
-                                from 10% to 12% (a 20% increase).
-                              </li>
-                            </ul>
-                            <strong>Considerations:</strong>
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Use Case</strong>: The choice between
-                                absolute and relative MDE depends on the context
-                                and the metric's nature. Absolute MDE is often
-                                used when the focus is on a specific fixed
-                                improvement, while relative MDE provides
-                                flexibility for varying baseline values.
-                              </li>
-                              <li>
-                                <strong>Interpretability</strong>: Absolute MDE
-                                is straightforward to interpret, as it directly
-                                represents the desired change. Relative MDE is
-                                useful when the impact is more meaningful
-                                relative to the current state.
-                              </li>
-                            </ul>
-                            Understanding whether to use absolute or relative
-                            MDE is crucial in setting realistic goals and
-                            interpreting the significance of observed effects in
-                            an experiment.
-                          </span>
-                        }
-                      >
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </Checkbox>
+                  <Form.Item
+                    name="absolute"
+                    label={
+                      <span>
+                        MDE Type&nbsp;
+                        <Tooltip
+                          overlayInnerStyle={{ width: "600px" }}
+                          className="text-primary px-2"
+                          title={
+                            <span className="no-tailwind">
+                              <strong>
+                                Absolute vs. Relative Minimum Detectable Effect
+                                (MDE)
+                              </strong>
+                              <br />
+                              <br />
+                              <em>Definition:</em>
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Absolute MDE</strong>: Represents the
+                                  minimum change or difference in an absolute
+                                  metric, such as a fixed amount of revenue,
+                                  conversion rate, or engagement.
+                                </li>
+                                <li>
+                                  <strong>Relative MDE</strong>: Represents the
+                                  minimum change or difference in a metric
+                                  relative to its baseline value, often
+                                  expressed as a percentage.
+                                </li>
+                              </ul>
+                              <em>Example:</em> Suppose you're conducting an A/B
+                              test for an e-commerce website's conversion rate.
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Absolute MDE</strong>: Aiming to
+                                  detect an absolute improvement of 2% in the
+                                  conversion rate, regardless of the initial
+                                  conversion rate value. For instance, from 10%
+                                  to 12%.
+                                </li>
+                                <li>
+                                  <strong>Relative MDE</strong>: Aiming to
+                                  detect a relative improvement of 20% in the
+                                  conversion rate. In this case, the improvement
+                                  is defined relative to the baseline value. For
+                                  instance, from 10% to 12% (a 20% increase).
+                                </li>
+                              </ul>
+                              <strong>Considerations:</strong>
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Use Case</strong>: The choice between
+                                  absolute and relative MDE depends on the
+                                  context and the metric's nature. Absolute MDE
+                                  is often used when the focus is on a specific
+                                  fixed improvement, while relative MDE provides
+                                  flexibility for varying baseline values.
+                                </li>
+                                <li>
+                                  <strong>Interpretability</strong>: Absolute
+                                  MDE is straightforward to interpret, as it
+                                  directly represents the desired change.
+                                  Relative MDE is useful when the impact is more
+                                  meaningful relative to the current state.
+                                </li>
+                              </ul>
+                              Understanding whether to use absolute or relative
+                              MDE is crucial in setting realistic goals and
+                              interpreting the significance of observed effects
+                              in an experiment.
+                            </span>
+                          }
+                        >
+                          <QuestionCircleOutlined />
+                        </Tooltip>
+                      </span>
+                    }
+                  >
+                    <Segmented
+                      block
+                      options={[
+                        { label: "ABSOLUTE", value: true },
+                        { label: "RELATIVE", value: false },
+                      ]}
+                    />
                   </Form.Item>
 
-                  <Form.Item name="two_tailed_test" valuePropName="checked">
-                    <Checkbox>
-                      Two-tail Test
-                      <Tooltip
-                        className="text-primary px-2"
-                        overlayInnerStyle={{ width: "600px" }}
-                        title={
-                          <span className="no-tailwind">
-                            <strong>Tail of a Test</strong>
-                            <br />
-                            <br />
-                            <em>Definition:</em> The "tail" of a statistical
-                            test refers to the region(s) in the probability
-                            distribution under the null hypothesis where extreme
-                            values are considered evidence against the null
-                            hypothesis. Statistical tests are classified as
-                            one-tailed or two-tailed based on the number of
-                            tails considered.
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>One-Tailed Test</strong>: Focuses on
-                                extreme values in one direction (either the
-                                upper or lower tail) of the distribution. It is
-                                used when the hypothesis specifies a directional
-                                change.
-                              </li>
-                              <li>
-                                <strong>Two-Tailed Test</strong>: Considers
-                                extreme values in both directions of the
-                                distribution. It is used when the hypothesis
-                                does not specify a directional change, and
-                                interest lies in deviations from the null
-                                hypothesis in either direction.
-                              </li>
-                            </ul>
-                            <em>Example:</em> Suppose you're conducting a
-                            hypothesis test to determine if a new drug has a
-                            different effect than a placebo.
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>One-Tailed Test</strong>: If the
-                                hypothesis predicts that the new drug increases
-                                the observed effect, a one-tailed test focuses
-                                on extreme values in the upper tail of the
-                                distribution.
-                              </li>
-                              <li>
-                                <strong>Two-Tailed Test</strong>: If the
-                                hypothesis is agnostic about the direction of
-                                the effect (increase or decrease), a two-tailed
-                                test considers extreme values in both the upper
-                                and lower tails of the distribution.
-                              </li>
-                            </ul>
-                            <strong>Considerations:</strong>
-                            <br />
-                            <ul>
-                              <li>
-                                <strong>Directional Hypotheses</strong>: Use a
-                                one-tailed test when the research hypothesis
-                                specifies a clear direction of the effect.
-                              </li>
-                              <li>
-                                <strong>Non-Directional Hypotheses</strong>: Use
-                                a two-tailed test when the research hypothesis
-                                is non-directional, and you want to detect
-                                deviations from the null hypothesis in either
-                                direction.
-                              </li>
-                            </ul>
-                            Understanding the tail of a test is crucial for
-                            selecting the appropriate statistical test and
-                            interpreting the results in the context of the
-                            research question.
-                          </span>
-                        }
-                      >
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </Checkbox>
+                  <Form.Item
+                    name="two_tailed_test"
+                    label={
+                      <span>
+                        Tail Type of Hypothesis&nbsp;
+                        <Tooltip
+                          overlayInnerStyle={{ width: "600px" }}
+                          className="text-primary px-2"
+                          title={
+                            <span className="no-tailwind">
+                              <strong>Tail of a Test</strong>
+                              <br />
+                              <br />
+                              <em>Definition:</em> The "tail" of a statistical
+                              test refers to the region(s) in the probability
+                              distribution under the null hypothesis where
+                              extreme values are considered evidence against the
+                              null hypothesis. Statistical tests are classified
+                              as one-tailed or two-tailed based on the number of
+                              tails considered.
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>One-Tailed Test</strong>: Focuses on
+                                  extreme values in one direction (either the
+                                  upper or lower tail) of the distribution. It
+                                  is used when the hypothesis specifies a
+                                  directional change.
+                                </li>
+                                <li>
+                                  <strong>Two-Tailed Test</strong>: Considers
+                                  extreme values in both directions of the
+                                  distribution. It is used when the hypothesis
+                                  does not specify a directional change, and
+                                  interest lies in deviations from the null
+                                  hypothesis in either direction.
+                                </li>
+                              </ul>
+                              <em>Example:</em> Suppose you're conducting a
+                              hypothesis test to determine if a new drug has a
+                              different effect than a placebo.
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>One-Tailed Test</strong>: If the
+                                  hypothesis predicts that the new drug
+                                  increases the observed effect, a one-tailed
+                                  test focuses on extreme values in the upper
+                                  tail of the distribution.
+                                </li>
+                                <li>
+                                  <strong>Two-Tailed Test</strong>: If the
+                                  hypothesis is agnostic about the direction of
+                                  the effect (increase or decrease), a
+                                  two-tailed test considers extreme values in
+                                  both the upper and lower tails of the
+                                  distribution.
+                                </li>
+                              </ul>
+                              <strong>Considerations:</strong>
+                              <br />
+                              <ul>
+                                <li>
+                                  <strong>Directional Hypotheses</strong>: Use a
+                                  one-tailed test when the research hypothesis
+                                  specifies a clear direction of the effect.
+                                </li>
+                                <li>
+                                  <strong>Non-Directional Hypotheses</strong>:
+                                  Use a two-tailed test when the research
+                                  hypothesis is non-directional, and you want to
+                                  detect deviations from the null hypothesis in
+                                  either direction.
+                                </li>
+                              </ul>
+                              Understanding the tail of a test is crucial for
+                              selecting the appropriate statistical test and
+                              interpreting the results in the context of the
+                              research question.
+                            </span>
+                          }
+                        >
+                          <QuestionCircleOutlined />
+                        </Tooltip>
+                      </span>
+                    }
+                  >
+                    <Segmented
+                      block
+                      options={[
+                        { label: "TWO-TAILED", value: true },
+                        { label: "ONE-TAILED", value: false },
+                      ]}
+                    />
                   </Form.Item>
                 </div>
                 <div className="w-full lg:w-64">
@@ -961,31 +1019,52 @@ export const ContinuousMetricTesting: React.FC = () => {
                                 <strong>KPI Standard Deviation</strong>
                                 <br />
                                 <br />
-                                <em>Definition</em>: In the context of Key Performance
-                                Indicators (KPIs), the standard deviation
-                                measures the degree of variability or dispersion
-                                of the KPI values around their mean. It provides
-                                insights into the consistency or volatility of
-                                the performance metric over a specific period.
+                                <em>Definition</em>: In the context of Key
+                                Performance Indicators (KPIs), the standard
+                                deviation measures the degree of variability or
+                                dispersion of the KPI values around their mean.
+                                It provides insights into the consistency or
+                                volatility of the performance metric over a
+                                specific period.
                                 <br />
                                 <br />
-                                <em>Example</em>: Consider an e-commerce portal tracking the daily revenue generated from online sales as a KPI.
+                                <em>Example</em>: Consider an e-commerce portal
+                                tracking the daily revenue generated from online
+                                sales as a KPI.
                                 <br />
                                 <ul>
                                   <li>
-                                    <strong>Low Standard Deviation</strong>: If the standard deviation of daily revenue is low, it indicates that most daily revenue values are close to the mean. The performance is relatively consistent.
+                                    <strong>Low Standard Deviation</strong>: If
+                                    the standard deviation of daily revenue is
+                                    low, it indicates that most daily revenue
+                                    values are close to the mean. The
+                                    performance is relatively consistent.
                                   </li>
                                   <li>
-                                    <strong>High Standard Deviation</strong>: If the standard deviation is high, it suggests greater variability in daily revenue values. The performance is more volatile, with larger fluctuations around the mean.
+                                    <strong>High Standard Deviation</strong>: If
+                                    the standard deviation is high, it suggests
+                                    greater variability in daily revenue values.
+                                    The performance is more volatile, with
+                                    larger fluctuations around the mean.
                                   </li>
                                 </ul>
                                 <strong>Considerations:</strong>
                                 <ul>
                                   <li>
-                                    <strong>Stability Assessment</strong>: A low standard deviation is often desirable for KPIs, indicating stability and predictability in performance. However, context matters, and certain KPIs may naturally exhibit higher variability.
+                                    <strong>Stability Assessment</strong>: A low
+                                    standard deviation is often desirable for
+                                    KPIs, indicating stability and
+                                    predictability in performance. However,
+                                    context matters, and certain KPIs may
+                                    naturally exhibit higher variability.
                                   </li>
                                   <li>
-                                    <strong>Identifying Trends</strong>: Monitoring changes in the standard deviation over time helps in identifying trends or shifts in the consistency of KPI values, prompting further investigation into potential influencing factors.
+                                    <strong>Identifying Trends</strong>:
+                                    Monitoring changes in the standard deviation
+                                    over time helps in identifying trends or
+                                    shifts in the consistency of KPI values,
+                                    prompting further investigation into
+                                    potential influencing factors.
                                   </li>
                                 </ul>
                               </span>
@@ -1088,7 +1167,10 @@ export const ContinuousMetricTesting: React.FC = () => {
                         <div>
                           <Tooltip
                             className="text-primary"
-                            overlayInnerStyle={{ width: "600px", height: '400px'}}
+                            overlayInnerStyle={{
+                              width: "600px",
+                              height: "400px",
+                            }}
                             title={
                               <span className="no-tailwind">
                                 <strong>Arms of an Experiment</strong>
@@ -1213,11 +1295,16 @@ export const ContinuousMetricTesting: React.FC = () => {
                         />
                       </Form.Item>
                     ))}
-                    {error && (
-                      <Form.Item wrapperCol={{ offset: 8, span: 16 }} className="m-0">
-                        <div style={{ color: 'red' }} className="m-0">{error}</div>
-                      </Form.Item>
-                    )}
+                  {error && (
+                    <Form.Item
+                      wrapperCol={{ offset: 8, span: 16 }}
+                      className="m-0"
+                    >
+                      <div style={{ color: "red" }} className="m-0">
+                        {error}
+                      </div>
+                    </Form.Item>
+                  )}
                 </div>
               </div>
               <div>
@@ -1307,10 +1394,10 @@ export const ContinuousMetricTesting: React.FC = () => {
                 </div>
               </div>
               <div className="flex gap-4 w-full justify-between">
-                <Form.Item  className="w-full">
+                <Form.Item className="w-full">
                   <Button
                     size="large"
-                     className="w-full"
+                    className="w-full"
                     type="primary"
                     htmlType="submit"
                     onClick={handleCalculateClick}
@@ -1328,7 +1415,7 @@ export const ContinuousMetricTesting: React.FC = () => {
                       saveResults(testData);
                     }}
                     disabled={isNotCalculatedSaved === CalculationStatus.IDLE}
-                    icon={<img src={SaveIcon} className="w-6"/>}
+                    icon={<img src={SaveIcon} className="w-6" />}
                   />
                 </>
               </div>
@@ -1337,8 +1424,10 @@ export const ContinuousMetricTesting: React.FC = () => {
           {/* {figures.length > 0 && <QuestionReview />} */}
         </div>
         <div className="flex-1 flex flex-col gap-4">
-          <div className="p-4 border-2 border-secondary rounded-lg bg-white"
-            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}>
+          <div
+            className="p-4 border-2 border-secondary rounded-lg bg-white"
+            style={{ boxShadow: "0px 10px 35px 0px #00000040" }}
+          >
             <div className="flex">
               <div className="flex-1 space-y-4">
                 <div>
@@ -1346,7 +1435,13 @@ export const ContinuousMetricTesting: React.FC = () => {
                     Total Sample Size
                     <Tooltip
                       className="text-primary px-2"
-                      title={`The necessary sample size for conducting a test at a ${testDataCopy?.power ?? 90}% power, aiming to detect a ${testDataCopy?.mde ?? 3}% difference with ${testDataCopy?.confidence_level ?? 90}% confidence`}
+                      title={`The necessary sample size for conducting a test at a ${
+                        testDataCopy?.power ?? 90
+                      }% power, aiming to detect a ${
+                        testDataCopy?.mde ?? 3
+                      }% difference with ${
+                        testDataCopy?.confidence_level ?? 90
+                      }% confidence`}
                     >
                       <QuestionCircleOutlined />
                     </Tooltip>
@@ -1365,7 +1460,11 @@ export const ContinuousMetricTesting: React.FC = () => {
                     Days Required
                     <Tooltip
                       className="text-primary px-2"
-                      title={`Total number of days required to get ${(numericalResults?.total_sample_size ?? 0).toLocaleString()} samples if ${testDataCopy?.daily_interactions ?? 100} daily visitors are allocated to the A/B test.`}
+                      title={`Total number of days required to get ${(
+                        numericalResults?.total_sample_size ?? 0
+                      ).toLocaleString()} samples if ${
+                        testDataCopy?.daily_interactions ?? 100
+                      } daily visitors are allocated to the A/B test.`}
                     >
                       <QuestionCircleOutlined />
                     </Tooltip>
@@ -1390,10 +1489,12 @@ export const ContinuousMetricTesting: React.FC = () => {
                     </Tooltip>
                   </div>
                   <div className="text-4xl">
-                  {conversionSymbol}
+                    {conversionSymbol}
                     <CountUp
                       start={0}
-                      end={numericalResults?.control_revenue*conversionNum ?? 0}
+                      end={
+                        numericalResults?.control_revenue * conversionNum ?? 0
+                      }
                       duration={0.5}
                       separator=","
                     />
@@ -1425,7 +1526,11 @@ export const ContinuousMetricTesting: React.FC = () => {
                     Weeks Required
                     <Tooltip
                       className="text-primary px-2"
-                      title={`Total number of weeks required to get ${(numericalResults?.total_sample_size ?? 0).toLocaleString()} samples if ${testDataCopy?.daily_interactions ?? 100} daily visitors are allocated to the A/B test.`}
+                      title={`Total number of weeks required to get ${(
+                        numericalResults?.total_sample_size ?? 0
+                      ).toLocaleString()} samples if ${
+                        testDataCopy?.daily_interactions ?? 100
+                      } daily visitors are allocated to the A/B test.`}
                     >
                       <QuestionCircleOutlined />
                     </Tooltip>
@@ -1453,7 +1558,7 @@ export const ContinuousMetricTesting: React.FC = () => {
                     {conversionSymbol}
                     <CountUp
                       start={0}
-                      end={numericalResults?.test_revenue*conversionNum}
+                      end={numericalResults?.test_revenue * conversionNum}
                       duration={0.5}
                       separator=","
                     />
@@ -1491,28 +1596,28 @@ export const ContinuousMetricTesting: React.FC = () => {
               </div>
             </div>
             {figures.length > 0 && (
-            <div className="py-4">
-              <Form.Item label="Select Figure">
-                <Select
-                  onChange={(value) => setSelectedFigIndex(value)}
-                  defaultValue={0}
-                >
-                  {figures.map((fig, index) => (
-                    <Option key={index} value={index}>
-                      {fig.name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <div className="flex w-full justify-center items-center">
-                <PlotGraph
-                  data={figures[selectedFigIndex].data}
-                  layout={figures[selectedFigIndex].layout}
-                />
+              <div className="py-4">
+                <Form.Item label="Select Figure">
+                  <Select
+                    onChange={(value) => setSelectedFigIndex(value)}
+                    defaultValue={0}
+                  >
+                    {figures.map((fig, index) => (
+                      <Option key={index} value={index}>
+                        {fig.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <div className="flex w-full justify-center items-center">
+                  <PlotGraph
+                    data={figures[selectedFigIndex].data}
+                    layout={figures[selectedFigIndex].layout}
+                  />
+                </div>
               </div>
-            </div>
-          )}
-           {numericalResults && (
+            )}
+            {numericalResults && (
               <>
                 <div className="p-4 space-y-4">
                   {selectedFigIndex === 0 && (
@@ -1558,7 +1663,6 @@ export const ContinuousMetricTesting: React.FC = () => {
               </>
             )}
           </div>
-        
         </div>
       </div>
     </div>

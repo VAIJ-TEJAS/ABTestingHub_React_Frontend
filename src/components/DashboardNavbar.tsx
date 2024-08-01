@@ -94,7 +94,7 @@ export const DashboardNavbar = () => {
   );
 
   return (
-    <>
+    <div className="z-50">
       <Logout isVisible={logoutModalVisible} onClose={onCloseLogoutModal} />
       <nav className={navClass}>
         <div className="flex justify-between items-center container">
@@ -311,6 +311,6 @@ export const DashboardNavbar = () => {
           </div>
         </nav>
       </div>
-    </>
+    </div>
   );
 };

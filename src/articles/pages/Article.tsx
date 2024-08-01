@@ -113,7 +113,7 @@ export const Article = () => {
           <ArticlesCategoryCard />
         </div> */}
 
-        <Container className="z-20">
+        <Container className="-z-50">
           <div className="flex flex-col gap-16">
             <Container
               style={{
@@ -122,7 +122,7 @@ export const Article = () => {
                 backgroundPosition: "center",
                 overflow: "hidden",
               }}
-              className="bg-black relative z-10 rounded-2xl mt-16 p-4"
+              className="bg-black relative -z-40 rounded-2xl mt-16 p-4"
             >
               {/* Backdrop */}
               <img

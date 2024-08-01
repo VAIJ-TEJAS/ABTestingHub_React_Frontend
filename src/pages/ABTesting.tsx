@@ -181,7 +181,7 @@ export const ABTesting: React.FC = () => {
           "conversion-rates": conversion_rates,
           "p-values": p_values,
           "relative-uplift-values": relative_uplift_values,
-          statistically_significant,
+          significance,
           max_uplift,
           warnings,
           conclusion,
@@ -193,6 +193,10 @@ export const ABTesting: React.FC = () => {
             (u: any) => u.arm === rate.arm
           )?.value;
           const pValue = p_values.find((p: any) => p.arm === rate.arm)?.value;
+          const significanceValue = significance.find(
+            (s: any) => s.arm === rate.arm
+          )?.value;
+          console.log(significanceValue);
 
           return {
             key: String.fromCharCode(64 + rate.arm), // ASCII code 65 is 'A', so 64 + arm number will give us the correct letter
@@ -200,18 +204,23 @@ export const ABTesting: React.FC = () => {
             conversionRate: `${rate.value}%`,
             relativeUplift: uplift !== undefined ? `${uplift}%` : "-",
             pValue: pValue !== undefined ? pValue.toFixed(5) : "-",
+            significance:
+              significanceValue !== undefined ? significanceValue : "-",
           };
         });
 
         setFigure(figure);
         setTableData(newTableData);
         setMaxUplift(max_uplift);
-        setStatisticallySignificant(statistically_significant);
+        setStatisticallySignificant(
+          arms === 2 ? significance[0].value === "significant" : false
+        );
         setNumericalResults({
           arms,
           conversion_rates,
-          p_values,
           relative_uplift_values,
+          significance,
+          p_values,
           warnings,
           conclusion,
         });
@@ -447,6 +456,22 @@ export const ABTesting: React.FC = () => {
       dataIndex: "pValue",
       key: "pValue",
     },
+    {
+      title: "Significance",
+      dataIndex: "significance",
+      key: "significance",
+      render: (significance: string) => (
+        <span
+          className={
+            significance.toLowerCase() === "significant"
+              ? "text-green-600"
+              : "text-red-600"
+          }
+        >
+          {significance}
+        </span>
+      ),
+    },
   ];
 
   return (
@@ -454,7 +479,7 @@ export const ABTesting: React.FC = () => {
       <QuestionReview isVisible={isModalVisible} onClose={closeModal} />
       {numericalResults && (
         <Fab
-          color="primary"
+          color="warning"
           aria-label="feedback"
           style={{ position: "fixed", bottom: 20, right: 20 }}
           onClick={showModal}
@@ -934,18 +959,6 @@ export const ABTesting: React.FC = () => {
             className="p-4 border-2 border-secondary rounded-lg bg-white"
             style={{ boxShadow: "0px 10px 35px 0px #00000040" }}
           >
-            <Table
-              columns={columns}
-              dataSource={tableData}
-              pagination={false}
-            />
-            
-              <div>
-                <div className="flex w-full justify-center items-center">
-                  <PlotGraph data={figure.data} layout={figure.layout} />
-                </div>
-              </div>
-            
             {numericalResults && (
               <div className="p-4 space-y-4">
                 <div className="text-lg font-medium text-zinc-500">
@@ -957,8 +970,8 @@ export const ABTesting: React.FC = () => {
                       <div key={index} className={item.className}>
                         {item.text !== "" ? (
                           <>
-                            {item.text ===
-                            "The test results are statistically" ? (
+                            {item.text === "The test results are statistically" ? (
+                              numericalResults.arms === 2 &&
                               <div className="font-bold">
                                 The test results are statistically
                                 <span className="text-3xl">
@@ -988,6 +1001,21 @@ export const ABTesting: React.FC = () => {
                 </div>
               </div>
             )}
+
+            <Table
+              columns={columns}
+              dataSource={tableData}
+              pagination={false}
+            />
+            {numericalResults && (
+              <div>
+                <div className="flex w-full justify-center items-center">
+                  <PlotGraph data={figure.data} layout={figure.layout} />
+                </div>
+              </div>
+            )}
+
+            
           </div>
         </div>
       </div>
