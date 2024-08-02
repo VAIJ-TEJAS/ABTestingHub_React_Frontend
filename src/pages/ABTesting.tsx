@@ -201,7 +201,7 @@ export const ABTesting: React.FC = () => {
           return {
             key: String.fromCharCode(64 + rate.arm), // ASCII code 65 is 'A', so 64 + arm number will give us the correct letter
             arm: String.fromCharCode(64 + rate.arm),
-            conversionRate: `${rate.value}%`,
+            conversionRate: `${rate.value.toFixed(2)}%`,
             relativeUplift: uplift !== undefined ? `${uplift}%` : "-",
             pValue: pValue !== undefined ? pValue.toFixed(5) : "-",
             significance:
