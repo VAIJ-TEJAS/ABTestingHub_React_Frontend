@@ -1,6 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { createContext, useState, ReactNode, useContext, useEffect } from 'react';
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useContext,
+  useEffect,
+} from "react";
 // import axios from 'axios';
 import currencyData from "../data/currency.json";
 
@@ -8,44 +14,48 @@ import currencyData from "../data/currency.json";
 const MyContext = createContext<any | undefined>(undefined);
 
 // Create a provider component
-export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-
-  const [userAuthenticated, setUserAuthenticated] = useState<boolean>(!!localStorage.getItem('abtestinghub-access-token'))
+export const MyContextProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [userAuthenticated, setUserAuthenticated] = useState<boolean>(
+    !!localStorage.getItem("abtestinghub-access-token")
+  );
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [rates, setRates] = useState({});
   const [conversionNum, setConversionNum] = useState(0.0);
   const [conversionName, setConversionName] = useState<string | null>(null);
-  const [conversionSymbol, setConversionSymbol] = useState<string | null>("₹");
-  const [username, setUsername] = useState<string | null>(localStorage.getItem('ab_testing_hub_username') ?? "");
-  
+  const [conversionSymbol, setConversionSymbol] = useState<string>("₹");
+  const [username, setUsername] = useState<string | null>(
+    localStorage.getItem("ab_testing_hub_username") ?? ""
+  );
+
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const response = currencyData
+        const response = currencyData;
         console.log(response);
         setRates(response.data);
       } catch (error) {
-        console.error('Error fetching conversion rates:', error);
-      } 
+        console.error("Error fetching conversion rates:", error);
+      }
     };
     fetchRates();
   }, []);
 
-    useEffect(() => {
-        // Trigger onChange function when the component mounts with the default value
-          const storedCurrency = localStorage.getItem("abtestinghub-currency");
-          if (storedCurrency) {
-            onCurrencyChange(storedCurrency);
-          }
-          else{
-            onCurrencyChange('USD,1');
-          }
-    }, []);
+  useEffect(() => {
+    // Trigger onChange function when the component mounts with the default value
+    const storedCurrency = localStorage.getItem("abtestinghub-currency");
+    if (storedCurrency) {
+      onCurrencyChange(storedCurrency);
+    } else {
+      onCurrencyChange("USD,1");
+    }
+  }, []);
 
   const onCurrencyChange = (value: string) => {
     console.log(`selected ${value}`);
-    localStorage.setItem('abtestinghub-currency', value);
-    const parts = value.split(',');
+    localStorage.setItem("abtestinghub-currency", value);
+    const parts = value.split(",");
     setConversionNum(parseFloat(parts[1]));
     setConversionName(parts[0]);
     setConversionSymbol(parts[2]);
@@ -54,21 +64,21 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
   };
 
   const signInUser = (token: string) => {
-    localStorage.setItem('abtestinghub-access-token', token);
-    setUserAuthenticated(true)
-  }
+    localStorage.setItem("abtestinghub-access-token", token);
+    setUserAuthenticated(true);
+  };
 
   const signOutUser = () => {
-    localStorage.removeItem('abtestinghub-access-token');
-    setUserAuthenticated(false)
-  }
+    localStorage.removeItem("abtestinghub-access-token");
+    setUserAuthenticated(false);
+  };
 
   const showAuthModal = () => {
     setAuthModalOpen(true);
   };
 
   const hideAuthModal = () => {
-    setAuthModalOpen(false)
+    setAuthModalOpen(false);
   };
 
   const contextValue: any = {
@@ -76,7 +86,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
     onCurrencyChange,
     conversionNum,
     conversionName,
-    conversionSymbol,
+    conversionSymbol: "₹",
     userAuthenticated,
     setUserAuthenticated,
     signInUser,
@@ -86,13 +96,11 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
     authModalOpen,
     setAuthModalOpen,
     username,
-    setUsername
+    setUsername,
   };
 
   return (
-    <MyContext.Provider value={contextValue}>
-      {children}
-    </MyContext.Provider>
+    <MyContext.Provider value={contextValue}>{children}</MyContext.Provider>
   );
 };
 
@@ -100,7 +108,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({ children 
 export const Context = (): any => {
   const context = useContext(MyContext);
   if (!context) {
-    throw new Error('useMyContext must be used within a MyContextProvider');
+    throw new Error("useMyContext must be used within a MyContextProvider");
   }
   return context;
 };

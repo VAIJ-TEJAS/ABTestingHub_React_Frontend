@@ -45,9 +45,9 @@ export const ProportionalMetricTesting: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const { userAuthenticated, rates, conversionSymbol, conversionNum } =
+  const { userAuthenticated, conversionSymbol, conversionNum } =
     Context();
-  console.log(rates);
+  console.log(conversionSymbol);
 
   const [isAuthVisible, setIsAuthVisible] = useState(false);
   const [userTests, setUserTests] = useState<ITest[]>([]);
