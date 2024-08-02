@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useGoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { Modal, Button, Form, message, Checkbox, Input } from "antd";
 import { Context } from "../context/context.provider";
 import IconText from "../assets/svgs/IconText.svg";
@@ -129,7 +129,7 @@ export const Auth: React.FC<AuthProps> = ({
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/google-complete/`,
         {
-          token: credentialResponse.access_token,
+          token: credentialResponse.credential,
         }
       );
 
@@ -218,12 +218,17 @@ export const Auth: React.FC<AuthProps> = ({
                 OR
               </div>
               <div className="w-full flex justify-center">
-                <Button
+                {/* <Button
                   className="custom-google-button border w-full border-secondary p-4 inline-flex justify-center items-center gap-2 font-sans"
                   onClick={() => googleLogin()}
                 >
                   <img src={Google} className="w-4"/>Continue with Google
-                </Button>
+                </Button> */}
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleFailure}
+                  useOneTap 
+                />
               </div>
               <Form.Item className="text-center my-3">
                 Don't have an account?
