@@ -99,7 +99,7 @@ export const Home = () => {
                   <Button
                     size="large"
                     type="primary"
-                    className="hidden h-16 text-2xl lg:inline-block lg:ml-auto px-28 transition duration-200"
+                    className="h-16 text-2xl lg:inline-block lg:ml-auto px-28 transition duration-200"
                     onClick={() => {
                       navigate("/dashboard");
                     }}
@@ -135,7 +135,7 @@ export const Home = () => {
           <div className="gap-8 py-16">
             <div className="space-y-4">
               <div className="text-4xl font-medium py-8">TOOLS WE OFFER</div>
-              <div className="flex justify-between gap-8">
+              <div className="w-full items-center flex flex-wrap justify-between gap-8">
                 <div className="rounded-xl">
                     <div
                       style={{boxShadow: "0px 15px 20px 0px #00000040 "}}
@@ -232,7 +232,7 @@ export const Home = () => {
 
       {articlesData.articles && (
         <div className="space-y-4 my-8">
-            <div className="flex w-full justify-between items-end pb-8">
+            <div className="flex w-full justify-between items-center pb-8">
               <div className="text-4xl">OUR ARTICLES</div>
               <button
                 className="text-xl text-primary hover:text-secondary"
@@ -243,7 +243,7 @@ export const Home = () => {
                 Read More
               </button>
             </div>
-            <div className="flex flex-wrap justify-between">
+            <div className="flex flex-wrap justify-between gap-8">
               {articlesData.articles.slice(0, 3).length > 0 ? (
                 articlesData.articles.slice(0, 3).map((props) => {
                   return <ArticleCard key={props.id} {...props} />;
