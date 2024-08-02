@@ -129,7 +129,7 @@ export const Auth: React.FC<AuthProps> = ({
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/google-complete/`,
         {
-          token: credentialResponse.credential,
+          token: credentialResponse.access_token,
         }
       );
 
