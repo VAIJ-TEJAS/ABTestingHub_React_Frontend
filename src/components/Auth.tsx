@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { Modal, Button, Form, message, Checkbox, Input } from "antd";
 import { Context } from "../context/context.provider";
 import IconText from "../assets/svgs/IconText.svg";
 import Mask from "../assets/images/Mask.png";
-import Google from "../assets/svgs/Google.svg"
 // import GoogleIcon from "../assets/svgs/google.svg";
 import { useState } from "react";
 import axios from "axios";
@@ -157,10 +156,10 @@ export const Auth: React.FC<AuthProps> = ({
     message.error("Google Sign-In was unsuccessful. Try again later.");
   };
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: handleGoogleSuccess,
-    onError: handleGoogleFailure,
-  });
+  // const googleLogin = useGoogleLogin({
+  //   onSuccess: handleGoogleSuccess,
+  //   onError: handleGoogleFailure,
+  // });
 
   return (
     <>
@@ -301,12 +300,17 @@ export const Auth: React.FC<AuthProps> = ({
                   OR
                 </div>
                 <div className="w-full flex justify-center">
-                <Button
+                {/* <Button
                   className="custom-google-button border w-full border-secondary p-4 inline-flex justify-center items-center gap-2 font-sans"
                   onClick={() => googleLogin()}
                 >
                   <img src={Google} className="w-4"/>Continue with Google
-                </Button>
+                </Button> */}
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleFailure}
+                  useOneTap 
+                />
               </div>
                 <Form.Item className="text-center my-3 font-sans">
                 Already have an account?
