@@ -65,7 +65,7 @@ export const Feedback = () => {
 
           <Form.Item
             label="FEEDBACK MESSAGE/QUERY"
-            name="feedback"
+            name="comment"
             rules={[{ required: true, message: "Please input your feedback!" }]}
           >
             <Input.TextArea placeholder="Sample User Feedback" rows={4} />
