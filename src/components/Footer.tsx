@@ -22,7 +22,7 @@ export const Footer = () => {
               </div>
             </a>
           </div>
-          <div className="grid grid-cols-1 text-sm gap-x-5 gap-y-8 lg:w-2/3 sm:grid-cols-2 px-6">
+          <div className="grid grid-cols-1 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-2 px-4">
             <div className="space-y-3">
               <h3 className="tracking-wide uppercase font-medium text-2xl text-[#2E383F]">TOOLS</h3>
               <ul className="space-y-2 text-lg text-primary">
@@ -43,7 +43,7 @@ export const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3">
               <h3 className="tracking-wide uppercase font-medium text-2xl text-[#2E383F]">COMPANY</h3>
               <ul className="space-y-2 text-lg text-primary">
                 <li>
