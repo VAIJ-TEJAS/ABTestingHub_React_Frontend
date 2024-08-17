@@ -759,7 +759,7 @@ export const ContinuousMetricTesting: React.FC = () => {
                       </div>
                     }
                   >
-                    <InputNumber min={0} max={20} style={{ width: "100%" }} />
+                    <InputNumber min={0} max={100} style={{ width: "100%" }} />
                   </Form.Item>
 
                   <Form.Item
