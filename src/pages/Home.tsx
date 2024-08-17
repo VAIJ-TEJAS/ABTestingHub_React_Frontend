@@ -99,7 +99,7 @@ export const Home = () => {
                   <Button
                     size="large"
                     type="primary"
-                    className="h-16 text-2xl lg:inline-block lg:ml-auto px-28 transition duration-200"
+                    className="px-6 transition duration-200"
                     onClick={() => {
                       navigate("/dashboard");
                     }}

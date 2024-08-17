@@ -7,8 +7,8 @@ export const Footer = () => {
   return (
     <>
       <footer className="border-t-2 border-secondary" style={{boxShadow: "0px -10px 30px 0px #00000040"}}>
-        <div className="container flex flex-col justify-between py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0">
-          <div className="lg:w-1/3">
+        <div className="container flex flex-col justify-between py-10 mx-12 space-y-8 lg:flex-row lg:space-y-0">
+          <div className="lg:w-1/4">
             <a
               rel="noopener noreferrer"
               href="#"
@@ -22,7 +22,7 @@ export const Footer = () => {
               </div>
             </a>
           </div>
-          <div className="grid grid-cols-1 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-3 px-4">
+          <div className="grid grid-cols-1 text-sm gap-x-5 gap-y-8 lg:w-2/3 sm:grid-cols-2 px-6">
             <div className="space-y-3">
               <h3 className="tracking-wide uppercase font-medium text-2xl text-[#2E383F]">TOOLS</h3>
               <ul className="space-y-2 text-lg text-primary">
@@ -43,7 +43,7 @@ export const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-4">
               <h3 className="tracking-wide uppercase font-medium text-2xl text-[#2E383F]">COMPANY</h3>
               <ul className="space-y-2 text-lg text-primary">
                 <li>
@@ -73,7 +73,7 @@ export const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               <div className="uppercase font-medium text-2xl text-[#2E383F]">FOLLOW US</div>
               <div className="flex justify-start space-x-3">
                 <a
@@ -101,7 +101,7 @@ export const Footer = () => {
                   <img src={Linkedin}/>
                 </a>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="py-6 text-sm text-center border-t-secondary border-t">
