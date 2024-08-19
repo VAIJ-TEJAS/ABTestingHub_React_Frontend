@@ -1,5 +1,4 @@
 import { Container } from "@mui/material";
-import YelloMaskImage from "../../assets/images/YellowMaskImage.png";
 import YelloMask from "../../assets/images/YellowMask.png";
 import { ArticleCard } from "../components/ArticleCard";
 import { useEffect, useState } from "react";
