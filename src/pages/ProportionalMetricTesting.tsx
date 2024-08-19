@@ -45,8 +45,7 @@ export const ProportionalMetricTesting: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const { userAuthenticated, conversionSymbol, conversionNum } =
-    Context();
+  const { userAuthenticated, conversionSymbol, conversionNum } = Context();
   console.log(conversionSymbol);
 
   const [isAuthVisible, setIsAuthVisible] = useState(false);
@@ -83,7 +82,7 @@ export const ProportionalMetricTesting: React.FC = () => {
   const createAllocations = (armsCount: number, equalAllocation: boolean) => {
     return Array.from({ length: armsCount }, (_, index) => ({
       id: index + 1,
-      value: parseInt(equalAllocation ? (100 / armsCount).toFixed(2) : "0"),
+      value: parseFloat(equalAllocation ? (100 / armsCount).toFixed(2) : (0).toFixed(2)),
     }));
   };
 
@@ -134,7 +133,7 @@ export const ProportionalMetricTesting: React.FC = () => {
         return sum + parseFloat(allocation.value);
       }, 0);
 
-      if (total !== 100 && allocations.length) {
+      if (Math.ceil(total) !== 100 && allocations.length) {
         setError("The sum of the values must be 100!");
       } else {
         setError(null);
@@ -176,6 +175,8 @@ export const ProportionalMetricTesting: React.FC = () => {
         data: allocations,
       },
     };
+
+    console.log(payload)
 
     axios
       .post(`${BASE_URL}/tests/calc_proportional_metric/`, payload)
@@ -237,7 +238,7 @@ export const ProportionalMetricTesting: React.FC = () => {
     setAllocations(
       Array.from({ length: value }, (_, index) => ({
         id: index + 1,
-        value: (100 / value).toFixed(2),
+        value: parseFloat((100 / value).toFixed(2)),
       }))
     );
   };
@@ -1083,7 +1084,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                       </div>
                     }
                   >
-                    <InputNumber min={0} max={20} style={{ width: "100%" }} />
+                    <InputNumber min={0} style={{ width: "100%" }} />
                   </Form.Item>
 
                   <Form.Item
@@ -1487,35 +1488,40 @@ export const ProportionalMetricTesting: React.FC = () => {
                       separator=","
                     />
                   </div>
-                  <div>
-                    {((numericalResults?.test_revenue -
-                      numericalResults?.control_revenue) *
-                      100) /
-                      numericalResults?.control_revenue >
-                    0 ? (
-                      <div className="text-green-600">
-                        <ArrowUpOutlined />{" "}
-                        {(
-                          ((numericalResults?.test_revenue -
-                            numericalResults?.control_revenue) *
-                            100) /
-                          numericalResults?.control_revenue
-                        ).toFixed(2)}
-                        %
-                      </div>
-                    ) : (
-                      <div className="text-red-600">
-                        <ArrowDownOutlined />{" "}
-                        {(
-                          ((numericalResults?.test_revenue -
-                            numericalResults?.control_revenue) *
-                            100) /
-                          numericalResults?.control_revenue
-                        ).toFixed(2)}
-                        %
-                      </div>
-                    )}
-                  </div>
+                  {(((numericalResults?.test_revenue -
+                        numericalResults?.control_revenue) *
+                        100) /
+                        numericalResults?.control_revenue).toString() !== "NaN" &&
+                    <div>
+                      {((numericalResults?.test_revenue -
+                        numericalResults?.control_revenue) *
+                        100) /
+                        numericalResults?.control_revenue >
+                      0 ? (
+                        <div className="text-green-600">
+                          <ArrowUpOutlined />{" "}
+                          {(
+                            ((numericalResults?.test_revenue -
+                              numericalResults?.control_revenue) *
+                              100) /
+                            numericalResults?.control_revenue
+                          ).toFixed(2)}
+                          %
+                        </div>
+                      ) : (
+                        <div className="text-red-600">
+                          <ArrowDownOutlined />{" "}
+                          {(
+                            ((numericalResults?.test_revenue -
+                              numericalResults?.control_revenue) *
+                              100) /
+                            numericalResults?.control_revenue
+                          ).toFixed(2)}
+                          %
+                        </div>
+                      )}
+                    </div>
+                  }
                 </div>
               </div>
             </div>

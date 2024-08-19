@@ -117,7 +117,7 @@ export const Article = () => {
           <div className="flex flex-col gap-16">
             <Container
               style={{
-                backgroundImage: `url(${YelloMaskImage})`,
+                backgroundImage: `url(${article?.cover_image.image})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 overflow: "hidden",

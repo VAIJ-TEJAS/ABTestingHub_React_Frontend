@@ -177,8 +177,8 @@ export const Auth: React.FC<AuthProps> = ({
         }}
       >
         {isSignInView ? (
-          <div className="flex border-4 border-secondary rounded-xl">
-            <div className="w-72 flex-shrink-0 relative flex justify-center items-center">
+          <div className="lg:flex border-4 border-secondary rounded-xl">
+            <div className="hidden lg:flex w-72 flex-shrink-0 relative justify-center items-center">
               <img src={Mask} />
               <img src={IconText} className="absolute w-36"></img>
             </div>
@@ -239,8 +239,8 @@ export const Auth: React.FC<AuthProps> = ({
           </div>
         ) : (
           <div>
-            <div className="flex border-4 border-secondary rounded-xl">
-            <div className="w-72 flex-shrink-0 relative flex justify-center items-center">
+            <div className="lg:flex border-4 border-secondary rounded-xl">
+            <div className="hidden lg:flex w-72 flex-shrink-0 relative justify-center items-center">
               <img src={Mask} />
               <img src={IconText} className="absolute w-36"></img>
             </div>
