@@ -132,7 +132,7 @@ export const ContinuousMetricTesting: React.FC = () => {
         return sum + parseFloat(allocation.value);
       }, 0);
 
-      if (total !== 100 && allocations.length) {
+      if (Math.ceil(total) !== 100 && allocations.length) {
         setError("The sum of the values must be 100!");
       } else {
         setError(null);
@@ -240,7 +240,7 @@ export const ContinuousMetricTesting: React.FC = () => {
     setAllocations(
       Array.from({ length: value }, (_, index) => ({
         id: index + 1,
-        value: 100 / value,
+        value: parseFloat((100 / value).toFixed(2)),
       }))
     );
   };
@@ -759,7 +759,7 @@ export const ContinuousMetricTesting: React.FC = () => {
                       </div>
                     }
                   >
-                    <InputNumber min={0} max={100} style={{ width: "100%" }} />
+                    <InputNumber min={0}  style={{ width: "100%" }} />
                   </Form.Item>
 
                   <Form.Item
@@ -1563,35 +1563,40 @@ export const ContinuousMetricTesting: React.FC = () => {
                       separator=","
                     />
                   </div>
-                  <div>
-                    {((numericalResults?.test_revenue -
-                      numericalResults?.control_revenue) *
-                      100) /
-                      numericalResults?.control_revenue >
-                    0 ? (
-                      <div className="text-green-600">
-                        <ArrowUpOutlined />{" "}
-                        {(
-                          ((numericalResults?.test_revenue -
-                            numericalResults?.control_revenue) *
-                            100) /
-                          numericalResults?.control_revenue
-                        ).toFixed(2)}
-                        %
-                      </div>
-                    ) : (
-                      <div className="text-red-600">
-                        <ArrowDownOutlined />{" "}
-                        {(
-                          ((numericalResults?.test_revenue -
-                            numericalResults?.control_revenue) *
-                            100) /
-                          numericalResults?.control_revenue
-                        ).toFixed(2)}
-                        %
-                      </div>
-                    )}
-                  </div>
+                  {(((numericalResults?.test_revenue -
+                        numericalResults?.control_revenue) *
+                        100) /
+                        numericalResults?.control_revenue).toString() !== "NaN" &&
+                    <div>
+                      {((numericalResults?.test_revenue -
+                        numericalResults?.control_revenue) *
+                        100) /
+                        numericalResults?.control_revenue >
+                      0 ? (
+                        <div className="text-green-600">
+                          <ArrowUpOutlined />{" "}
+                          {(
+                            ((numericalResults?.test_revenue -
+                              numericalResults?.control_revenue) *
+                              100) /
+                            numericalResults?.control_revenue
+                          ).toFixed(2)}
+                          %
+                        </div>
+                      ) : (
+                        <div className="text-red-600">
+                          <ArrowDownOutlined />{" "}
+                          {(
+                            ((numericalResults?.test_revenue -
+                              numericalResults?.control_revenue) *
+                              100) /
+                            numericalResults?.control_revenue
+                          ).toFixed(2)}
+                          %
+                        </div>
+                      )}
+                    </div>
+                  }
                 </div>
               </div>
             </div>

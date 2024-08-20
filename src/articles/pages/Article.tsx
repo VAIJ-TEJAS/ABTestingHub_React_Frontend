@@ -1,5 +1,4 @@
 import { Container } from "@mui/material";
-import YelloMaskImage from "../../assets/images/YellowMaskImage.png";
 import YelloMask from "../../assets/images/YellowMask.png";
 import { ArticleCard } from "../components/ArticleCard";
 import { useEffect, useState } from "react";
@@ -117,7 +116,7 @@ export const Article = () => {
           <div className="flex flex-col gap-16">
             <Container
               style={{
-                backgroundImage: `url(${YelloMaskImage})`,
+                backgroundImage: `url(${article?.cover_image.image})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 overflow: "hidden",

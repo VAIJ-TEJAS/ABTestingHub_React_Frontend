@@ -110,7 +110,7 @@ export const Home = () => {
                   <Button
                     size="large"
                     type="primary"
-                    className="px-6 transition duration-200"
+                    className="h-16 text-2xl lg:inline-block lg:ml-auto px-28 transition duration-200"
                     onClick={showAuthModal}
                   >
                     GET STARTED

@@ -24,7 +24,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({
   const [rates, setRates] = useState({});
   const [conversionNum, setConversionNum] = useState(0.0);
   const [conversionName, setConversionName] = useState<string | null>(null);
-  const [, setConversionSymbol] = useState<string>("₹");
+  const [conversionSymbol, setConversionSymbol] = useState<string>("₹");
   const [username, setUsername] = useState<string | null>(
     localStorage.getItem("ab_testing_hub_username") ?? ""
   );
@@ -86,7 +86,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({
     onCurrencyChange,
     conversionNum,
     conversionName,
-    conversionSymbol: "₹",
+    conversionSymbol,
     userAuthenticated,
     setUserAuthenticated,
     signInUser,

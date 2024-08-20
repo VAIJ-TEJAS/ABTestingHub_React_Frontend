@@ -12,7 +12,7 @@ export const SideDrawer = () => {
     const navigate = useNavigate();
   
   
-    const { showAuthModal, userAuthenticated, signOutUser, onCurrencyChange, rates, conversionName } = Context()
+    const { username, showAuthModal, userAuthenticated, signOutUser, onCurrencyChange, rates, conversionName } = Context()
     const [visible, setVisible] = useState(false);
   
     const showDrawer = () => {
@@ -67,7 +67,7 @@ export const SideDrawer = () => {
   
                   (<div className="flex items-center p-4 border-b border-gray-200">
                       <Avatar size={40} icon={<UserOutlined />} />
-                      <span className="ml-4 font-bold text-gray-800">Username</span>
+                      <span className="ml-4 font-bold text-gray-800">{username || "Username"}</span>
                       <Button
                           type="text"
                           icon={<CloseOutlined />}
@@ -103,6 +103,7 @@ export const SideDrawer = () => {
                     </SubMenu>
                     <Menu.Item className="p-4"  key="2" onClick={() => { navigate('/ab-testing'); closeDrawer() }}><strong>A/B Testing</strong></Menu.Item>
                     <Menu.Item className="p-4"  key="3" onClick={() => { navigate('/articles'); closeDrawer() }}><strong>Articles</strong></Menu.Item>
+                    <Menu.Item className="p-4"  key="4" onClick={() => { navigate('/feedback'); closeDrawer() }}><strong>Feedback</strong></Menu.Item>
   
                     <Menu.SubMenu key="sub2" title={<strong>Currency ({conversionName})</strong>}>
                         <div className="max-h-60 overflow-y-auto">
@@ -111,7 +112,7 @@ export const SideDrawer = () => {
                     </Menu.SubMenu>
                     {
                       userAuthenticated &&
-                        <Menu.Item className="p-4"  key="4" onClick={() => { navigate('/home'); closeDrawer() }}>
+                        <Menu.Item className="p-4"  key="5" onClick={() => { navigate('/home'); closeDrawer() }}>
                           <Button
                               type="text"
                               icon={<LogoutOutlined />}
