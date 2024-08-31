@@ -43,8 +43,8 @@ export const AboutUs = () => {
         <div>TEAM CONTENT</div> */}
 
         <div className="text-primary text-3xl pt-8">What We Do</div>
-        <div className="py-6">
-          <div className="flex justify-between gap-8">
+        <div className="py-6 flex justify-center">
+          <div className="grid lg:grid-cols-3 gap-8">
             <div className="rounded-xl">
               <div
                 style={{
@@ -130,8 +130,8 @@ export const AboutUs = () => {
         </div>
 
         <div className="text-primary text-3xl pt-8">Why Choose Us</div>
-        <div className="py-6">
-        <div className="flex justify-between gap-8">
+        <div className="py-6 flex justify-center">
+        <div className="grid lg:grid-cols-3 gap-8">
             <div className="rounded-xl">
               <div
                 style={{

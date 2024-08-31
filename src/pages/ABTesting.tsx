@@ -10,6 +10,7 @@ import {
   Modal,
   List,
   Segmented,
+  Spin,
 } from "antd";
 import axios from "axios";
 import PlotGraph from "../components/PlotGraph";
@@ -33,6 +34,7 @@ interface ArmData {
 
 export const ABTesting: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -143,6 +145,7 @@ export const ABTesting: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
+    setLoading(true);
     // const BASE_URL = import.meta.env.VITE_BASE_URL;
     const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -170,6 +173,7 @@ export const ABTesting: React.FC = () => {
 
     console.log(payload);
 
+    try {
     axios
       .post(`${BASE_URL}/tests/calc_ab_metric/`, payload)
       .then((response) => {
@@ -233,6 +237,11 @@ export const ABTesting: React.FC = () => {
       .catch((error) => {
         console.error("There was an error!", error);
       });
+    } catch (error) {
+      // Handle error here
+    } finally {
+      setLoading(false); // Stop loading
+    }
   };
 
   const handleArmsChange = (newArmsCount: number) => {
@@ -934,21 +943,21 @@ export const ABTesting: React.FC = () => {
                     htmlType="submit"
                     onClick={handleCalculateClick}
                   >
-                    CALCULATE
+                    {loading ? <Spin className="bg-white rounded-full"/> : 'CALCULATE'}
                   </Button>
                 </Form.Item>
-                <>
-                  <Button
-                    className="bg-secondary"
-                    size="large"
+                <Form.Item>
+                  <button
+                    className="bg-secondary h-10 w-10 flex justify-center items-center rounded border-secondary border-2 hover:bg-white transition-all duration-300"
                     onClick={(event) => {
                       event.preventDefault();
                       saveResults(testData);
                     }}
                     disabled={isNotCalculatedSaved === CalculationStatus.IDLE}
-                    icon={<img src={SaveIcon} className="w-6" />}
-                  />
-                </>
+                    >
+                    <img src={SaveIcon} className="w-6" />
+                    </button>
+                </Form.Item>
               </div>
             </Form>
           </div>

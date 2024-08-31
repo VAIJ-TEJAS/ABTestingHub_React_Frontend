@@ -12,6 +12,7 @@ import {
   List,
   Modal,
   Segmented,
+  Spin,
 } from "antd";
 import axios from "axios";
 import CountUp from "react-countup";
@@ -36,6 +37,7 @@ const { Option } = Select;
 
 export const ProportionalMetricTesting: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -82,7 +84,9 @@ export const ProportionalMetricTesting: React.FC = () => {
   const createAllocations = (armsCount: number, equalAllocation: boolean) => {
     return Array.from({ length: armsCount }, (_, index) => ({
       id: index + 1,
-      value: parseFloat(equalAllocation ? (100 / armsCount).toFixed(2) : (0).toFixed(2)),
+      value: parseFloat(
+        equalAllocation ? (100 / armsCount).toFixed(2) : (0).toFixed(2)
+      ),
     }));
   };
 
@@ -166,6 +170,8 @@ export const ProportionalMetricTesting: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
+    setLoading(true);
+
     const BASE_URL = import.meta.env.VITE_BASE_URL;
 
     const payload = {
@@ -176,54 +182,60 @@ export const ProportionalMetricTesting: React.FC = () => {
       },
     };
 
-    console.log(payload)
+    console.log(payload);
 
-    axios
-      .post(`${BASE_URL}/tests/calc_proportional_metric/`, payload)
-      .then((response) => {
-        const {
-          "Total Sample Size": total_sample_size,
-          "Sample Size Per Arm": sample_size_per_arm,
-          "Days Required": days_required,
-          "Weeks Required": weeks_required,
-          "Control Revenue": control_revenue,
-          "Test Revenue": test_revenue,
-        } = response.data;
+    try {
+      axios
+        .post(`${BASE_URL}/tests/calc_proportional_metric/`, payload)
+        .then((response) => {
+          const {
+            "Total Sample Size": total_sample_size,
+            "Sample Size Per Arm": sample_size_per_arm,
+            "Days Required": days_required,
+            "Weeks Required": weeks_required,
+            "Control Revenue": control_revenue,
+            "Test Revenue": test_revenue,
+          } = response.data;
 
-        setNumericalResults({
-          total_sample_size,
-          sample_size_per_arm,
-          days_required,
-          weeks_required,
-          control_revenue,
-          test_revenue,
+          setNumericalResults({
+            total_sample_size,
+            sample_size_per_arm,
+            days_required,
+            weeks_required,
+            control_revenue,
+            test_revenue,
+          });
+
+          setFigures([
+            {
+              name: "Confidence Level",
+              data: response.data["Fig Confidence Level"].data,
+              layout: response.data["Fig Confidence Level"].layout,
+            },
+            {
+              name: "Power",
+              data: response.data["Fig Power"].data,
+              layout: response.data["Fig Power"].layout,
+            },
+            {
+              name: "MDE",
+              data: response.data["Fig MDE"].data,
+              layout: response.data["Fig MDE"].layout,
+            },
+          ]);
+          message.success("Calculations completed successfully");
+
+          if (userInitiatedCalculation)
+            setIsNotCalculatedSaved(CalculationStatus.CALC);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
         });
-
-        setFigures([
-          {
-            name: "Confidence Level",
-            data: response.data["Fig Confidence Level"].data,
-            layout: response.data["Fig Confidence Level"].layout,
-          },
-          {
-            name: "Power",
-            data: response.data["Fig Power"].data,
-            layout: response.data["Fig Power"].layout,
-          },
-          {
-            name: "MDE",
-            data: response.data["Fig MDE"].data,
-            layout: response.data["Fig MDE"].layout,
-          },
-        ]);
-        message.success("Calculations completed successfully");
-
-        if (userInitiatedCalculation)
-          setIsNotCalculatedSaved(CalculationStatus.CALC);
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
+    } catch (error) {
+      // Handle error here
+    } finally {
+      setLoading(false); // Stop loading
+    }
   };
 
   const handleAllocationChange = (id: number, value: number) => {
@@ -1327,21 +1339,21 @@ export const ProportionalMetricTesting: React.FC = () => {
                     onClick={handleCalculateClick}
                     disabled={!!error}
                   >
-                    CALCULATE
+                    {loading ? <Spin className="bg-white rounded-full"/> : 'CALCULATE'}
                   </Button>
                 </Form.Item>
-                <>
-                  <Button
-                    className="bg-secondary"
-                    size="large"
+                <Form.Item>
+                  <button
+                    className="bg-secondary h-10 w-10 flex justify-center items-center rounded border-secondary border-2 hover:bg-white transition-all duration-300"
                     onClick={(event) => {
                       event.preventDefault();
                       saveResults(testData);
                     }}
                     disabled={isNotCalculatedSaved === CalculationStatus.IDLE}
-                    icon={<img src={SaveIcon} className="w-6" />}
-                  />
-                </>
+                  >
+                    <img src={SaveIcon} className="w-6 h-6" />
+                  </button>
+                </Form.Item>
               </div>
             </Form>
           </div>
@@ -1360,11 +1372,11 @@ export const ProportionalMetricTesting: React.FC = () => {
                     <Tooltip
                       className="text-primary px-2"
                       title={`The necessary sample size for conducting a test at a ${
-                        testDataCopy?.power ?? 90
+                        testDataCopy?.power ?? 80
                       }% power, aiming to detect a ${
                         testDataCopy?.mde ?? 3
                       }% difference with ${
-                        testDataCopy?.confidence_level ?? 90
+                        testDataCopy?.confidence_level ?? 95
                       }% confidence`}
                     >
                       <QuestionCircleOutlined />
@@ -1488,10 +1500,12 @@ export const ProportionalMetricTesting: React.FC = () => {
                       separator=","
                     />
                   </div>
-                  {(((numericalResults?.test_revenue -
-                        numericalResults?.control_revenue) *
-                        100) /
-                        numericalResults?.control_revenue).toString() !== "NaN" &&
+                  {(
+                    ((numericalResults?.test_revenue -
+                      numericalResults?.control_revenue) *
+                      100) /
+                    numericalResults?.control_revenue
+                  ).toString() !== "NaN" && (
                     <div>
                       {((numericalResults?.test_revenue -
                         numericalResults?.control_revenue) *
@@ -1521,7 +1535,7 @@ export const ProportionalMetricTesting: React.FC = () => {
                         </div>
                       )}
                     </div>
-                  }
+                  )}
                 </div>
               </div>
             </div>

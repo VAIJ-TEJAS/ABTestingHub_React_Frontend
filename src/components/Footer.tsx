@@ -1,7 +1,7 @@
 import IconText from "../assets/svgs/IconText.svg"
-import Instagram from "../assets/svgs/Instagram.svg"
-import X from "../assets/svgs/X.svg"
-import Linkedin from "../assets/svgs/LinkedIn.svg"
+// import Instagram from "../assets/svgs/Instagram.svg"
+// import X from "../assets/svgs/X.svg"
+// import Linkedin from "../assets/svgs/LinkedIn.svg"
 
 export const Footer = () => {
   return (
@@ -22,7 +22,7 @@ export const Footer = () => {
               </div>
             </a>
           </div>
-          <div className="grid grid-cols-1 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-3 px-4">
+          <div className="grid grid-cols-1 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-2 px-4">
             <div className="space-y-3">
               <h3 className="tracking-wide uppercase font-medium text-2xl text-[#2E383F]">TOOLS</h3>
               <ul className="space-y-2 text-lg text-primary">
@@ -73,7 +73,7 @@ export const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               <div className="uppercase font-medium text-2xl text-[#2E383F]">FOLLOW US</div>
               <div className="flex justify-start space-x-3">
                 <a
@@ -101,7 +101,7 @@ export const Footer = () => {
                   <img src={Linkedin}/>
                 </a>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="py-6 text-sm text-center border-t-secondary border-t">

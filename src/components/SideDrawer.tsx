@@ -1,9 +1,10 @@
-import { CheckOutlined, CloseOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Drawer, Menu } from 'antd';
 import { useState } from 'react'
 import { confirmation } from './Confirmation';
 import { useNavigate } from 'react-router-dom';
 import { Context } from '../context/context.provider';
+import LogoutIcon from "../assets/svgs/Logout.svg";
 
 const { SubMenu } = Menu;
 
@@ -115,7 +116,7 @@ export const SideDrawer = () => {
                         <Menu.Item className="p-4"  key="5" onClick={() => { navigate('/home'); closeDrawer() }}>
                           <Button
                               type="text"
-                              icon={<LogoutOutlined />}
+                              icon={<img src={LogoutIcon}/>}
                               onClick={() => handleLogoutClick()}
                               className="w-full font-bold flex items-center justify-center py-2 text-red-600 hover:bg-red-100"
                               > 

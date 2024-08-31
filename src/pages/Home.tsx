@@ -158,9 +158,9 @@ export const Home = () => {
                         </div>
                       </div>
                       <div className="px-4 pb-4">
-                        <Button className="flex items-center justify-center w-full text-lg text-primary border-2 border-primary p-6">
+                        <button className="flex items-center justify-center w-full text-lg text-primary border-2 border-primary p-2 hover:bg-primary hover:text-white transition-all duration-300">
                           EXPLORE
-                        </Button>
+                        </button>
                       </div>
                     </div>
                 </div>
@@ -187,9 +187,9 @@ export const Home = () => {
                         </div>
                       </div>
                       <div className="px-4 pb-4">
-                        <Button className="flex items-center justify-center w-full text-lg text-primary border-2 border-primary p-6">
+                      <button className="flex items-center justify-center w-full text-lg text-primary border-2 border-primary p-2 hover:bg-primary hover:text-white transition-all duration-300">
                           EXPLORE
-                        </Button>
+                        </button>
                       </div>
                     </div>
                 </div>
@@ -216,9 +216,9 @@ export const Home = () => {
                         </div>
                       </div>
                       <div className="px-4 pb-4">
-                        <Button className="flex items-center justify-center w-full text-lg text-primary border-2 border-primary p-6">
+                      <button className="flex items-center justify-center w-full text-lg text-primary border-2 border-primary p-2 hover:bg-primary hover:text-white transition-all duration-300">
                           EXPLORE
-                        </Button>
+                        </button>
                       </div>
                     </div>
                 </div>
