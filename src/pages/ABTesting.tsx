@@ -167,7 +167,7 @@ export const ABTesting: React.FC = () => {
     const payload = {
       visitors_input: visitorsInput,
       conversions_input: conversionsInput,
-      confidence_level: values.confidence_level / 100,
+      confidence_level: values.confidence_level,
       tail: values.tail_type ? "two-tailed" : "one-tailed",
     };
 
