@@ -1,7 +1,4 @@
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from "react-router-dom"
-import { Categories } from "./articles/pages/ArticlesCategories";
-import { ArticlesHome } from "./articles/pages/ArticlesHome";
-import { Article } from "./articles/pages/Article";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { Home } from "./pages/Home";
@@ -17,8 +14,6 @@ import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { AboutUs } from "./pages/AboutUs";
 import { CommunityAnalytics } from "./pages/CommunityAnalytics";
 import { Feedback } from "./pages/Feedback";
-import { Latest } from "./articles/pages/ArticlesLatest";
-import { MostPopular } from "./articles/pages/ArticlesMostPopular";
 
 function App() {
 
