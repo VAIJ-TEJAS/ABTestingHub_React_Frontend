@@ -155,7 +155,7 @@ export const Navbar = () => {
               </a>
             </li>
 
-            <li>
+            {/* <li>
               <a
                 className={`hover:text-primary transition-all duration-300 cursor-pointer ${
                   isActive("/articles/") ? "text-primary" : ""
@@ -166,7 +166,7 @@ export const Navbar = () => {
               >
                 ARTICLES
               </a>
-            </li>
+            </li> */}
           </ul>
 
           {userAuthenticated ? (

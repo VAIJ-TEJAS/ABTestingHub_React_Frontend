@@ -55,11 +55,11 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/community-analytics" element={<CommunityAnalytics />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-          <Route path="/articles" element={<ArticlesHome />} />
+          {/* <Route path="/articles" element={<ArticlesHome />} />
           <Route path="/articles-latest" element={<Latest />} />
           <Route path="/articles-most-popular" element={<MostPopular />} />
           <Route path="/articles/:category_name" element={<Categories />} />
-          <Route path="/article/:article_id" element={<Article />} />
+          <Route path="/article/:article_id" element={<Article />} /> */}
           <Route path="/ab-testing/" element={<ABTesting />} />
           <Route path="/continuous-metric-testing" element={<ContinuousMetricTesting />} />
           <Route path="/proportional-metric-testing" element={<ProportionalMetricTesting />} />

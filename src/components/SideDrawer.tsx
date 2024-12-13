@@ -103,7 +103,7 @@ export const SideDrawer = () => {
                         <Menu.Item key="3" onClick={() => {navigate('/continuous-metric-testing');closeDrawer()}}><strong>Continuous Metric</strong></Menu.Item>
                     </SubMenu>
                     <Menu.Item className="p-4"  key="2" onClick={() => { navigate('/ab-testing'); closeDrawer() }}><strong>A/B Testing</strong></Menu.Item>
-                    <Menu.Item className="p-4"  key="3" onClick={() => { navigate('/articles'); closeDrawer() }}><strong>Articles</strong></Menu.Item>
+                    {/* <Menu.Item className="p-4"  key="3" onClick={() => { navigate('/articles'); closeDrawer() }}><strong>Articles</strong></Menu.Item> */}
                     <Menu.Item className="p-4"  key="4" onClick={() => { navigate('/feedback'); closeDrawer() }}><strong>Feedback</strong></Menu.Item>
   
                     <Menu.SubMenu key="sub2" title={<strong>Currency ({conversionName})</strong>}>
