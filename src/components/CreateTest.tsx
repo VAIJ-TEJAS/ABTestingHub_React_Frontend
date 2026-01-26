@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { generateProjectName } from "../utils/hypothesis_title_generator";
@@ -13,8 +13,18 @@ import {
   Col,
   message,
   Segmented,
+  Switch,
+  Tooltip,
+  Space,
+  Tag,
+  Alert,
+  Spin,
+  AutoComplete,
+  DatePicker,
 } from "antd";
-import { CloseSharp } from "@mui/icons-material";
+import { CloseSharp, InfoOutlined, SaveOutlined, RocketOutlined } from "@mui/icons-material";
+import { validateRequired, validateLength, validateForm } from "../utils/formValidators";
+import dayjs from "dayjs";
 
 interface CreateTestModalProps {
   isVisible: boolean;
@@ -30,15 +40,82 @@ export const CreateTest: React.FC<CreateTestModalProps> = ({
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [testId, setTestId] = useState<number | undefined>();
+  const [loading, setLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [autoSaveEnabled, setAutoSaveEnabled] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [formDirty, setFormDirty] = useState(false);
 
   useEffect(() => {
     if (test_id) {
       setTestId(test_id);
       fetchTestData(test_id);
+    } else {
+      form.resetFields();
+      setFormDirty(false);
+      setValidationErrors({});
     }
-  }, [test_id]);
+  }, [test_id, isVisible]);
+
+  useEffect(() => {
+    if (autoSaveEnabled && formDirty) {
+      const timer = setTimeout(() => {
+        handleAutoSave();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [formDirty, autoSaveEnabled]);
+
+  const handleAutoSave = useCallback(async () => {
+    try {
+      const values = form.getFieldsValue();
+      const validation = validateForm({
+        name: validateRequired(values.name),
+        description: validateLength(values.description || '', 0, 500),
+      });
+
+      if (validation.isValid && testId) {
+        await axios.patch(
+          `${import.meta.env.VITE_BASE_URL}/tests/${testId}/`,
+          values,
+          {
+            headers: {
+              Authorization: "Token " + localStorage.getItem("abtestinghub-access-token"),
+            },
+          }
+        );
+        setLastSaved(new Date());
+        setFormDirty(false);
+      }
+    } catch (error) {
+      console.error("Auto-save failed:", error);
+    }
+  }, [form, testId]);
+
+  const loadSuggestions = useCallback(async (searchText: string) => {
+    if (searchText.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/tests/?search=${searchText}`,
+        {
+          headers: {
+            Authorization: "Token " + localStorage.getItem("abtestinghub-access-token"),
+          },
+        }
+      );
+      const names = response.data.map((test: any) => test.name).slice(0, 5);
+      setSuggestions(names);
+    } catch (error) {
+      console.error("Failed to load suggestions:", error);
+    }
+  }, []);
 
   const fetchTestData = async (testId: number) => {
+    setLoading(true);
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/tests/${testId}/`,
@@ -49,10 +126,18 @@ export const CreateTest: React.FC<CreateTestModalProps> = ({
           },
         }
       );
-      form.setFieldsValue(response.data);
+      const data = response.data;
+      form.setFieldsValue({
+        ...data,
+        startDate: data.start_date ? dayjs(data.start_date) : null,
+        endDate: data.end_date ? dayjs(data.end_date) : null,
+      });
+      setFormDirty(false);
     } catch (error) {
       console.error("Failed to fetch test data:", error);
       message.error("Failed to fetch test details.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,15 +179,46 @@ export const CreateTest: React.FC<CreateTestModalProps> = ({
     }
   };
 
-  const onFinish = (values: any) => {
+  const validateFormData = useCallback((values: any): boolean => {
+    const validation = validateForm({
+      name: validateRequired(values.name),
+      description: validateLength(values.description || '', 0, 1000),
+      arms: validateRequired(values.arms),
+    });
+
+    if (!validation.isValid) {
+      setValidationErrors(validation.errors);
+      message.error("Please fix validation errors before submitting.");
+      return false;
+    }
+
+    setValidationErrors({});
+    return true;
+  }, []);
+
+  const onFinish = useCallback((values: any) => {
+    if (!validateFormData(values)) return;
+    setFormDirty(false);
     createOrUpdateTest(values, "continue");
-  };
+  }, [validateFormData]);
 
-  const onFinishReturn = (values: any) => {
+  const onFinishReturn = useCallback((values: any) => {
+    if (!validateFormData(values)) return;
+    setFormDirty(false);
     createOrUpdateTest(values, "return");
-  };
+  }, [validateFormData]);
 
-  const randomName = generateProjectName();
+  const handleFormChange = useCallback(() => {
+    setFormDirty(true);
+  }, []);
+
+  const handleGenerateName = useCallback(() => {
+    const newName = generateProjectName();
+    form.setFieldsValue({ name: newName });
+    setFormDirty(true);
+  }, [form]);
+
+  const randomName = useMemo(() => generateProjectName(), []);
 
   return (
     <Modal
@@ -123,30 +239,83 @@ export const CreateTest: React.FC<CreateTestModalProps> = ({
           <div className="w-ful flex justify-end">
             <CloseSharp className="hover:text-primary hover:cursor-pointer" onClick={onClose}/>
           </div>
-          <div className="text-2xl text-center inline-flex w-full justify-center">
-            CREATE/EDIT TEST 
+          <div className="text-2xl text-center inline-flex w-full justify-center items-center gap-2">
+            {testId ? 'EDIT TEST' : 'CREATE TEST'}
+            {testId && <Tag color="blue">ID: {testId}</Tag>}
           </div>
+          {lastSaved && (
+            <Alert
+              message={`Last saved: ${lastSaved.toLocaleTimeString()}`}
+              type="success"
+              showIcon
+              closable
+              className="mt-2"
+            />
+          )}
+          {Object.keys(validationErrors).length > 0 && (
+            <Alert
+              message="Validation Errors"
+              description={Object.values(validationErrors).join(', ')}
+              type="error"
+              showIcon
+              closable
+              onClose={() => setValidationErrors({})}
+              className="mt-2"
+            />
+          )}
         </div>
+        {loading ? (
+          <div className="flex justify-center items-center p-8">
+            <Spin size="large" />
+          </div>
+        ) : (
         <Form
           layout="vertical"
           form={form}
           onFinish={onFinish}
+          onValuesChange={handleFormChange}
           initialValues={{
             name: randomName,
             proportional_metric: true,
             arms: 2,
+            autoSave: false,
           }}
         >
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                label="NAME"
+                label={
+                  <Space>
+                    NAME
+                    <Tooltip title="Enter a unique name for your test">
+                      <InfoOutlined style={{ fontSize: '14px', color: '#999' }} />
+                    </Tooltip>
+                  </Space>
+                }
                 name="name"
                 rules={[
                   { required: true, message: "Please input the test name!" },
+                  { min: 3, message: "Name must be at least 3 characters" },
+                  { max: 100, message: "Name must be less than 100 characters" },
                 ]}
+                validateStatus={validationErrors.name ? 'error' : ''}
+                help={validationErrors.name}
               >
-                <Input />
+                <AutoComplete
+                  options={suggestions.map(s => ({ value: s }))}
+                  onSearch={loadSuggestions}
+                  placeholder="Enter test name"
+                  suffix={
+                    <Button
+                      type="text"
+                      size="small"
+                      onClick={handleGenerateName}
+                      title="Generate random name"
+                    >
+                      <RocketOutlined />
+                    </Button>
+                  }
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -208,19 +377,53 @@ export const CreateTest: React.FC<CreateTestModalProps> = ({
             </Col>
           </Row>
 
-          <div className="flex w-full justify-between">
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label="START DATE" name="startDate">
+                <DatePicker className="w-full" format="YYYY-MM-DD" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="END DATE" name="endDate">
+                <DatePicker className="w-full" format="YYYY-MM-DD" />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Form.Item name="autoSave" valuePropName="checked">
+            <Switch
+              checkedChildren="Auto-save enabled"
+              unCheckedChildren="Auto-save disabled"
+              onChange={setAutoSaveEnabled}
+            />
+          </Form.Item>
+
+          <div className="flex w-full justify-between items-center">
             <Form.Item>
-              <Button onClick={() => onFinishReturn(form.getFieldsValue())}>
-                Save and Return
-              </Button>
+              <Space>
+                <Button 
+                  onClick={() => onFinishReturn(form.getFieldsValue())}
+                  icon={<SaveOutlined />}
+                >
+                  Save and Return
+                </Button>
+                {formDirty && (
+                  <Tag color="orange">Unsaved changes</Tag>
+                )}
+              </Space>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button 
+                type="primary" 
+                htmlType="submit"
+                icon={<RocketOutlined />}
+              >
                 Save and Continue
               </Button>
             </Form.Item>
           </div>
         </Form>
+        )}
       </div>
     </Modal>
   );
